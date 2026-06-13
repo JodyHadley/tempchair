@@ -72,7 +72,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
       });
       if (error) {
-        return { success: false, error: "Invalid email or password. Try a test account below." };
+        console.error("Supabase sign-in error:", error.message, error.status);
+        return { success: false, error: error.message || "Invalid email or password. Try a test account below." };
       }
       if (data.user) {
         setUser(toAuthUser(data.user));
