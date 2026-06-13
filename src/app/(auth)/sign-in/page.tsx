@@ -31,10 +31,10 @@ export default function SignInPage() {
     if (user) router.replace("/dashboard");
   }, [user, router]);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const result = signIn(email, password);
+    const result = await signIn(email, password);
     if (result.success) {
       router.push("/dashboard");
     } else {

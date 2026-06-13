@@ -6,9 +6,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MapPin, Star, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { workers } from "@/lib/sample-data";
+import { getAllWorkers } from "@/lib/db/queries";
 
-export default function WorkersPage() {
+export default async function WorkersPage() {
+  const workers = await getAllWorkers();
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
