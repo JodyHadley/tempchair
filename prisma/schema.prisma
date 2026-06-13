@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  worker
+  clinic
+}
+
+enum WorkerSpecialty {
+  Hygienist
+  Assistant
+  Dentist
+}
+
+enum JobStatus {
+  open
+  filled
+  completed
+  cancelled
+}
+
+enum ApplicationStatus {
+  pending
+  accepted
+  rejected
+  withdrawn
+}
+
+model WorkerProfile {
+  id             String          @id @default(uuid())
+  authUserId     String?         @unique @map("auth_user_id")
+  email          String          @unique
+  firstName      String
+  lastName       String
+  initials       String
+  specialty      WorkerSpecialty
+  location       String
+  bio            String
+  experience     String
+  rating         Float           @default(0)
+  reviewCount    Int             @default(0)
+  certifications String[]
+  availability   String
+  hourlyRate     String
+
+  applications      Application[]
+  reviewsReceived   Review[]        @relation("ReviewToWorker")
+  reviewsGiven      Review[]        @relation("ReviewFromWorker")
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@map("worker_profiles")
+}
+
+model ClinicProfile {
+  id             String   @id @default(uuid())
+  authUserId     String?  @unique @map("auth_user_id")
+  email          String   @default("")
+  name           String
+  contactName    String   @default("")
+  initials       String
+  location       String
+  address        String
+  phone          String   @default("")
+  description    String
+  rating         Float    @default(0)
+  reviewCount    Int      @default(0)
+  claimed        Boolean  @default(false)
+
+  jobs              JobPosting[]
+  reviewsReceived   Review[]        @relation("ReviewToClinic")
+  reviewsGiven      Review[]        @relation("ReviewFromClinic")
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("clinic_profiles")
+}
+
+model JobPosting {
+  id          String         @id @default(uuid())
+  clinicId    String
+  clinic      ClinicProfile  @relation(fields: [clinicId], references: [id])
+  title       String
+  type        WorkerSpecialty
+  dates       String
+  startDate   DateTime
+  endDate     DateTime
+  hours       String
+  rate        String
+  description String
+  posted      String
+  status      JobStatus      @default(open)
+
+  applications Application[]
+  reviews      Review[]
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("job_postings")
+}
+
+model Application {
+  id          String            @id @default(uuid())
+  jobId       String
+  job         JobPosting        @relation(fields: [jobId], references: [id])
+  workerId    String
+  worker      WorkerProfile     @relation(fields: [workerId], references: [id])
+  appliedDate String
+  status      ApplicationStatus @default(pending)
+  coverNote   String
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@map("applications")
+}
+
+model Review {
+  id             String   @id @default(uuid())
+
+  fromWorkerId   String?
+  fromWorker     WorkerProfile?  @relation("ReviewFromWorker", fields: [fromWorkerId], references: [id])
+  fromClinicId   String?
+  fromClinic     ClinicProfile?  @relation("ReviewFromClinic", fields: [fromClinicId], references: [id])
+
+  fromRole       UserRole
+  fromName       String
+
+  toWorkerId     String?
+  toWorker       WorkerProfile?  @relation("ReviewToWorker", fields: [toWorkerId], references: [id])
+  toClinicId     String?
+  toClinic       ClinicProfile?  @relation("ReviewToClinic", fields: [toClinicId], references: [id])
+
+  toRole         UserRole
+  rating         Int
+  comment        String
+  date           String
+
+  jobId          String
+  job            JobPosting      @relation(fields: [jobId], references: [id])
+
+  createdAt      DateTime        @default(now())
+
+  @@map("reviews")
+}

@@ -2,54 +2,91 @@
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { authenticate, type AuthUser } from "@/lib/sample-data";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
+
+export interface AuthUser {
+  id: string;
+  role: "worker" | "clinic";
+  email: string;
+  name: string;
+  initials: string;
+  authUserId: string;
+}
 
 interface AuthContextValue {
   user: AuthUser | null;
   isLoading: boolean;
-  signIn: (email: string, password: string) => { success: boolean; error?: string };
+  signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-const STORAGE_KEY = "tempchair-auth";
+function toAuthUser(supaUser: User): AuthUser | null {
+  const meta = supaUser.user_metadata;
+  if (!meta?.role || !meta?.profileId) return null;
+  return {
+    id: meta.profileId,
+    role: meta.role,
+    email: supaUser.email ?? "",
+    name: meta.name ?? supaUser.email ?? "",
+    initials: meta.initials ?? "",
+    authUserId: supaUser.id,
+  };
+}
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const supabase = createClient();
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored));
-      } catch {
-        localStorage.removeItem(STORAGE_KEY);
+    // Get initial session
+    supabase.auth.getUser().then(({ data: { user: supaUser } }) => {
+      if (supaUser) {
+        setUser(toAuthUser(supaUser));
       }
-    }
-    setIsLoading(false);
-  }, []);
+      setIsLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session?.user) {
+          setUser(toAuthUser(session.user));
+        } else {
+          setUser(null);
+        }
+      },
+    );
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   const signIn = useCallback(
-    (email: string, password: string) => {
-      const result = authenticate(email, password);
-      if (result) {
-        setUser(result);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
-        return { success: true };
+    async (email: string, password: string) => {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) {
+        return { success: false, error: "Invalid email or password. Try a test account below." };
       }
-      return { success: false, error: "Invalid email or password. Try a test account below." };
+      if (data.user) {
+        setUser(toAuthUser(data.user));
+      }
+      return { success: true };
     },
-    [],
+    [supabase],
   );
 
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
+    await supabase.auth.signOut();
     setUser(null);
-    localStorage.removeItem(STORAGE_KEY);
     router.push("/");
-  }, [router]);
+  }, [supabase, router]);
 
   return (
     <AuthContext.Provider value={{ user, isLoading, signIn, signOut }}>

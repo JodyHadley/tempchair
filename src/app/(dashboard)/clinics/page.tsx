@@ -5,14 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MapPin, Phone, Star, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getAllClinics } from "@/lib/sample-data";
+import { getAllClinics } from "@/lib/db/queries";
 
-export default function ClinicsPage() {
-  const allClinics = getAllClinics();
+export default async function ClinicsPage() {
+  const allClinics = await getAllClinics();
   const claimed = allClinics.filter((c) => c.claimed);
   const unclaimed = allClinics.filter((c) => !c.claimed);
 
-  // Group unclaimed by location
   const locationGroups = unclaimed.reduce<Record<string, typeof unclaimed>>(
     (acc, clinic) => {
       const loc = clinic.location;
@@ -32,7 +31,6 @@ export default function ClinicsPage() {
         </p>
       </div>
 
-      {/* Active / Claimed clinics */}
       {claimed.length > 0 && (
         <div className="mt-8">
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
@@ -90,7 +88,6 @@ export default function ClinicsPage() {
         </div>
       )}
 
-      {/* Unclaimed clinics by location */}
       {Object.entries(locationGroups)
         .sort(([a], [b]) => a.localeCompare(b))
         .map(([location, locationClinics]) => (

@@ -1,14 +1,38 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { WorkerDashboard } from "@/components/dashboard/worker-dashboard";
 import { ClinicDashboard } from "@/components/dashboard/clinic-dashboard";
+import { getWorkerDashboardData, getClinicDashboardData } from "@/lib/db/actions";
+
+type WorkerData = Awaited<ReturnType<typeof getWorkerDashboardData>>;
+type ClinicData = Awaited<ReturnType<typeof getClinicDashboardData>>;
+
+function LoadingSkeleton() {
+  return (
+    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="space-y-4 animate-pulse">
+        <div className="h-8 w-64 rounded bg-muted" />
+        <div className="h-4 w-96 rounded bg-muted" />
+        <div className="mt-8 grid gap-4 sm:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-24 rounded-lg bg-muted" />
+          ))}
+        </div>
+        <div className="h-64 rounded-lg bg-muted" />
+      </div>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
+  const [workerData, setWorkerData] = useState<WorkerData | null>(null);
+  const [clinicData, setClinicData] = useState<ClinicData | null>(null);
+  const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -16,28 +40,35 @@ export default function DashboardPage() {
     }
   }, [isLoading, user, router]);
 
-  if (isLoading) {
-    return (
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="space-y-4 animate-pulse">
-          <div className="h-8 w-64 rounded bg-muted" />
-          <div className="h-4 w-96 rounded bg-muted" />
-          <div className="mt-8 grid gap-4 sm:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-24 rounded-lg bg-muted" />
-            ))}
-          </div>
-          <div className="h-64 rounded-lg bg-muted" />
-        </div>
-      </div>
-    );
+  useEffect(() => {
+    if (!user) return;
+
+    setDataLoading(true);
+    if (user.role === "worker") {
+      getWorkerDashboardData(user.id).then((data) => {
+        setWorkerData(data);
+        setDataLoading(false);
+      });
+    } else {
+      getClinicDashboardData(user.id).then((data) => {
+        setClinicData(data);
+        setDataLoading(false);
+      });
+    }
+  }, [user]);
+
+  if (isLoading || dataLoading || !user) {
+    if (!isLoading && !user) return null;
+    return <LoadingSkeleton />;
   }
 
-  if (!user) return null;
-
-  if (user.role === "worker") {
-    return <WorkerDashboard workerId={user.id} />;
+  if (user.role === "worker" && workerData?.worker) {
+    return <WorkerDashboard data={workerData} />;
   }
 
-  return <ClinicDashboard clinicId={user.id} />;
+  if (user.role === "clinic" && clinicData?.clinic) {
+    return <ClinicDashboard data={clinicData} />;
+  }
+
+  return <LoadingSkeleton />;
 }
