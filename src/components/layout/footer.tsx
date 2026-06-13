@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Stethoscope } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export function Footer() {
   return (
@@ -8,7 +8,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="col-span-1">
             <Link href="/" className="flex items-center gap-2">
-              <Stethoscope className="h-6 w-6 text-primary" />
+              <Sparkles className="h-6 w-6 text-primary" />
               <span className="text-lg font-bold tracking-tight">
                 Temp<span className="text-primary">Chair</span>
               </span>

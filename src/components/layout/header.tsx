@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Stethoscope, LogOut, LayoutDashboard, User } from "lucide-react";
+import { Menu, Sparkles, LogOut, LayoutDashboard, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 
@@ -48,7 +48,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
-          <Stethoscope className="h-7 w-7 text-primary" />
+          <Sparkles className="h-7 w-7 text-primary" />
           <span className="text-xl font-bold tracking-tight">
             Temp<span className="text-primary">Chair</span>
           </span>
@@ -129,7 +129,7 @@ export function Header() {
           <SheetContent side="right" className="w-80">
             <div className="flex flex-col gap-6 pt-6">
               <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-                <Stethoscope className="h-7 w-7 text-primary" />
+                <Sparkles className="h-7 w-7 text-primary" />
                 <span className="text-xl font-bold tracking-tight">
                   Temp<span className="text-primary">Chair</span>
                 </span>

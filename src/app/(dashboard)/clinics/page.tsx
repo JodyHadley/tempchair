@@ -1,7 +1,10 @@
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MapPin, Phone, Star, ShieldCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { getAllClinics } from "@/lib/sample-data";
 
 export default function ClinicsPage() {
@@ -132,9 +135,12 @@ export default function ClinicsPage() {
                         </p>
                       )}
                     </div>
-                    <p className="mt-3 text-xs text-primary font-medium">
-                      Is this your clinic? Sign up to claim it.
-                    </p>
+                    <Link
+                      href="/claim"
+                      className={cn(buttonVariants({ size: "sm", variant: "outline" }), "mt-3 w-full text-xs")}
+                    >
+                      Claim This Clinic
+                    </Link>
                   </CardContent>
                 </Card>
               ))}
