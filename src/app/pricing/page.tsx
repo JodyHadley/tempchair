@@ -97,7 +97,7 @@ export default function PricingPage() {
 
       {/* Pricing Cards */}
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {tiers.map((tier) => (
             <Card
               key={tier.name}
@@ -113,7 +113,7 @@ export default function PricingPage() {
                   </span>
                 </div>
               )}
-              <CardContent className="p-8">
+              <CardContent className="p-5 sm:p-8">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                     <tier.icon className="h-5 w-5 text-primary" />
@@ -174,7 +174,7 @@ export default function PricingPage() {
           <p className="mt-2 text-center text-muted-foreground">
             No agency markups. No middleman. Just direct connections.
           </p>
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
+          <div className="mt-10 grid gap-4 sm:gap-6 md:grid-cols-3">
             <Card>
               <CardContent className="p-6 text-center">
                 <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">

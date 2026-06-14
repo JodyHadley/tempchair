@@ -35,6 +35,7 @@ const MONTH_NAMES = [
   "July", "August", "September", "October", "November", "December",
 ];
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const DAY_NAMES_SHORT = ["S", "M", "T", "W", "T", "F", "S"];
 
 const categoryConfig = {
   booked: { label: "Booked", color: "bg-green-500", lightColor: "bg-green-100 dark:bg-green-900/30", textColor: "text-green-700 dark:text-green-300", borderColor: "border-green-300" },
@@ -148,9 +149,10 @@ export function JobCalendar({ availableJobs, bookedJobs, workerApplications, wor
       <CardContent className="relative">
         {/* Day headers */}
         <div className="grid grid-cols-7 mb-1">
-          {DAY_NAMES.map((day) => (
+          {DAY_NAMES.map((day, i) => (
             <div key={day} className="text-center text-xs font-medium text-muted-foreground py-1">
-              {day}
+              <span className="hidden sm:inline">{day}</span>
+              <span className="sm:hidden">{DAY_NAMES_SHORT[i]}</span>
             </div>
           ))}
         </div>
@@ -159,7 +161,7 @@ export function JobCalendar({ availableJobs, bookedJobs, workerApplications, wor
         <div className="grid grid-cols-7">
           {/* Padding for first week */}
           {Array.from({ length: startPad }).map((_, i) => (
-            <div key={`pad-${i}`} className="min-h-[72px] border-t border-l first:border-l-0 border-border/50 bg-muted/20" />
+            <div key={`pad-${i}`} className="min-h-[48px] sm:min-h-[72px] border-t border-l first:border-l-0 border-border/50 bg-muted/20" />
           ))}
 
           {/* Days */}
@@ -174,18 +176,18 @@ export function JobCalendar({ availableJobs, bookedJobs, workerApplications, wor
             return (
               <div
                 key={day}
-                className={`min-h-[72px] border-t border-border/50 p-1 ${colIndex > 0 ? "border-l" : ""} ${isPast ? "bg-muted/20" : ""}`}
+                className={`min-h-[48px] sm:min-h-[72px] border-t border-border/50 p-0.5 sm:p-1 ${colIndex > 0 ? "border-l" : ""} ${isPast ? "bg-muted/20" : ""}`}
               >
                 <span className={`text-xs ${isToday ? "inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold" : isPast ? "text-muted-foreground" : "text-foreground"}`}>
                   {day}
                 </span>
                 <div className="mt-0.5 space-y-0.5">
-                  {dayEvents.slice(0, 3).map((event) => {
+                  {dayEvents.slice(0, 2).map((event) => {
                     const config = categoryConfig[event.category];
                     return (
                       <div
                         key={event.id}
-                        className={`rounded px-1 py-0.5 text-[9px] leading-tight truncate cursor-pointer border ${config.lightColor} ${config.textColor} ${config.borderColor} hover:opacity-80 transition-opacity`}
+                        className={`rounded px-0.5 sm:px-1 py-0.5 text-[8px] sm:text-[9px] leading-tight truncate cursor-pointer border ${config.lightColor} ${config.textColor} ${config.borderColor} hover:opacity-80 transition-opacity`}
                         onMouseEnter={(e) => {
                           setHoveredEvent(event);
                           const rect = e.currentTarget.getBoundingClientRect();
@@ -205,9 +207,9 @@ export function JobCalendar({ availableJobs, bookedJobs, workerApplications, wor
                       </div>
                     );
                   })}
-                  {dayEvents.length > 3 && (
-                    <div className="text-[9px] text-muted-foreground pl-1">
-                      +{dayEvents.length - 3} more
+                  {dayEvents.length > 2 && (
+                    <div className="text-[8px] sm:text-[9px] text-muted-foreground pl-0.5">
+                      +{dayEvents.length - 2} more
                     </div>
                   )}
                 </div>

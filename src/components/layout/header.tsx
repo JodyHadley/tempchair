@@ -142,7 +142,7 @@ export function Header() {
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </SheetTrigger>
-          <SheetContent side="right" className="w-80">
+          <SheetContent side="right" className="w-[85vw] max-w-80">
             <div className="flex flex-col gap-6 pt-6">
               <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
                 <Sparkles className="h-7 w-7 text-primary" />
@@ -180,6 +180,17 @@ export function Header() {
 
               <div className="flex flex-col gap-3 pt-4 border-t">
                 {user ? (
+                  <>
+                  <Button
+                    variant={helpMode ? "default" : "outline"}
+                    onClick={() => {
+                      toggleHelp();
+                      setMobileOpen(false);
+                    }}
+                  >
+                    <HelpCircle className="h-4 w-4 mr-2" />
+                    {helpMode ? "Exit Help Mode" : "Help Mode"}
+                  </Button>
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -190,6 +201,7 @@ export function Header() {
                     <LogOut className="h-4 w-4 mr-2" />
                     Sign Out
                   </Button>
+                  </>
                 ) : (
                   <>
                     <Link
