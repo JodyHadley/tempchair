@@ -55,7 +55,41 @@ export async function getClinicDashboardData(clinicId: string) {
     }),
   ]);
 
-  return { clinic, jobs, reviews, reviewsGiven };
+  // Market rate insights (premium only)
+  let marketRates = null;
+  if (clinic?.premiumTier) {
+    const allJobs = await prisma.jobPosting.findMany({
+      where: { clinicId: { not: clinicId } },
+      select: { type: true, rate: true },
+    });
+
+    // Parse rate strings like "$45–55/hr" → average of 45 and 55
+    function parseRate(rateStr: string): number | null {
+      const nums = rateStr.match(/\d+/g);
+      if (!nums || nums.length === 0) return null;
+      const values = nums.map(Number);
+      return values.reduce((a, b) => a + b, 0) / values.length;
+    }
+
+    const byType: Record<string, number[]> = {};
+    for (const j of allJobs) {
+      const parsed = parseRate(j.rate);
+      if (parsed !== null) {
+        if (!byType[j.type]) byType[j.type] = [];
+        byType[j.type].push(parsed);
+      }
+    }
+
+    marketRates = Object.entries(byType).map(([type, rates]) => ({
+      type,
+      avg: Math.round(rates.reduce((a, b) => a + b, 0) / rates.length),
+      min: Math.round(Math.min(...rates)),
+      max: Math.round(Math.max(...rates)),
+      count: rates.length,
+    }));
+  }
+
+  return { clinic, jobs, reviews, reviewsGiven, marketRates };
 }
 
 export async function updateReview(

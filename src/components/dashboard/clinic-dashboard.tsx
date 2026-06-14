@@ -23,6 +23,8 @@ import {
   Pencil,
   MessageSquarePlus,
   Plus,
+  DollarSign,
+  Crown,
   CheckCircle2,
   XCircle,
   ClockIcon,
@@ -49,7 +51,7 @@ const appStatusConfig: Record<StatusKey, { label: string; variant: "default" | "
 };
 
 export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
-  const { clinic, jobs, reviews, reviewsGiven } = data;
+  const { clinic, jobs, reviews, reviewsGiven, marketRates } = data;
   const [editing, setEditing] = useState(false);
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
@@ -211,6 +213,61 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                           <p className="mt-1 text-xs text-muted-foreground">{review.date}</p>
                         </div>
                       ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Market Rate Insights — Premium Only */}
+              {marketRates && marketRates.length > 0 && (
+                <Card className="border-primary/20">
+                  <CardHeader>
+                    <CardTitle className="text-base flex items-center gap-2">
+                      <DollarSign className="h-4 w-4 text-primary" />
+                      Market Rate Insights
+                      <Badge variant="default" className="text-[10px]">
+                        <Crown className="mr-0.5 h-2.5 w-2.5" />
+                        Premium
+                      </Badge>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-xs text-muted-foreground mb-4">
+                      Average hourly rates posted by other clinics in your area.
+                    </p>
+                    <div className="space-y-3">
+                      {marketRates.map((r) => (
+                        <div key={r.type} className="flex items-center justify-between rounded-lg border p-3">
+                          <div>
+                            <p className="text-sm font-medium">{r.type}</p>
+                            <p className="text-xs text-muted-foreground">{r.count} posting{r.count !== 1 ? "s" : ""}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-lg font-bold text-primary">${r.avg}/hr</p>
+                            <p className="text-[10px] text-muted-foreground">Range: ${r.min}–${r.max}/hr</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-3 text-[10px] text-muted-foreground">
+                      Based on rates from all postings on TempChair. Updated in real-time.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Non-premium upsell */}
+              {!clinic.premiumTier && (
+                <Card className="border-dashed">
+                  <CardContent className="p-4 flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 shrink-0">
+                      <Crown className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Upgrade to Premium</p>
+                      <p className="text-xs text-muted-foreground">
+                        See market rate insights, write private reviews, and get unlimited postings for $89/mo.
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
