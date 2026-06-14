@@ -11,16 +11,25 @@ import { JobListings } from "@/components/jobs/job-listings";
 export default async function JobsPage() {
   const openJobs = await getOpenJobs();
 
-  // Get current user's applications if they're a worker
+  // Get current user's info if they're a worker
   let workerApplications: { jobId: string }[] = [];
+  let workerSpecialty: string | null = null;
   try {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (user?.user_metadata?.role === "worker" && user.user_metadata?.profileId) {
-      workerApplications = await prisma.application.findMany({
-        where: { workerId: user.user_metadata.profileId },
-        select: { jobId: true },
-      });
+      const [apps, worker] = await Promise.all([
+        prisma.application.findMany({
+          where: { workerId: user.user_metadata.profileId },
+          select: { jobId: true },
+        }),
+        prisma.workerProfile.findUnique({
+          where: { id: user.user_metadata.profileId },
+          select: { specialty: true },
+        }),
+      ]);
+      workerApplications = apps;
+      workerSpecialty = worker?.specialty ?? null;
     }
   } catch {
     // Not logged in or error — that's fine
@@ -56,7 +65,11 @@ export default async function JobsPage() {
       </div>
 
       <div className="mt-8">
-        <JobListings jobs={jobsData} workerApplications={workerApplications} />
+        <JobListings
+          jobs={jobsData}
+          workerApplications={workerApplications}
+          workerSpecialty={workerSpecialty}
+        />
       </div>
 
       {openJobs.length === 0 && (
