@@ -10,6 +10,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ClinicProfileEdit } from "./clinic-profile-edit";
 import { ReviewForm, PrivateBadge } from "./review-form";
 import { ReviewEditForm } from "./review-edit-form";
+import { PostPositionForm } from "./post-position-form";
 import {
   Star,
   MapPin,
@@ -20,6 +21,7 @@ import {
   Phone,
   Pencil,
   MessageSquarePlus,
+  Plus,
   CheckCircle2,
   XCircle,
   ClockIcon,
@@ -50,6 +52,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
   const [editing, setEditing] = useState(false);
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
+  const [showPostForm, setShowPostForm] = useState(false);
   if (!clinic) return null;
 
   const allApplications = jobs.flatMap((job) =>
@@ -196,6 +199,23 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
         {/* Positions Tab */}
         <TabsContent value="positions">
           <div className="space-y-4">
+            {showPostForm ? (
+              <PostPositionForm
+                clinicId={clinic.id}
+                onClose={() => setShowPostForm(false)}
+                onPosted={() => {
+                  setShowPostForm(false);
+                  onRefresh?.();
+                }}
+              />
+            ) : (
+              <div className="flex justify-end">
+                <Button onClick={() => setShowPostForm(true)}>
+                  <Plus className="h-4 w-4 mr-1.5" />
+                  Post a Position
+                </Button>
+              </div>
+            )}
             {jobs.map((job) => {
               const config = jobStatusConfig[job.status as JobStatusKey];
               return (

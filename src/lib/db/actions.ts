@@ -230,3 +230,63 @@ export async function submitReview(data: {
   revalidatePath("/dashboard");
   return { success: true };
 }
+
+// ── Job Posting ─────────────────────────────────────────────
+
+export async function createJobPosting(data: {
+  clinicId: string;
+  title: string;
+  type: "Hygienist" | "Assistant" | "Dentist";
+  startDate: string;
+  endDate: string;
+  hours: string;
+  rate: string;
+  description: string;
+}) {
+  const start = new Date(data.startDate);
+  const end = new Date(data.endDate);
+
+  const fmt = (d: Date) =>
+    d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const dates = `${fmt(start)} – ${fmt(end)}`;
+
+  // Expires at the end date or 30 days from now, whichever comes first
+  const thirtyDays = new Date();
+  thirtyDays.setDate(thirtyDays.getDate() + 30);
+  const expiresAt = end < thirtyDays ? end : thirtyDays;
+
+  await prisma.jobPosting.create({
+    data: {
+      clinicId: data.clinicId,
+      title: data.title,
+      type: data.type,
+      dates,
+      startDate: start,
+      endDate: end,
+      hours: data.hours,
+      rate: data.rate,
+      description: data.description,
+      posted: "Just now",
+      status: "open",
+      expiresAt,
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/jobs");
+  return { success: true };
+}
+
+export async function expireOldJobs() {
+  const now = new Date();
+  await prisma.jobPosting.updateMany({
+    where: {
+      status: "open",
+      OR: [
+        { expiresAt: { lte: now } },
+        { endDate: { lte: now } },
+      ],
+    },
+    data: { status: "cancelled" },
+  });
+}
