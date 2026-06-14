@@ -62,8 +62,24 @@ export default function DashboardPage() {
     return <LoadingSkeleton />;
   }
 
+  function refreshData() {
+    if (!user) return;
+    setDataLoading(true);
+    if (user.role === "worker") {
+      getWorkerDashboardData(user.id).then((data) => {
+        setWorkerData(data);
+        setDataLoading(false);
+      });
+    } else {
+      getClinicDashboardData(user.id).then((data) => {
+        setClinicData(data);
+        setDataLoading(false);
+      });
+    }
+  }
+
   if (user.role === "worker" && workerData?.worker) {
-    return <WorkerDashboard data={workerData} />;
+    return <WorkerDashboard data={workerData} onRefresh={refreshData} />;
   }
 
   if (user.role === "clinic" && clinicData?.clinic) {

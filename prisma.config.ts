@@ -2,6 +2,7 @@ import path from "node:path";
 import { defineConfig } from "prisma/config";
 import dotenv from "dotenv";
 
+// Load .env.local if it exists (local dev); on Vercel, env vars are injected by the platform
 dotenv.config({ path: path.resolve(__dirname, ".env.local") });
 
 export default defineConfig({
@@ -10,8 +11,6 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    // Use session-mode pooler (port 5432) for migrations/schema push
-    // Runtime uses DATABASE_URL (port 6543 transaction pooler) via schema.prisma
-    url: process.env["DIRECT_URL"],
+    url: process.env["DIRECT_URL"] || process.env["DATABASE_URL"] || "",
   },
 });
