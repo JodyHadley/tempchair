@@ -142,7 +142,7 @@ async function main() {
   // ── Clinics (claimed test accounts) ─────────────────────
   console.log("Seeding clinics...");
   const claimedClinics = [
-    { id: C.c1, authUserId: authIds.c1, email: "boise@test.com", name: "Boise Family Dentistry", contactName: "Dr. Robert Hayes", initials: "BF", location: "Boise, ID", address: "1234 Main St, Boise, ID 83702", phone: "(208) 555-0101", description: "A friendly family dental practice serving the Boise community for over 15 years.", rating: 4.8, reviewCount: 18, claimed: true },
+    { id: C.c1, authUserId: authIds.c1, email: "boise@test.com", name: "Boise Family Dentistry", contactName: "Dr. Robert Hayes", initials: "BF", location: "Boise, ID", address: "1234 Main St, Boise, ID 83702", phone: "(208) 555-0101", description: "A friendly family dental practice serving the Boise community for over 15 years.", rating: 4.8, reviewCount: 18, claimed: true, premiumTier: true },
     { id: C.c2, authUserId: authIds.c2, email: "eagle@test.com", name: "Eagle Road Dental", contactName: "Dr. Lisa Park", initials: "ER", location: "Eagle, ID", address: "5678 Eagle Rd, Eagle, ID 83616", phone: "(208) 555-0202", description: "Modern dental office with state-of-the-art equipment.", rating: 4.6, reviewCount: 12, claimed: true },
     { id: C.c3, authUserId: authIds.c3, email: "meridian@test.com", name: "Meridian Smiles", contactName: "Dr. James Wilson", initials: "MS", location: "Meridian, ID", address: "9012 Fairview Ave, Meridian, ID 83642", phone: "(208) 555-0303", description: "General and pediatric dentistry in a fun, comfortable environment.", rating: 4.9, reviewCount: 9, claimed: true },
   ];
@@ -227,10 +227,15 @@ async function main() {
   console.log("Seeding reviews...");
   await prisma.review.createMany({
     data: [
-      { id: "e0000000-0000-0000-0000-000000000001", fromClinicId: C.c1, fromRole: "clinic", fromName: "Boise Family Dentistry", toWorkerId: W.w1, toRole: "worker", rating: 5, comment: "Sarah was outstanding! She arrived early, was professional with every patient.", date: "May 18, 2026", jobId: J.j1 },
-      { id: "e0000000-0000-0000-0000-000000000002", fromWorkerId: W.w1, fromRole: "worker", fromName: "Sarah Johnson", toClinicId: C.c1, toRole: "clinic", rating: 5, comment: "Great office with a wonderful team. Everything was well-organized.", date: "May 18, 2026", jobId: J.j1 },
-      { id: "e0000000-0000-0000-0000-000000000003", fromClinicId: C.c2, fromRole: "clinic", fromName: "Eagle Road Dental", toWorkerId: W.w2, toRole: "worker", rating: 4, comment: "Michael was reliable and knew his way around digital X-rays.", date: "May 2, 2026", jobId: J.j4 },
-      { id: "e0000000-0000-0000-0000-000000000004", fromWorkerId: W.w2, fromRole: "worker", fromName: "Michael Chen", toClinicId: C.c2, toRole: "clinic", rating: 5, comment: "Excellent office with top-of-the-line equipment.", date: "May 2, 2026", jobId: J.j4 },
+      // Public reviews
+      { id: "e0000000-0000-0000-0000-000000000001", fromClinicId: C.c1, fromRole: "clinic", fromName: "Boise Family Dentistry", toWorkerId: W.w1, toRole: "worker", rating: 5, comment: "Sarah was outstanding! She arrived early, was professional with every patient.", date: "May 18, 2026", jobId: J.j1, isPrivate: false },
+      { id: "e0000000-0000-0000-0000-000000000002", fromWorkerId: W.w1, fromRole: "worker", fromName: "Sarah Johnson", toClinicId: C.c1, toRole: "clinic", rating: 5, comment: "Great office with a wonderful team. Everything was well-organized.", date: "May 18, 2026", jobId: J.j1, isPrivate: false },
+      { id: "e0000000-0000-0000-0000-000000000003", fromClinicId: C.c2, fromRole: "clinic", fromName: "Eagle Road Dental", toWorkerId: W.w2, toRole: "worker", rating: 4, comment: "Michael was reliable and knew his way around digital X-rays.", date: "May 2, 2026", jobId: J.j4, isPrivate: false },
+      { id: "e0000000-0000-0000-0000-000000000004", fromWorkerId: W.w2, fromRole: "worker", fromName: "Michael Chen", toClinicId: C.c2, toRole: "clinic", rating: 5, comment: "Excellent office with top-of-the-line equipment.", date: "May 2, 2026", jobId: J.j4, isPrivate: false },
+      // Private reviews (blind reviews)
+      { id: "e0000000-0000-0000-0000-000000000005", fromClinicId: C.c1, fromRole: "clinic", fromName: "Boise Family Dentistry", toWorkerId: W.w1, toRole: "worker", rating: 5, comment: "Very thorough with perio charting. Patients specifically asked for her by name after the first day. Would absolutely book again.", date: "May 19, 2026", jobId: J.j1, isPrivate: true },
+      { id: "e0000000-0000-0000-0000-000000000006", fromWorkerId: W.w1, fromRole: "worker", fromName: "Sarah Johnson", toClinicId: C.c1, toRole: "clinic", rating: 4, comment: "Great team but the sterilization area could use better organization. Had to hunt for instruments a few times. Minor issue overall.", date: "May 19, 2026", jobId: J.j1, isPrivate: true },
+      { id: "e0000000-0000-0000-0000-000000000007", fromClinicId: C.c2, fromRole: "clinic", fromName: "Eagle Road Dental", toWorkerId: W.w2, toRole: "worker", rating: 3, comment: "Decent assistant but a bit slow on chairside transitions. Needed reminders on instrument setup. Fine for a fill-in but wouldn't be first choice.", date: "May 3, 2026", jobId: J.j4, isPrivate: true },
     ],
   });
 

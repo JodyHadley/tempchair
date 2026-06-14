@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { WorkerProfileEdit } from "./worker-profile-edit";
+import { ReviewForm, PrivateBadge } from "./review-form";
 import {
   Star,
   MapPin,
@@ -16,6 +17,7 @@ import {
   Building2,
   Briefcase,
   Pencil,
+  MessageSquarePlus,
   CheckCircle2,
   XCircle,
   ClockIcon,
@@ -36,6 +38,7 @@ const statusConfig: Record<StatusKey, { label: string; variant: "default" | "sec
 export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
   const { worker, applications, reviews } = data;
   const [editing, setEditing] = useState(false);
+  const [reviewingShift, setReviewingShift] = useState<string | null>(null);
   if (!worker) return null;
 
   const upcomingShifts = applications.filter(
@@ -264,20 +267,51 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Completed</h3>
                 <div className="space-y-3">
                   {completedShifts.map((a) => (
-                    <Card key={a.id} className="opacity-80">
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <h3 className="font-semibold">{a.job.title}</h3>
-                            <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                              <span className="flex items-center gap-1"><Building2 className="h-3 w-3" />{a.job.clinic.name}</span>
-                              <span className="flex items-center gap-1"><CalendarDays className="h-3 w-3" />{a.job.dates}</span>
+                    <div key={a.id}>
+                      {reviewingShift === a.id ? (
+                        <ReviewForm
+                          fromWorkerId={worker.id}
+                          fromRole="worker"
+                          fromName={`${worker.firstName} ${worker.lastName}`}
+                          toClinicId={a.job.clinicId}
+                          toRole="clinic"
+                          toName={a.job.clinic.name}
+                          jobId={a.job.id}
+                          jobTitle={a.job.title}
+                          canWritePrivate={true}
+                          onClose={() => setReviewingShift(null)}
+                          onSubmitted={() => {
+                            setReviewingShift(null);
+                            onRefresh?.();
+                          }}
+                        />
+                      ) : (
+                        <Card className="opacity-80">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h3 className="font-semibold">{a.job.title}</h3>
+                                <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                                  <span className="flex items-center gap-1"><Building2 className="h-3 w-3" />{a.job.clinic.name}</span>
+                                  <span className="flex items-center gap-1"><CalendarDays className="h-3 w-3" />{a.job.dates}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => setReviewingShift(a.id)}
+                                >
+                                  <MessageSquarePlus className="h-3.5 w-3.5 mr-1" />
+                                  Review
+                                </Button>
+                                <Badge variant="secondary">Completed</Badge>
+                              </div>
                             </div>
-                          </div>
-                          <Badge variant="secondary">Completed</Badge>
-                        </div>
-                      </CardContent>
-                    </Card>
+                          </CardContent>
+                        </Card>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -301,6 +335,7 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-semibold">{review.fromName}</span>
+                          {review.isPrivate && <PrivateBadge />}
                           <div className="flex items-center gap-0.5">
                             {Array.from({ length: 5 }).map((_, i) => (
                               <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-primary text-primary" : "text-muted"}`} />

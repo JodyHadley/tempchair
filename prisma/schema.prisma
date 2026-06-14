@@ -73,6 +73,7 @@ model ClinicProfile {
   rating         Float    @default(0)
   reviewCount    Int      @default(0)
   claimed        Boolean  @default(false)
+  premiumTier    Boolean  @default(false)
 
   jobs              JobPosting[]
   reviewsReceived   Review[]        @relation("ReviewToClinic")
@@ -144,6 +145,7 @@ model Review {
   rating         Int
   comment        String
   date           String
+  isPrivate      Boolean  @default(false)
 
   jobId          String
   job            JobPosting      @relation(fields: [jobId], references: [id])
