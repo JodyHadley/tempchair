@@ -453,7 +453,7 @@ export async function applyToJob(data: {
     if (clinic?.email && worker && process.env.RESEND_API_KEY) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: "TempChair <onboarding@resend.dev>",
+        from: "TempChair <noreply@notifications.tempchair.com>",
         to: clinic.email,
         subject: `New applicant for ${job.title} — TempChair`,
         html: `

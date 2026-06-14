@@ -73,7 +73,7 @@ export async function sendMessage(data: {
     if (recipientEmail && process.env.RESEND_API_KEY) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: "TempChair <onboarding@resend.dev>",
+        from: "TempChair <noreply@notifications.tempchair.com>",
         to: recipientEmail,
         subject: `New message from ${data.senderName} — TempChair`,
         html: `
