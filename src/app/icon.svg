@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="8" fill="#1a7a6d"/>
+  <text x="16" y="22" font-family="system-ui, sans-serif" font-size="18" font-weight="700" fill="white" text-anchor="middle">TC</text>
+  <circle cx="25" cy="7" r="2.5" fill="#5ce0d0"/>
+  <circle cx="22" cy="11" r="1.5" fill="#5ce0d0" opacity="0.7"/>
+  <circle cx="27" cy="11" r="1" fill="#5ce0d0" opacity="0.5"/>
+</svg>
