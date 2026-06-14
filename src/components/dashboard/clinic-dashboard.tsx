@@ -106,7 +106,17 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                     <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">{clinic.initials}</AvatarFallback>
                   </Avatar>
                   <h2 className="mt-4 text-lg font-semibold">{clinic.name}</h2>
-                  <p className="text-sm text-muted-foreground">{clinic.contactName}</p>
+                  {clinic.premiumTier ? (
+                    <Badge variant="default" className="mt-1.5 text-xs">
+                      <Crown className="mr-0.5 h-3 w-3" />
+                      Premium Plan
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="mt-1.5 text-xs">
+                      Standard Plan
+                    </Badge>
+                  )}
+                  <p className="mt-1.5 text-sm text-muted-foreground">{clinic.contactName}</p>
                   <div className="mt-2 flex items-center gap-1 text-sm text-muted-foreground">
                     <MapPin className="h-3.5 w-3.5" />{clinic.location}
                   </div>
