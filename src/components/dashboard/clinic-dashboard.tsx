@@ -209,12 +209,21 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                 }}
               />
             ) : (
-              <div className="flex justify-end">
-                <Button onClick={() => setShowPostForm(true)}>
-                  <Plus className="h-4 w-4 mr-1.5" />
-                  Post a Position
-                </Button>
-              </div>
+              <Card className="border-2 border-dashed border-primary/30 bg-primary/5 hover:border-primary/50 hover:bg-primary/10 transition-colors cursor-pointer" onClick={() => setShowPostForm(true)}>
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 mb-3">
+                    <Plus className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-lg">Post a New Position</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Need a hygienist, assistant, or dentist? Post your shift and get applicants fast.
+                  </p>
+                  <Button className="mt-4" size="lg">
+                    <Plus className="h-4 w-4 mr-1.5" />
+                    Post a Position
+                  </Button>
+                </CardContent>
+              </Card>
             )}
             {jobs.map((job) => {
               const config = jobStatusConfig[job.status as JobStatusKey];
