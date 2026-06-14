@@ -42,7 +42,7 @@ const categoryConfig = {
   available: { label: "Available", color: "bg-primary", lightColor: "bg-primary/10", textColor: "text-primary", borderColor: "border-primary/30" },
 };
 
-export function JobCalendar({ availableJobs, bookedJobs, workerApplications, workerSpecialty }: CalendarProps) {
+export function JobCalendar({ availableJobs, bookedJobs, workerApplications, workerSpecialty, onJobClick }: CalendarProps & { onJobClick?: (jobId: string) => void }) {
   const now = new Date();
   const [currentMonth, setCurrentMonth] = useState(now.getMonth());
   const [currentYear, setCurrentYear] = useState(now.getFullYear());
@@ -186,6 +186,11 @@ export function JobCalendar({ availableJobs, bookedJobs, workerApplications, wor
                         onMouseLeave={() => {
                           setHoveredEvent(null);
                           setTooltipPos(null);
+                        }}
+                        onClick={() => {
+                          setHoveredEvent(null);
+                          setTooltipPos(null);
+                          onJobClick?.(event.id);
                         }}
                       >
                         {event.clinic.name}

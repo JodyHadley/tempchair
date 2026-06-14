@@ -6,8 +6,7 @@ import { cn } from "@/lib/utils";
 import { getOpenJobs } from "@/lib/db/queries";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
-import { JobListings } from "@/components/jobs/job-listings";
-import { JobCalendar } from "@/components/jobs/job-calendar";
+import { JobsPageClient } from "@/components/jobs/jobs-page-client";
 
 export default async function JobsPage() {
   const openJobs = await getOpenJobs();
@@ -53,7 +52,7 @@ export default async function JobsPage() {
     },
   }));
 
-  // Also get jobs the worker is booked for (accepted, not just open jobs)
+  // Get booked jobs for calendar
   let bookedJobs: typeof jobsData = [];
   if (workerSpecialty) {
     const acceptedApps = workerApplications.filter((a) => a.status === "accepted");
@@ -95,25 +94,12 @@ export default async function JobsPage() {
         </Link>
       </div>
 
-      {/* Calendar view for workers */}
-      {workerSpecialty && (
-        <div className="mt-8">
-          <JobCalendar
-            availableJobs={jobsData}
-            bookedJobs={bookedJobs}
-            workerApplications={workerApplications}
-            workerSpecialty={workerSpecialty}
-          />
-        </div>
-      )}
-
-      <div className="mt-8">
-        <JobListings
-          jobs={jobsData}
-          workerApplications={workerApplications.map((a) => ({ jobId: a.jobId }))}
-          workerSpecialty={workerSpecialty}
-        />
-      </div>
+      <JobsPageClient
+        jobs={jobsData}
+        bookedJobs={bookedJobs}
+        workerApplications={workerApplications}
+        workerSpecialty={workerSpecialty}
+      />
 
       {openJobs.length === 0 && (
         <div className="mt-8 text-center">

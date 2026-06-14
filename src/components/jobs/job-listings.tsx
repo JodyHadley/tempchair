@@ -34,10 +34,12 @@ export function JobListings({
   jobs,
   workerApplications,
   workerSpecialty,
+  highlightedJobId,
 }: {
   jobs: JobData[];
   workerApplications: ApplicationData[];
   workerSpecialty: string | null;
+  highlightedJobId?: string | null;
 }) {
   const { user } = useAuth();
   const [applyingTo, setApplyingTo] = useState<string | null>(null);
@@ -121,7 +123,7 @@ export function JobListings({
         }
 
         return (
-          <Card key={job.id} className="hover:shadow-md transition-shadow">
+          <Card key={job.id} id={`job-${job.id}`} className={`hover:shadow-md transition-all ${highlightedJobId === job.id ? "ring-2 ring-primary shadow-lg" : ""}`}>
             <CardContent className="p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex-1">
