@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectTrigger,
@@ -13,13 +14,14 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { CheckCircle2, X } from "lucide-react";
+import { CheckCircle2, X, Lock, CalendarDays } from "lucide-react";
 import { updateJobPosting } from "@/lib/db/actions";
 
 interface JobData {
   id: string;
   title: string;
   type: string;
+  dates: string;
   startDate: Date;
   endDate: Date;
   hours: string;
@@ -37,10 +39,6 @@ export function EditPositionForm({
   onClose: () => void;
   onSaved: () => void;
 }) {
-  const [title, setTitle] = useState(job.title);
-  const [type, setType] = useState(job.type);
-  const [startDate, setStartDate] = useState(new Date(job.startDate).toISOString().split("T")[0]);
-  const [endDate, setEndDate] = useState(new Date(job.endDate).toISOString().split("T")[0]);
   const [hours, setHours] = useState(job.hours);
   const [rate, setRate] = useState(job.rate);
   const [description, setDescription] = useState(job.description);
@@ -52,19 +50,14 @@ export function EditPositionForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-
-    if (new Date(endDate) <= new Date(startDate)) {
-      setError("End date must be after start date.");
-      return;
-    }
-
     setSaving(true);
+
     try {
       const result = await updateJobPosting(job.id, {
-        title,
-        type: type as "Hygienist" | "Assistant" | "Dentist",
-        startDate,
-        endDate,
+        title: job.title,
+        type: job.type as "Hygienist" | "Assistant" | "Dentist",
+        startDate: new Date(job.startDate).toISOString().split("T")[0],
+        endDate: new Date(job.endDate).toISOString().split("T")[0],
         hours,
         rate,
         description,
@@ -109,50 +102,48 @@ export function EditPositionForm({
             </div>
           )}
 
+          {/* Locked fields — shown but not editable */}
+          <div className="rounded-lg bg-muted/50 p-4 space-y-3">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              <Lock className="h-3 w-3" />
+              Fixed Details
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="text-xs text-muted-foreground">Title</p>
+                <p className="text-sm font-medium">{job.title}</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Role Type</p>
+                <p className="text-sm font-medium">{job.type}</p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                  <CalendarDays className="h-3 w-3" />
+                  Dates
+                </p>
+                <p className="text-sm font-medium">{job.dates}</p>
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              Title, role, and dates can&apos;t be changed. Need different dates or role? Cancel this posting and create a new one.
+            </p>
+          </div>
+
+          {/* Editable fields */}
           <div className="space-y-2">
-            <Label htmlFor="editTitle">Position Title</Label>
-            <Input id="editTitle" value={title} onChange={(e) => setTitle(e.target.value)} required />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="editType">Role Type</Label>
-              <Select value={type} onValueChange={(v) => v && setType(v)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Hygienist">Dental Hygienist</SelectItem>
-                  <SelectItem value="Assistant">Dental Assistant</SelectItem>
-                  <SelectItem value="Dentist">Dentist</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="editStatus">Status</Label>
-              <Select value={status} onValueChange={(v) => v && setStatus(v)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="open">Open</SelectItem>
-                  <SelectItem value="filled">Filled</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="editStartDate">Start Date</Label>
-              <Input id="editStartDate" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="editEndDate">End Date</Label>
-              <Input id="editEndDate" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
-            </div>
+            <Label htmlFor="editStatus">Status</Label>
+            <Select value={status} onValueChange={(v) => v && setStatus(v)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="open">Open</SelectItem>
+                <SelectItem value="filled">Filled</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -168,7 +159,7 @@ export function EditPositionForm({
 
           <div className="space-y-2">
             <Label htmlFor="editDescription">Description</Label>
-            <Textarea id="editDescription" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} required />
+            <Textarea id="editDescription" value={description} onChange={(e) => setDescription(e.target.value)} rows={4} required />
           </div>
 
           <div className="flex gap-3 pt-1">
