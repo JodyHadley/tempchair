@@ -248,7 +248,10 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                 </CardContent>
               </Card>
             )}
-            {jobs.map((job) => {
+            {[...jobs].sort((a, b) => {
+              const order: Record<string, number> = { open: 0, filled: 1, completed: 2, cancelled: 3 };
+              return (order[a.status] ?? 4) - (order[b.status] ?? 4);
+            }).map((job) => {
               const config = jobStatusConfig[job.status as JobStatusKey];
               if (editingJob === job.id) {
                 return (
