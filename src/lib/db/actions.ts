@@ -2,6 +2,7 @@
 
 import { prisma } from "./prisma";
 import { revalidatePath } from "next/cache";
+import { Resend } from "resend";
 
 export async function getWorkerDashboardData(workerId: string) {
   const [worker, applications, reviews, reviewsGiven, credentials] = await Promise.all([
@@ -437,6 +438,43 @@ export async function applyToJob(data: {
       status: "pending",
     },
   });
+
+  // Email notification to clinic about new application
+  try {
+    const worker = await prisma.workerProfile.findUnique({
+      where: { id: data.workerId },
+      select: { firstName: true, lastName: true, specialty: true },
+    });
+    const clinic = await prisma.clinicProfile.findUnique({
+      where: { id: job.clinicId },
+      select: { email: true, name: true },
+    });
+
+    if (clinic?.email && worker && process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      await resend.emails.send({
+        from: "TempChair <onboarding@resend.dev>",
+        to: clinic.email,
+        subject: `New applicant for ${job.title} — TempChair`,
+        html: `
+          <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2 style="color: #1a7a6d; margin-bottom: 4px;">New Application Received</h2>
+            <p style="color: #666; margin-top: 0;">For: <strong>${job.title}</strong> (${job.dates})</p>
+            <div style="background: #f5f5f5; border-radius: 8px; padding: 16px; margin: 16px 0;">
+              <p style="margin: 0 0 8px 0; font-weight: 600;">${worker.firstName} ${worker.lastName}</p>
+              <p style="margin: 0 0 8px 0; font-size: 13px; color: #1a7a6d;">${worker.specialty}</p>
+              <p style="margin: 0; font-size: 13px; color: #888;">Cover note:</p>
+              <p style="margin: 4px 0 0 0; font-size: 14px;">"${data.coverNote}"</p>
+            </div>
+            <a href="https://tempchair.com/dashboard" style="display: inline-block; background: #1a7a6d; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 500;">Review Application</a>
+            <p style="color: #999; font-size: 12px; margin-top: 24px;">You received this because you have an open position on TempChair.</p>
+          </div>
+        `,
+      });
+    }
+  } catch (emailError) {
+    console.error("Application email notification failed:", emailError);
+  }
 
   revalidatePath("/dashboard");
   revalidatePath("/jobs");
