@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { MapPin, Clock, CalendarDays, Building2, CheckCircle2 } from "lucide-react";
+import { MapPin, Clock, CalendarDays, Building2, CheckCircle2, Filter, X } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { ApplyForm } from "./apply-form";
 
@@ -33,22 +33,69 @@ interface ApplicationData {
 export function JobListings({
   jobs,
   workerApplications,
+  workerSpecialty,
 }: {
   jobs: JobData[];
   workerApplications: ApplicationData[];
+  workerSpecialty: string | null;
 }) {
   const { user } = useAuth();
   const [applyingTo, setApplyingTo] = useState<string | null>(null);
   const [appliedJobs, setAppliedJobs] = useState<Set<string>>(
     new Set(workerApplications.map((a) => a.jobId)),
   );
+  const [showAll, setShowAll] = useState(false);
 
   const isWorker = user?.role === "worker";
   const isClinic = user?.role === "clinic";
 
+  // Filter jobs by specialty for workers, unless they toggle "show all"
+  const filteredJobs = isWorker && workerSpecialty && !showAll
+    ? jobs.filter((job) => job.type === workerSpecialty)
+    : jobs;
+
+  const hiddenCount = isWorker && workerSpecialty ? jobs.length - jobs.filter((j) => j.type === workerSpecialty).length : 0;
+
   return (
     <div className="space-y-4">
-      {jobs.map((job) => {
+      {/* Filter bar for workers */}
+      {isWorker && workerSpecialty && (
+        <div className="flex items-center justify-between rounded-lg bg-muted/50 px-4 py-2.5">
+          <div className="flex items-center gap-2 text-sm">
+            <Filter className="h-4 w-4 text-muted-foreground" />
+            {showAll ? (
+              <span className="text-muted-foreground">
+                Showing <strong className="text-foreground">all {jobs.length}</strong> positions
+              </span>
+            ) : (
+              <span className="text-muted-foreground">
+                Showing <strong className="text-foreground">{filteredJobs.length} {workerSpecialty}</strong> position{filteredJobs.length !== 1 ? "s" : ""}
+                {hiddenCount > 0 && <span> ({hiddenCount} other{hiddenCount !== 1 ? "s" : ""} hidden)</span>}
+              </span>
+            )}
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-xs"
+            onClick={() => setShowAll(!showAll)}
+          >
+            {showAll ? (
+              <>
+                <Filter className="h-3 w-3 mr-1" />
+                Show My Specialty
+              </>
+            ) : (
+              <>
+                <X className="h-3 w-3 mr-1" />
+                Show All Jobs
+              </>
+            )}
+          </Button>
+        </div>
+      )}
+
+      {filteredJobs.map((job) => {
         const alreadyApplied = appliedJobs.has(job.id);
 
         if (applyingTo === job.id && user && isWorker) {
@@ -81,6 +128,9 @@ export function JobListings({
                   <div className="flex flex-wrap items-center gap-2">
                     <h2 className="text-lg font-semibold">{job.title}</h2>
                     <Badge variant="secondary">{job.type}</Badge>
+                    {isWorker && workerSpecialty && job.type !== workerSpecialty && (
+                      <Badge variant="outline" className="text-[10px]">Other specialty</Badge>
+                    )}
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
@@ -126,7 +176,7 @@ export function JobListings({
                     </Button>
                   ) : isClinic ? null : (
                     <Link
-                      href={`/sign-in`}
+                      href="/sign-in"
                       className={cn(buttonVariants({ size: "sm" }), "mt-2")}
                     >
                       Sign In to Apply
@@ -138,6 +188,25 @@ export function JobListings({
           </Card>
         );
       })}
+
+      {filteredJobs.length === 0 && isWorker && workerSpecialty && !showAll && (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-muted-foreground">
+              No open {workerSpecialty.toLowerCase()} positions right now.
+            </p>
+            {hiddenCount > 0 && (
+              <Button
+                variant="link"
+                className="mt-2"
+                onClick={() => setShowAll(true)}
+              >
+                View {hiddenCount} other position{hiddenCount !== 1 ? "s" : ""}
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
