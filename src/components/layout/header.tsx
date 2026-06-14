@@ -24,7 +24,7 @@ const publicNav = [
   { name: "Find Workers", href: "/workers" },
   { name: "Find Jobs", href: "/jobs" },
   { name: "Clinics", href: "/clinics" },
-  { name: "How It Works", href: "/#how-it-works" },
+  { name: "Pricing", href: "/pricing" },
 ];
 
 const workerNav = [
