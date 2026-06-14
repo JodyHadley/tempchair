@@ -11,6 +11,7 @@ import { ClinicProfileEdit } from "./clinic-profile-edit";
 import { ReviewForm, PrivateBadge } from "./review-form";
 import { ReviewEditForm } from "./review-edit-form";
 import { PostPositionForm } from "./post-position-form";
+import { EditPositionForm } from "./edit-position-form";
 import {
   Star,
   MapPin,
@@ -53,6 +54,8 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
   const [showPostForm, setShowPostForm] = useState(false);
+  const [editingJob, setEditingJob] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("overview");
   if (!clinic) return null;
 
   const allApplications = jobs.flatMap((job) =>
@@ -70,7 +73,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
         <p className="mt-1 text-muted-foreground">Manage your positions, applications, and team from your dashboard.</p>
       </div>
 
-      <Tabs defaultValue="overview">
+      <Tabs value={activeTab} onValueChange={(v) => v && setActiveTab(v)}>
         <TabsList variant="line" className="mb-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="positions">My Positions ({jobs.length})</TabsTrigger>
@@ -134,10 +137,30 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
 
             <div className="lg:col-span-2 space-y-6">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <Card><CardContent className="p-4 text-center"><p className="text-2xl font-bold text-primary">{openJobs}</p><p className="text-xs text-muted-foreground">Open Positions</p></CardContent></Card>
-                <Card><CardContent className="p-4 text-center"><p className="text-2xl font-bold text-primary">{pendingApps}</p><p className="text-xs text-muted-foreground">Pending Apps</p></CardContent></Card>
-                <Card><CardContent className="p-4 text-center"><p className="text-2xl font-bold text-primary">{acceptedWorkers}</p><p className="text-xs text-muted-foreground">Workers Booked</p></CardContent></Card>
-                <Card><CardContent className="p-4 text-center"><p className="text-2xl font-bold text-primary">{clinic.rating}</p><p className="text-xs text-muted-foreground">Clinic Rating</p></CardContent></Card>
+                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("positions")}>
+                  <CardContent className="p-4 text-center">
+                    <p className="text-2xl font-bold text-primary">{openJobs}</p>
+                    <p className="text-xs text-muted-foreground">Open Positions</p>
+                  </CardContent>
+                </Card>
+                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
+                  <CardContent className="p-4 text-center">
+                    <p className="text-2xl font-bold text-primary">{pendingApps}</p>
+                    <p className="text-xs text-muted-foreground">Pending Apps</p>
+                  </CardContent>
+                </Card>
+                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
+                  <CardContent className="p-4 text-center">
+                    <p className="text-2xl font-bold text-primary">{acceptedWorkers}</p>
+                    <p className="text-xs text-muted-foreground">Workers Booked</p>
+                  </CardContent>
+                </Card>
+                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("reviews")}>
+                  <CardContent className="p-4 text-center">
+                    <p className="text-2xl font-bold text-primary">{clinic.rating}</p>
+                    <p className="text-xs text-muted-foreground">Clinic Rating</p>
+                  </CardContent>
+                </Card>
               </div>
 
               <Card>
@@ -227,6 +250,19 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
             )}
             {jobs.map((job) => {
               const config = jobStatusConfig[job.status as JobStatusKey];
+              if (editingJob === job.id) {
+                return (
+                  <EditPositionForm
+                    key={job.id}
+                    job={job}
+                    onClose={() => setEditingJob(null)}
+                    onSaved={() => {
+                      setEditingJob(null);
+                      onRefresh?.();
+                    }}
+                  />
+                );
+              }
               return (
                 <Card key={job.id}>
                   <CardContent className="p-4">
@@ -267,9 +303,17 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                           </div>
                         )}
                       </div>
-                      <div className="text-right">
+                      <div className="flex flex-col items-end gap-2">
                         <span className="text-sm font-bold text-primary">{job.rate}</span>
-                        <p className="text-xs text-muted-foreground mt-1">{job.posted}</p>
+                        <p className="text-xs text-muted-foreground">{job.posted}</p>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setEditingJob(job.id)}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" />
+                          Edit
+                        </Button>
                       </div>
                     </div>
                   </CardContent>
