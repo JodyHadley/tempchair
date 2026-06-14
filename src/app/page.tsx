@@ -23,7 +23,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/30" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
           <div className="mx-auto max-w-3xl text-center">
-            <Image src="/logo.jpg" alt="TempChair" width={220} height={65} className="mx-auto mb-6 h-16 w-auto sm:h-20" priority />
+            <Image src="/logo.jpg" alt="TempChair" width={400} height={120} className="mx-auto mb-8 h-28 w-auto sm:h-36 lg:h-44" priority />
             <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium">
               Now serving Boise, Idaho
             </Badge>
