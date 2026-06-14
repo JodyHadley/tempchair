@@ -51,7 +51,7 @@ const appStatusConfig: Record<StatusKey, { label: string; variant: "default" | "
 };
 
 export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
-  const { clinic, jobs, reviews, reviewsGiven, marketRates, marketName } = data;
+  const { clinic, jobs, reviews, reviewsGiven, marketRates, marketName, isPremium, trialDaysLeft } = data;
   const [editing, setEditing] = useState(false);
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
@@ -110,6 +110,11 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                     <Badge variant="default" className="mt-1.5 text-xs">
                       <Crown className="mr-0.5 h-3 w-3" />
                       Premium Plan
+                    </Badge>
+                  ) : trialDaysLeft && trialDaysLeft > 0 ? (
+                    <Badge variant="default" className="mt-1.5 text-xs">
+                      <Crown className="mr-0.5 h-3 w-3" />
+                      Premium Trial — {trialDaysLeft} day{trialDaysLeft !== 1 ? "s" : ""} left
                     </Badge>
                   ) : (
                     <Badge variant="secondary" className="mt-1.5 text-xs">
@@ -267,7 +272,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
               )}
 
               {/* Non-premium upsell */}
-              {!clinic.premiumTier && (
+              {!isPremium && (
                 <Card className="border-dashed">
                   <CardContent className="p-4 flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 shrink-0">
@@ -413,7 +418,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                         toName={`${app.worker.firstName} ${app.worker.lastName}`}
                         jobId={app.job.id}
                         jobTitle={app.job.title}
-                        canWritePrivate={clinic.premiumTier}
+                        canWritePrivate={isPremium}
                         onClose={() => setReviewingApp(null)}
                         onSubmitted={() => {
                           setReviewingApp(null);
@@ -527,7 +532,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                       currentRating={review.rating}
                       currentComment={review.comment}
                       currentIsPrivate={review.isPrivate}
-                      canTogglePrivate={clinic.premiumTier}
+                      canTogglePrivate={isPremium}
                       targetName={review.fromName}
                       fromRole="clinic"
                       onClose={() => setEditingReview(null)}

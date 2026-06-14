@@ -72,8 +72,9 @@ model ClinicProfile {
   description    String
   rating         Float    @default(0)
   reviewCount    Int      @default(0)
-  claimed        Boolean  @default(false)
-  premiumTier    Boolean  @default(false)
+  claimed           Boolean  @default(false)
+  premiumTier       Boolean  @default(false)
+  premiumTrialEndsAt DateTime?
 
   jobs              JobPosting[]
   reviewsReceived   Review[]        @relation("ReviewToClinic")
