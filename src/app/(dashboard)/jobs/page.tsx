@@ -1,15 +1,45 @@
 export const dynamic = "force-dynamic";
 
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, CalendarDays, Building2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { getOpenJobs } from "@/lib/db/queries";
+import { createClient } from "@/lib/supabase/server";
+import { prisma } from "@/lib/db/prisma";
+import { JobListings } from "@/components/jobs/job-listings";
 
 export default async function JobsPage() {
   const openJobs = await getOpenJobs();
+
+  // Get current user's applications if they're a worker
+  let workerApplications: { jobId: string }[] = [];
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user?.user_metadata?.role === "worker" && user.user_metadata?.profileId) {
+      workerApplications = await prisma.application.findMany({
+        where: { workerId: user.user_metadata.profileId },
+        select: { jobId: true },
+      });
+    }
+  } catch {
+    // Not logged in or error — that's fine
+  }
+
+  const jobsData = openJobs.map((job) => ({
+    id: job.id,
+    title: job.title,
+    type: job.type,
+    dates: job.dates,
+    hours: job.hours,
+    rate: job.rate,
+    description: job.description,
+    posted: job.posted,
+    clinic: {
+      name: job.clinic.name,
+      location: job.clinic.location,
+    },
+  }));
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -25,57 +55,15 @@ export default async function JobsPage() {
         </Link>
       </div>
 
-      <div className="mt-8 space-y-4">
-        {openJobs.map((job) => (
-          <Card key={job.id} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-lg font-semibold">{job.title}</h2>
-                    <Badge variant="secondary">{job.type}</Badge>
-                  </div>
-                  <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Building2 className="h-4 w-4" />
-                      {job.clinic.name}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      {job.clinic.location}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <CalendarDays className="h-4 w-4" />
-                      {job.dates}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {job.hours}
-                    </span>
-                  </div>
-                  <p className="mt-3 text-sm text-muted-foreground">
-                    {job.description}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  <span className="text-lg font-bold text-primary">
-                    {job.rate}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {job.posted}
-                  </span>
-                  <Link
-                    href="/sign-in"
-                    className={cn(buttonVariants({ size: "sm" }), "mt-2")}
-                  >
-                    Apply Now
-                  </Link>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="mt-8">
+        <JobListings jobs={jobsData} workerApplications={workerApplications} />
       </div>
+
+      {openJobs.length === 0 && (
+        <div className="mt-8 text-center">
+          <p className="text-muted-foreground">No open positions right now. Check back soon!</p>
+        </div>
+      )}
     </div>
   );
 }

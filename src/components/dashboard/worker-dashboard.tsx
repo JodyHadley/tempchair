@@ -254,9 +254,22 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                           </div>
                           <p className="mt-2 text-sm text-muted-foreground italic">&ldquo;{app.coverNote}&rdquo;</p>
                         </div>
-                        <div className="text-right">
+                        <div className="flex flex-col items-end gap-2">
                           <span className="text-sm font-bold text-primary">{app.job.rate}</span>
-                          <p className="text-xs text-muted-foreground mt-1">Applied {app.appliedDate}</p>
+                          <p className="text-xs text-muted-foreground">Applied {app.appliedDate}</p>
+                          {app.status === "pending" && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={async () => {
+                                const { withdrawApplication } = await import("@/lib/db/actions");
+                                await withdrawApplication(app.id, worker.id);
+                                onRefresh?.();
+                              }}
+                            >
+                              Withdraw
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </CardContent>
