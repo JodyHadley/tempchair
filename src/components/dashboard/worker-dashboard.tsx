@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { WorkerProfileEdit } from "./worker-profile-edit";
 import { ReviewForm, PrivateBadge } from "./review-form";
 import { ReviewEditForm } from "./review-edit-form";
+import { CredentialVault } from "./credential-vault";
 import {
   Star,
   MapPin,
@@ -38,7 +39,7 @@ const statusConfig: Record<StatusKey, { label: string; variant: "default" | "sec
 };
 
 export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
-  const { worker, applications, reviews, reviewsGiven } = data;
+  const { worker, applications, reviews, reviewsGiven, credentials } = data;
   const [editing, setEditing] = useState(false);
   const [reviewingShift, setReviewingShift] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
@@ -75,6 +76,7 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
           <TabsTrigger value="shifts">My Shifts</TabsTrigger>
           <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
           <TabsTrigger value="my-reviews">My Reviews ({reviewsGiven.length})</TabsTrigger>
+          <TabsTrigger value="credentials">Credentials ({credentials.length})</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -468,6 +470,16 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
               ))
             )}
           </div>
+        </TabsContent>
+
+        {/* Credentials Tab */}
+        <TabsContent value="credentials">
+          <CredentialVault
+            credentials={credentials}
+            workerId={worker.id}
+            specialty={worker.specialty}
+            onRefresh={onRefresh}
+          />
         </TabsContent>
       </Tabs>
     </div>
