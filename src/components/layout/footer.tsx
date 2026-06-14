@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { Sparkles } from "lucide-react";
 
 export function Footer() {
   return (
@@ -7,8 +7,11 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="col-span-1">
-            <Link href="/" className="flex items-center">
-              <Image src="/logo.jpg" alt="TempChair" width={120} height={35} className="h-8 w-auto" />
+            <Link href="/" className="flex items-center gap-2">
+              <Sparkles className="h-6 w-6 text-primary" />
+              <span className="text-lg font-bold tracking-tight">
+                Temp<span className="text-primary">Chair</span>
+              </span>
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">
               Connecting dental professionals with clinics that need them. Fast, reliable temp staffing for the dental industry.
