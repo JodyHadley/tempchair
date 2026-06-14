@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -140,30 +141,38 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
 
             <div className="lg:col-span-2 space-y-6">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("shifts")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{completedShifts.length}</p>
-                    <p className="text-xs text-muted-foreground">Completed Shifts</p>
-                  </CardContent>
-                </Card>
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("shifts")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{upcomingShifts.length}</p>
-                    <p className="text-xs text-muted-foreground">Upcoming Shifts</p>
-                  </CardContent>
-                </Card>
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{pendingApps}</p>
-                    <p className="text-xs text-muted-foreground">Pending Apps</p>
-                  </CardContent>
-                </Card>
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("reviews")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{worker.rating}</p>
-                    <p className="text-xs text-muted-foreground">Avg Rating</p>
-                  </CardContent>
-                </Card>
+                <HelpTooltip text="Shifts you've worked and completed. Click to see your shift history and leave reviews.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("shifts")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{completedShifts.length}</p>
+                      <p className="text-xs text-muted-foreground">Completed Shifts</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
+                <HelpTooltip text="Confirmed shifts you have coming up. Click to see dates, locations, and clinic details.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("shifts")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{upcomingShifts.length}</p>
+                      <p className="text-xs text-muted-foreground">Upcoming Shifts</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
+                <HelpTooltip text="Applications you've submitted that are waiting for a clinic's response. Click to view their status.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{pendingApps}</p>
+                      <p className="text-xs text-muted-foreground">Pending Apps</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
+                <HelpTooltip text="Your average rating from clinics you've worked with. Higher ratings help you stand out to new clinics.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("reviews")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{worker.rating}</p>
+                      <p className="text-xs text-muted-foreground">Avg Rating</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
               </div>
 
               <Card>
