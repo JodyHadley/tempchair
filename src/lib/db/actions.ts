@@ -11,8 +11,10 @@ export async function getWorkerDashboardData(workerId: string) {
       include: { job: { include: { clinic: true } } },
       orderBy: { createdAt: "desc" },
     }),
+    // Reviews received: only show public reviews (private clinic reviews of workers
+    // should only be visible to other premium clinics, not to the worker themselves)
     prisma.review.findMany({
-      where: { toWorkerId: workerId },
+      where: { toWorkerId: workerId, isPrivate: false },
       include: { job: true },
       orderBy: { createdAt: "desc" },
     }),
@@ -39,8 +41,10 @@ export async function getClinicDashboardData(clinicId: string) {
       },
       orderBy: { createdAt: "desc" },
     }),
+    // Reviews received: only show public reviews (private worker reviews of clinics
+    // should only be visible to other workers, not to the clinic themselves)
     prisma.review.findMany({
-      where: { toClinicId: clinicId },
+      where: { toClinicId: clinicId, isPrivate: false },
       include: { job: true },
       orderBy: { createdAt: "desc" },
     }),
