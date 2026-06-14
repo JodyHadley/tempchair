@@ -12,6 +12,7 @@ import { WorkerProfileEdit } from "./worker-profile-edit";
 import { ReviewForm, PrivateBadge } from "./review-form";
 import { ReviewEditForm } from "./review-edit-form";
 import { CredentialVault } from "./credential-vault";
+import { MessageThread } from "./message-thread";
 import {
   Star,
   MapPin,
@@ -274,6 +275,16 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                           )}
                         </div>
                       </div>
+                      {(app.status === "pending" || app.status === "accepted") && (
+                        <MessageThread
+                          applicationId={app.id}
+                          currentRole="worker"
+                          currentName={`${worker.firstName} ${worker.lastName}`}
+                          currentId={worker.id}
+                          otherName={app.job.clinic.name}
+                          unreadCount={app.messages?.filter((m: any) => m.senderRole === "clinic" && !m.readAt).length || 0}
+                        />
+                      )}
                     </CardContent>
                   </Card>
                 );

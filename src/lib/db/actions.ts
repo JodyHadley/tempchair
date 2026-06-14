@@ -8,7 +8,10 @@ export async function getWorkerDashboardData(workerId: string) {
     prisma.workerProfile.findUnique({ where: { id: workerId } }),
     prisma.application.findMany({
       where: { workerId },
-      include: { job: { include: { clinic: true } } },
+      include: {
+        job: { include: { clinic: true } },
+        messages: { orderBy: { createdAt: "asc" } },
+      },
       orderBy: { createdAt: "desc" },
     }),
     prisma.review.findMany({
@@ -37,7 +40,10 @@ export async function getClinicDashboardData(clinicId: string) {
       where: { clinicId },
       include: {
         applications: {
-          include: { worker: true },
+          include: {
+            worker: true,
+            messages: { orderBy: { createdAt: "asc" } },
+          },
           orderBy: { createdAt: "desc" },
         },
       },
