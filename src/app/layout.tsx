@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   title: "TempChair — Temp Staffing for Dental Professionals",
   description:
     "Connect dental clinics with qualified hygienists, assistants, and dentists for temporary positions. Fast, reliable, and trusted.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
