@@ -143,7 +143,7 @@ export function Header() {
             <span className="sr-only">Toggle menu</span>
           </SheetTrigger>
           <SheetContent side="right" className="w-[85vw] max-w-80">
-            <div className="flex flex-col gap-6 pt-6">
+            <div className="flex flex-col gap-6 px-5 pt-8 pb-6">
               <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
                 <Sparkles className="h-7 w-7 text-primary" />
                 <span className="text-xl font-bold tracking-tight">
