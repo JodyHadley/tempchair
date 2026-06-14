@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { WorkerProfileEdit } from "./worker-profile-edit";
 import { ReviewForm, PrivateBadge } from "./review-form";
+import { ReviewEditForm } from "./review-edit-form";
 import {
   Star,
   MapPin,
@@ -36,9 +37,10 @@ const statusConfig: Record<StatusKey, { label: string; variant: "default" | "sec
 };
 
 export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
-  const { worker, applications, reviews } = data;
+  const { worker, applications, reviews, reviewsGiven } = data;
   const [editing, setEditing] = useState(false);
   const [reviewingShift, setReviewingShift] = useState<string | null>(null);
+  const [editingReview, setEditingReview] = useState<string | null>(null);
   if (!worker) return null;
 
   const upcomingShifts = applications.filter(
@@ -70,6 +72,7 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
           </TabsTrigger>
           <TabsTrigger value="shifts">My Shifts</TabsTrigger>
           <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
+          <TabsTrigger value="my-reviews">My Reviews ({reviewsGiven.length})</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -353,6 +356,72 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                     </div>
                   </CardContent>
                 </Card>
+              ))
+            )}
+          </div>
+        </TabsContent>
+
+        {/* My Reviews Tab (reviews I've written) */}
+        <TabsContent value="my-reviews">
+          <div className="space-y-4">
+            {reviewsGiven.length === 0 ? (
+              <Card><CardContent className="p-8 text-center text-muted-foreground">You haven&apos;t written any reviews yet.</CardContent></Card>
+            ) : (
+              reviewsGiven.map((review) => (
+                <div key={review.id}>
+                  {editingReview === review.id ? (
+                    <ReviewEditForm
+                      reviewId={review.id}
+                      currentRating={review.rating}
+                      currentComment={review.comment}
+                      currentIsPrivate={review.isPrivate}
+                      canTogglePrivate={true}
+                      targetName={review.toRole === "clinic" ? "clinic" : "worker"}
+                      fromRole="worker"
+                      onClose={() => setEditingReview(null)}
+                      onSaved={() => {
+                        setEditingReview(null);
+                        onRefresh?.();
+                      }}
+                    />
+                  ) : (
+                    <Card>
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-muted-foreground">Your review of</span>
+                              <span className="font-semibold">{review.toRole === "clinic" ? review.fromName : review.fromName}</span>
+                              {review.isPrivate && <PrivateBadge />}
+                              <div className="flex items-center gap-0.5">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-primary text-primary" : "text-muted"}`} />
+                                ))}
+                              </div>
+                            </div>
+                            <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
+                            {review.job && (
+                              <p className="mt-2 text-xs text-muted-foreground">
+                                <Briefcase className="inline h-3 w-3 mr-1" />{review.job.title} &middot; {review.job.dates}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex flex-col items-end gap-2">
+                            <span className="text-xs text-muted-foreground">{review.date}</span>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setEditingReview(review.id)}
+                            >
+                              <Pencil className="h-3 w-3 mr-1" />
+                              Edit
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
               ))
             )}
           </div>

@@ -4,7 +4,7 @@ import { prisma } from "./prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getWorkerDashboardData(workerId: string) {
-  const [worker, applications, reviews] = await Promise.all([
+  const [worker, applications, reviews, reviewsGiven] = await Promise.all([
     prisma.workerProfile.findUnique({ where: { id: workerId } }),
     prisma.application.findMany({
       where: { workerId },
@@ -16,13 +16,18 @@ export async function getWorkerDashboardData(workerId: string) {
       include: { job: true },
       orderBy: { createdAt: "desc" },
     }),
+    prisma.review.findMany({
+      where: { fromWorkerId: workerId },
+      include: { job: true },
+      orderBy: { createdAt: "desc" },
+    }),
   ]);
 
-  return { worker, applications, reviews };
+  return { worker, applications, reviews, reviewsGiven };
 }
 
 export async function getClinicDashboardData(clinicId: string) {
-  const [clinic, jobs, reviews] = await Promise.all([
+  const [clinic, jobs, reviews, reviewsGiven] = await Promise.all([
     prisma.clinicProfile.findUnique({ where: { id: clinicId } }),
     prisma.jobPosting.findMany({
       where: { clinicId },
@@ -39,9 +44,60 @@ export async function getClinicDashboardData(clinicId: string) {
       include: { job: true },
       orderBy: { createdAt: "desc" },
     }),
+    prisma.review.findMany({
+      where: { fromClinicId: clinicId },
+      include: { job: true },
+      orderBy: { createdAt: "desc" },
+    }),
   ]);
 
-  return { clinic, jobs, reviews };
+  return { clinic, jobs, reviews, reviewsGiven };
+}
+
+export async function updateReview(
+  reviewId: string,
+  data: {
+    rating: number;
+    comment: string;
+    isPrivate: boolean;
+  },
+) {
+  const review = await prisma.review.update({
+    where: { id: reviewId },
+    data: {
+      rating: data.rating,
+      comment: data.comment,
+      isPrivate: data.isPrivate,
+    },
+  });
+
+  // Recalculate target's average rating
+  if (review.toWorkerId) {
+    const reviews = await prisma.review.findMany({
+      where: { toWorkerId: review.toWorkerId },
+      select: { rating: true },
+    });
+    const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    await prisma.workerProfile.update({
+      where: { id: review.toWorkerId },
+      data: { rating: Math.round(avg * 10) / 10, reviewCount: reviews.length },
+    });
+  }
+
+  if (review.toClinicId) {
+    const reviews = await prisma.review.findMany({
+      where: { toClinicId: review.toClinicId },
+      select: { rating: true },
+    });
+    const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    await prisma.clinicProfile.update({
+      where: { id: review.toClinicId },
+      data: { rating: Math.round(avg * 10) / 10, reviewCount: reviews.length },
+    });
+  }
+
+  revalidatePath("/dashboard");
+  return { success: true };
 }
 
 export async function updateWorkerProfile(
