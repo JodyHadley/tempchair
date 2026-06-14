@@ -90,8 +90,9 @@ function SignUpForm() {
         setSuccess(true);
         setTimeout(() => router.push("/sign-in"), 2000);
       }
-    } catch {
-      setError("Something went wrong. Please try again.");
+    } catch (err) {
+      console.error("Sign-up error:", err);
+      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -45,23 +45,28 @@ export async function createWorkerAccount(data: {
   }
 
   // Create worker profile in database
-  await prisma.workerProfile.create({
-    data: {
-      id: profileId,
-      authUserId: authData.user.id,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      initials,
-      specialty: data.specialty,
-      location: "",
-      bio: "",
-      experience: "",
-      certifications: [],
-      availability: "",
-      hourlyRate: "",
-    },
-  });
+  try {
+    await prisma.workerProfile.create({
+      data: {
+        id: profileId,
+        authUserId: authData.user.id,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        initials,
+        specialty: data.specialty,
+        location: "",
+        bio: "",
+        experience: "",
+        certifications: [],
+        availability: "",
+        hourlyRate: "",
+      },
+    });
+  } catch (dbError) {
+    console.error("Worker profile creation error:", dbError);
+    return { success: false, error: "Account created but profile setup failed. Please contact support." };
+  }
 
   return { success: true };
 }
@@ -103,22 +108,27 @@ export async function createClinicAccount(data: {
   }
 
   // Create clinic profile in database
-  await prisma.clinicProfile.create({
-    data: {
-      id: profileId,
-      authUserId: authData.user.id,
-      email: data.email,
-      name: data.clinicName,
-      contactName: data.contactName,
-      initials,
-      location: "",
-      address: "",
-      phone: "",
-      description: "",
-      claimed: true,
-      premiumTrialEndsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
-    },
-  });
+  try {
+    await prisma.clinicProfile.create({
+      data: {
+        id: profileId,
+        authUserId: authData.user.id,
+        email: data.email,
+        name: data.clinicName,
+        contactName: data.contactName,
+        initials,
+        location: "",
+        address: "",
+        phone: "",
+        description: "",
+        claimed: true,
+        premiumTrialEndsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+      },
+    });
+  } catch (dbError) {
+    console.error("Clinic profile creation error:", dbError);
+    return { success: false, error: "Account created but profile setup failed. Please contact support." };
+  }
 
   return { success: true };
 }
