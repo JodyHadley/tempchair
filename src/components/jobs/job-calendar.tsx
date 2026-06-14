@@ -122,6 +122,14 @@ export function JobCalendar({ availableJobs, bookedJobs, workerApplications, wor
             <Button variant="ghost" size="icon" onClick={nextMonth} className="h-7 w-7">
               <ChevronRight className="h-4 w-4" />
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-2 text-xs h-7"
+              onClick={() => { setCurrentMonth(now.getMonth()); setCurrentYear(now.getFullYear()); }}
+            >
+              Today
+            </Button>
           </div>
         </div>
         {/* Legend */}
