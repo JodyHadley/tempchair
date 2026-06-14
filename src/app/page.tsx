@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/30" />
         <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
           <div className="mx-auto max-w-3xl text-center">
+            <Image src="/logo.jpg" alt="TempChair" width={220} height={65} className="mx-auto mb-6 h-16 w-auto sm:h-20" priority />
             <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium">
               Now serving Boise, Idaho
             </Badge>
