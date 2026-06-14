@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/lib/auth-context";
+import { GoogleSignInButton } from "@/components/auth/google-button";
 
 const testAccounts = [
   { label: "Hygienist", email: "sarah@test.com" },
@@ -92,6 +93,14 @@ export default function SignInPage() {
             <Button type="submit" className="w-full" size="lg">
               Sign In
             </Button>
+
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center"><div className="w-full border-t" /></div>
+              <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">or</span></div>
+            </div>
+
+            <GoogleSignInButton />
+
             <p className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{" "}
               <Link href="/sign-up" className="font-medium text-primary hover:underline">

@@ -132,3 +132,86 @@ export async function createClinicAccount(data: {
 
   return { success: true };
 }
+
+// ── Google OAuth Profile Setup ─────────────────────────────
+
+export async function createProfileForGoogleUser(data: {
+  authUserId: string;
+  email: string;
+  role: "worker" | "clinic";
+  firstName?: string;
+  lastName?: string;
+  specialty?: "Hygienist" | "Assistant" | "Dentist";
+  clinicName?: string;
+  contactName?: string;
+}) {
+  const supabase = getAdminClient();
+  const profileId = crypto.randomUUID();
+
+  try {
+    if (data.role === "worker") {
+      const firstName = data.firstName || "";
+      const lastName = data.lastName || "";
+      const initials = ((firstName[0] || "") + (lastName[0] || "")).toUpperCase() || "??";
+      const name = `${firstName} ${lastName}`.trim();
+
+      await prisma.workerProfile.create({
+        data: {
+          id: profileId,
+          authUserId: data.authUserId,
+          email: data.email,
+          firstName,
+          lastName,
+          initials,
+          specialty: data.specialty || "Hygienist",
+          location: "",
+          bio: "",
+          experience: "",
+          certifications: [],
+          availability: "",
+          hourlyRate: "",
+        },
+      });
+
+      await supabase.auth.admin.updateUserById(data.authUserId, {
+        user_metadata: { role: "worker", profileId, name, initials },
+      });
+
+      return { success: true, profileId, name, initials, role: "worker" as const };
+    } else {
+      const clinicName = data.clinicName || "";
+      const initials = clinicName
+        .split(" ")
+        .map((w) => w[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase() || "??";
+
+      await prisma.clinicProfile.create({
+        data: {
+          id: profileId,
+          authUserId: data.authUserId,
+          email: data.email,
+          name: clinicName,
+          contactName: data.contactName || "",
+          initials,
+          location: "",
+          address: "",
+          phone: "",
+          description: "",
+          claimed: true,
+          premiumTrialEndsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
+        },
+      });
+
+      await supabase.auth.admin.updateUserById(data.authUserId, {
+        user_metadata: { role: "clinic", profileId, name: clinicName, initials },
+      });
+
+      return { success: true, profileId, name: clinicName, initials, role: "clinic" as const };
+    }
+  } catch (err) {
+    console.error("Google profile creation error:", err);
+    return { success: false, error: "Failed to create profile. Please try again." };
+  }
+}

@@ -17,6 +17,7 @@ import { Users, Building2, CheckCircle2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { GoogleSignInButton } from "@/components/auth/google-button";
 import { createWorkerAccount, createClinicAccount } from "@/lib/db/auth-actions";
 
 function SignUpForm() {
@@ -126,6 +127,13 @@ function SignUpForm() {
         <CardContent>
           {!role ? (
             <div className="space-y-4">
+              <GoogleSignInButton />
+
+              <div className="relative my-1">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t" /></div>
+                <div className="relative flex justify-center text-xs uppercase"><span className="bg-card px-2 text-muted-foreground">or sign up with email</span></div>
+              </div>
+
               <p className="text-center text-sm font-medium text-muted-foreground">
                 I am a...
               </p>

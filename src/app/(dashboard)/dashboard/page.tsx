@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { WorkerDashboard } from "@/components/dashboard/worker-dashboard";
 import { ClinicDashboard } from "@/components/dashboard/clinic-dashboard";
+import { GoogleProfileSetup } from "@/components/auth/google-profile-setup";
 import { getWorkerDashboardData, getClinicDashboardData } from "@/lib/db/actions";
 
 type WorkerData = Awaited<ReturnType<typeof getWorkerDashboardData>>;
@@ -28,17 +29,17 @@ function LoadingSkeleton() {
 }
 
 export default function DashboardPage() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, needsProfile, pendingAuthUser } = useAuth();
   const router = useRouter();
   const [workerData, setWorkerData] = useState<WorkerData | null>(null);
   const [clinicData, setClinicData] = useState<ClinicData | null>(null);
   const [dataLoading, setDataLoading] = useState(true);
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (!isLoading && !user && !needsProfile) {
       router.replace("/sign-in");
     }
-  }, [isLoading, user, router]);
+  }, [isLoading, user, needsProfile, router]);
 
   useEffect(() => {
     if (!user) return;
@@ -56,6 +57,11 @@ export default function DashboardPage() {
       });
     }
   }, [user]);
+
+  // New Google user needs to complete profile setup
+  if (needsProfile && pendingAuthUser) {
+    return <GoogleProfileSetup authUser={pendingAuthUser} />;
+  }
 
   if (isLoading || dataLoading || !user) {
     if (!isLoading && !user) return null;

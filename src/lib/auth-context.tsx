@@ -17,8 +17,12 @@ export interface AuthUser {
 interface AuthContextValue {
   user: AuthUser | null;
   isLoading: boolean;
+  needsProfile: boolean;
+  pendingAuthUser: User | null;
   signIn: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => void;
+  setProfileComplete: (authUser: AuthUser) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -39,25 +43,42 @@ function toAuthUser(supaUser: User): AuthUser | null {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [needsProfile, setNeedsProfile] = useState(false);
+  const [pendingAuthUser, setPendingAuthUser] = useState<User | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getUser().then(({ data: { user: supaUser } }) => {
       if (supaUser) {
-        setUser(toAuthUser(supaUser));
+        const authUser = toAuthUser(supaUser);
+        if (authUser) {
+          setUser(authUser);
+        } else {
+          // Signed in but no profile (e.g., new Google user)
+          setPendingAuthUser(supaUser);
+          setNeedsProfile(true);
+        }
       }
       setIsLoading(false);
     });
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         if (session?.user) {
-          setUser(toAuthUser(session.user));
+          const authUser = toAuthUser(session.user);
+          if (authUser) {
+            setUser(authUser);
+            setNeedsProfile(false);
+            setPendingAuthUser(null);
+          } else {
+            setPendingAuthUser(session.user);
+            setNeedsProfile(true);
+          }
         } else {
           setUser(null);
+          setNeedsProfile(false);
+          setPendingAuthUser(null);
         }
       },
     );
@@ -73,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       if (error) {
         console.error("Supabase sign-in error:", error.message, error.status);
-        return { success: false, error: error.message || "Invalid email or password. Try a test account below." };
+        return { success: false, error: error.message || "Invalid email or password." };
       }
       if (data.user) {
         setUser(toAuthUser(data.user));
@@ -83,14 +104,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [supabase],
   );
 
+  const signInWithGoogle = useCallback(async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+  }, [supabase]);
+
   const signOut = useCallback(async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setNeedsProfile(false);
+    setPendingAuthUser(null);
     router.push("/");
   }, [supabase, router]);
 
+  const setProfileComplete = useCallback((authUser: AuthUser) => {
+    setUser(authUser);
+    setNeedsProfile(false);
+    setPendingAuthUser(null);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, isLoading, needsProfile, pendingAuthUser, signIn, signInWithGoogle, signOut, setProfileComplete }}>
       {children}
     </AuthContext.Provider>
   );
