@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ClinicProfileEdit } from "./clinic-profile-edit";
+import { ReviewForm, PrivateBadge } from "./review-form";
 import {
   Star,
   MapPin,
@@ -17,6 +18,7 @@ import {
   Users,
   Phone,
   Pencil,
+  MessageSquarePlus,
   CheckCircle2,
   XCircle,
   ClockIcon,
@@ -45,6 +47,7 @@ const appStatusConfig: Record<StatusKey, { label: string; variant: "default" | "
 export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
   const { clinic, jobs, reviews } = data;
   const [editing, setEditing] = useState(false);
+  const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   if (!clinic) return null;
 
   const allApplications = jobs.flatMap((job) =>
@@ -252,6 +255,28 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
             ) : (
               allApplications.map((app) => {
                 const aConfig = appStatusConfig[app.status as StatusKey];
+                if (reviewingApp === app.id) {
+                  return (
+                    <div key={app.id}>
+                      <ReviewForm
+                        fromClinicId={clinic.id}
+                        fromRole="clinic"
+                        fromName={clinic.name}
+                        toWorkerId={app.worker.id}
+                        toRole="worker"
+                        toName={`${app.worker.firstName} ${app.worker.lastName}`}
+                        jobId={app.job.id}
+                        jobTitle={app.job.title}
+                        canWritePrivate={clinic.premiumTier}
+                        onClose={() => setReviewingApp(null)}
+                        onSubmitted={() => {
+                          setReviewingApp(null);
+                          onRefresh?.();
+                        }}
+                      />
+                    </div>
+                  );
+                }
                 return (
                   <Card key={app.id}>
                     <CardContent className="p-4">
@@ -285,6 +310,17 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                               <Button size="sm"><CheckCircle2 className="h-3.5 w-3.5 mr-1" />Accept</Button>
                             </div>
                           )}
+                          {app.status === "accepted" && app.job.status === "completed" && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="mt-1"
+                              onClick={() => setReviewingApp(app.id)}
+                            >
+                              <MessageSquarePlus className="h-3.5 w-3.5 mr-1" />
+                              Review Worker
+                            </Button>
+                          )}
                         </div>
                       </div>
                     </CardContent>
@@ -308,6 +344,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-semibold">{review.fromName}</span>
+                          {review.isPrivate && <PrivateBadge />}
                           <div className="flex items-center gap-0.5">
                             {Array.from({ length: 5 }).map((_, i) => (
                               <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-primary text-primary" : "text-muted"}`} />

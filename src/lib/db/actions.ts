@@ -104,3 +104,69 @@ export async function updateClinicProfile(
   revalidatePath("/clinics");
   return { success: true };
 }
+
+export async function submitReview(data: {
+  fromWorkerId?: string;
+  fromClinicId?: string;
+  fromRole: "worker" | "clinic";
+  fromName: string;
+  toWorkerId?: string;
+  toClinicId?: string;
+  toRole: "worker" | "clinic";
+  rating: number;
+  comment: string;
+  jobId: string;
+  isPrivate: boolean;
+}) {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  await prisma.review.create({
+    data: {
+      fromWorkerId: data.fromWorkerId || null,
+      fromClinicId: data.fromClinicId || null,
+      fromRole: data.fromRole,
+      fromName: data.fromName,
+      toWorkerId: data.toWorkerId || null,
+      toClinicId: data.toClinicId || null,
+      toRole: data.toRole,
+      rating: data.rating,
+      comment: data.comment,
+      date: dateStr,
+      jobId: data.jobId,
+      isPrivate: data.isPrivate,
+    },
+  });
+
+  // Update review count and recalculate average rating for the target
+  if (data.toWorkerId) {
+    const reviews = await prisma.review.findMany({
+      where: { toWorkerId: data.toWorkerId },
+      select: { rating: true },
+    });
+    const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    await prisma.workerProfile.update({
+      where: { id: data.toWorkerId },
+      data: { rating: Math.round(avg * 10) / 10, reviewCount: reviews.length },
+    });
+  }
+
+  if (data.toClinicId) {
+    const reviews = await prisma.review.findMany({
+      where: { toClinicId: data.toClinicId },
+      select: { rating: true },
+    });
+    const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+    await prisma.clinicProfile.update({
+      where: { id: data.toClinicId },
+      data: { rating: Math.round(avg * 10) / 10, reviewCount: reviews.length },
+    });
+  }
+
+  revalidatePath("/dashboard");
+  return { success: true };
+}
