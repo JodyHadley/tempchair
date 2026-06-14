@@ -39,6 +39,15 @@ export async function POST(request: NextRequest) {
         const clinicId = session.metadata?.clinicId;
         const type = session.metadata?.type;
 
+        // Save Stripe customer ID if we have one
+        if (clinicId && session.customer) {
+          const custId = typeof session.customer === "string" ? session.customer : session.customer.id;
+          await prisma.clinicProfile.update({
+            where: { id: clinicId },
+            data: { stripeCustomerId: custId },
+          }).catch(() => {}); // Ignore if already set
+        }
+
         if (clinicId && type === "premium") {
           await prisma.clinicProfile.update({
             where: { id: clinicId },
@@ -49,7 +58,6 @@ export async function POST(request: NextRequest) {
 
         if (clinicId && type === "posting") {
           console.log(`Posting payment received for clinic ${clinicId}`);
-          // Posting is already created — payment just confirms it
         }
         break;
       }

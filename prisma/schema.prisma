@@ -112,6 +112,7 @@ model ClinicProfile {
   claimed           Boolean  @default(false)
   premiumTier       Boolean  @default(false)
   premiumTrialEndsAt DateTime?
+  stripeCustomerId  String?  @unique
 
   jobs              JobPosting[]
   reviewsReceived   Review[]        @relation("ReviewToClinic")
