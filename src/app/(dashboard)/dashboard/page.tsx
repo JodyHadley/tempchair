@@ -83,7 +83,7 @@ export default function DashboardPage() {
   }
 
   if (user.role === "clinic" && clinicData?.clinic) {
-    return <ClinicDashboard data={clinicData} />;
+    return <ClinicDashboard data={clinicData} onRefresh={refreshData} />;
   }
 
   return <LoadingSkeleton />;

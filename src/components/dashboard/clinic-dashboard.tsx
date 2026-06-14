@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ClinicProfileEdit } from "./clinic-profile-edit";
 import {
   Star,
   MapPin,
@@ -14,6 +16,7 @@ import {
   Briefcase,
   Users,
   Phone,
+  Pencil,
   CheckCircle2,
   XCircle,
   ClockIcon,
@@ -39,8 +42,9 @@ const appStatusConfig: Record<StatusKey, { label: string; variant: "default" | "
   withdrawn: { label: "Withdrawn", variant: "secondary" },
 };
 
-export function ClinicDashboard({ data }: { data: DashboardData }) {
+export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
   const { clinic, jobs, reviews } = data;
+  const [editing, setEditing] = useState(false);
   if (!clinic) return null;
 
   const allApplications = jobs.flatMap((job) =>
@@ -69,6 +73,18 @@ export function ClinicDashboard({ data }: { data: DashboardData }) {
         {/* Overview Tab */}
         <TabsContent value="overview">
           <div className="grid gap-6 lg:grid-cols-3">
+            {editing ? (
+              <div className="lg:col-span-1">
+                <ClinicProfileEdit
+                  clinic={clinic}
+                  onClose={() => setEditing(false)}
+                  onSaved={() => {
+                    setEditing(false);
+                    onRefresh?.();
+                  }}
+                />
+              </div>
+            ) : (
             <Card className="lg:col-span-1">
               <CardContent className="p-6">
                 <div className="flex flex-col items-center text-center">
@@ -94,9 +110,18 @@ export function ClinicDashboard({ data }: { data: DashboardData }) {
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-3">About</p>
                     <p className="text-sm text-muted-foreground">{clinic.description}</p>
                   </div>
+                  <Button
+                    variant="outline"
+                    className="mt-4 w-full"
+                    onClick={() => setEditing(true)}
+                  >
+                    <Pencil className="h-3.5 w-3.5 mr-1.5" />
+                    Edit Profile
+                  </Button>
                 </div>
               </CardContent>
             </Card>
+            )}
 
             <div className="lg:col-span-2 space-y-6">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

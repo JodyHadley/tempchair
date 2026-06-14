@@ -72,3 +72,35 @@ export async function updateWorkerProfile(
   revalidatePath("/workers");
   return { success: true };
 }
+
+export async function updateClinicProfile(
+  clinicId: string,
+  data: {
+    name: string;
+    contactName: string;
+    email: string;
+    location: string;
+    address: string;
+    phone: string;
+    description: string;
+  },
+) {
+  const initials = data.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  await prisma.clinicProfile.update({
+    where: { id: clinicId },
+    data: {
+      ...data,
+      initials,
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/clinics");
+  return { success: true };
+}
