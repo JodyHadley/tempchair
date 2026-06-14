@@ -116,6 +116,7 @@ export async function createClinicAccount(data: {
       phone: "",
       description: "",
       claimed: true,
+      premiumTrialEndsAt: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
     },
   });
 

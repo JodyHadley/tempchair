@@ -55,10 +55,20 @@ export async function getClinicDashboardData(clinicId: string) {
     }),
   ]);
 
+  // Determine premium status (paid OR trial active)
+  const isPremium = clinic
+    ? clinic.premiumTier ||
+      (clinic.premiumTrialEndsAt !== null && new Date(clinic.premiumTrialEndsAt) > new Date())
+    : false;
+
+  const trialDaysLeft = clinic?.premiumTrialEndsAt && !clinic.premiumTier
+    ? Math.max(0, Math.ceil((new Date(clinic.premiumTrialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+    : null;
+
   // Market rate insights (premium only)
   let marketRates = null;
   let marketName = "";
-  if (clinic?.premiumTier) {
+  if (isPremium) {
     // Define market regions by state abbreviation
     const marketRegions: Record<string, string> = {
       ID: "Southwest Idaho (Treasure Valley)",
@@ -69,15 +79,15 @@ export async function getClinicDashboardData(clinicId: string) {
     };
 
     // Extract state from clinic location (e.g., "Boise, ID" → "ID")
-    const stateMatch = clinic.location.match(/,\s*([A-Z]{2})$/);
+    const stateMatch = clinic!.location.match(/,\s*([A-Z]{2})$/);
     const state = stateMatch?.[1] || "";
-    marketName = marketRegions[state] || clinic.location;
+    marketName = marketRegions[state] || clinic!.location;
 
     // Get all clinics in the same state
     const localClinics = await prisma.clinicProfile.findMany({
       where: {
         id: { not: clinicId },
-        location: { contains: state ? `, ${state}` : clinic.location },
+        location: { contains: state ? `, ${state}` : clinic!.location },
       },
       select: { id: true },
     });
@@ -115,7 +125,7 @@ export async function getClinicDashboardData(clinicId: string) {
     }));
   }
 
-  return { clinic, jobs, reviews, reviewsGiven, marketRates, marketName };
+  return { clinic, jobs, reviews, reviewsGiven, marketRates, marketName, isPremium, trialDaysLeft };
 }
 
 export async function updateReview(
