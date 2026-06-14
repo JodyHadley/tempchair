@@ -99,6 +99,7 @@ model JobPosting {
   description String
   posted      String
   status      JobStatus      @default(open)
+  expiresAt   DateTime?
 
   applications Application[]
   reviews      Review[]

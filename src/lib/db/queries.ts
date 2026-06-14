@@ -49,8 +49,16 @@ export async function getJobsByClinicId(clinicId: string) {
 }
 
 export async function getOpenJobs() {
+  const now = new Date();
   return prisma.jobPosting.findMany({
-    where: { status: "open" },
+    where: {
+      status: "open",
+      endDate: { gt: now },
+      OR: [
+        { expiresAt: null },
+        { expiresAt: { gt: now } },
+      ],
+    },
     include: { clinic: true },
     orderBy: { createdAt: "desc" },
   });
