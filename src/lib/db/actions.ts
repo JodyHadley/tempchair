@@ -277,6 +277,51 @@ export async function createJobPosting(data: {
   return { success: true };
 }
 
+export async function updateJobPosting(
+  jobId: string,
+  data: {
+    title: string;
+    type: "Hygienist" | "Assistant" | "Dentist";
+    startDate: string;
+    endDate: string;
+    hours: string;
+    rate: string;
+    description: string;
+    status: "open" | "filled" | "completed" | "cancelled";
+  },
+) {
+  const start = new Date(data.startDate);
+  const end = new Date(data.endDate);
+
+  const fmt = (d: Date) =>
+    d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const dates = `${fmt(start)} – ${fmt(end)}`;
+
+  const thirtyDays = new Date();
+  thirtyDays.setDate(thirtyDays.getDate() + 30);
+  const expiresAt = end < thirtyDays ? end : thirtyDays;
+
+  await prisma.jobPosting.update({
+    where: { id: jobId },
+    data: {
+      title: data.title,
+      type: data.type,
+      dates,
+      startDate: start,
+      endDate: end,
+      hours: data.hours,
+      rate: data.rate,
+      description: data.description,
+      status: data.status,
+      expiresAt,
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/jobs");
+  return { success: true };
+}
+
 export async function expireOldJobs() {
   const now = new Date();
   await prisma.jobPosting.updateMany({
