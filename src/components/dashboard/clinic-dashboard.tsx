@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -154,30 +155,38 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
 
             <div className="lg:col-span-2 space-y-6">
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("positions")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{openJobs}</p>
-                    <p className="text-xs text-muted-foreground">Open Positions</p>
-                  </CardContent>
-                </Card>
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{pendingApps}</p>
-                    <p className="text-xs text-muted-foreground">Pending Apps</p>
-                  </CardContent>
-                </Card>
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{acceptedWorkers}</p>
-                    <p className="text-xs text-muted-foreground">Workers Booked</p>
-                  </CardContent>
-                </Card>
-                <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("reviews")}>
-                  <CardContent className="p-4 text-center">
-                    <p className="text-2xl font-bold text-primary">{clinic.rating}</p>
-                    <p className="text-xs text-muted-foreground">Clinic Rating</p>
-                  </CardContent>
-                </Card>
+                <HelpTooltip text="The number of job postings you currently have that are accepting applications. Click to view your positions.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("positions")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{openJobs}</p>
+                      <p className="text-xs text-muted-foreground">Open Positions</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
+                <HelpTooltip text="Applications from dental professionals waiting for your response. Click to review and accept or decline them.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{pendingApps}</p>
+                      <p className="text-xs text-muted-foreground">Pending Apps</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
+                <HelpTooltip text="The number of dental professionals you've accepted and confirmed for upcoming or completed shifts.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{acceptedWorkers}</p>
+                      <p className="text-xs text-muted-foreground">Workers Booked</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
+                <HelpTooltip text="Your average rating from dental professionals who have worked at your clinic. Higher ratings attract better applicants.">
+                  <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("reviews")}>
+                    <CardContent className="p-4 text-center">
+                      <p className="text-2xl font-bold text-primary">{clinic.rating}</p>
+                      <p className="text-xs text-muted-foreground">Clinic Rating</p>
+                    </CardContent>
+                  </Card>
+                </HelpTooltip>
               </div>
 
               <Card>

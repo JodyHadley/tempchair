@@ -16,8 +16,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Sparkles, LogOut, LayoutDashboard, User } from "lucide-react";
+import { Menu, Sparkles, LogOut, LayoutDashboard, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useHelp } from "@/lib/help-context";
 import { useAuth } from "@/lib/auth-context";
 
 const publicNav = [
@@ -40,6 +41,7 @@ const clinicNav = [
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, isLoading, signOut } = useAuth();
+  const { helpMode, toggleHelp } = useHelp();
   const router = useRouter();
 
   const navigation = !user ? publicNav : user.role === "worker" ? workerNav : clinicNav;
@@ -70,6 +72,19 @@ export function Header() {
           {isLoading ? (
             <div className="h-8 w-20" />
           ) : user ? (
+            <>
+            <Button
+              variant={helpMode ? "default" : "ghost"}
+              size="icon"
+              onClick={toggleHelp}
+              title={helpMode ? "Exit help mode" : "Toggle help mode"}
+              className="relative"
+            >
+              <HelpCircle className="h-4 w-4" />
+              {helpMode && (
+                <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary border-2 border-background" />
+              )}
+            </Button>
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -106,6 +121,7 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </>
           ) : (
             <>
               <Link href="/sign-in" className={cn(buttonVariants({ variant: "ghost" }))}>
