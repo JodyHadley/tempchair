@@ -50,6 +50,7 @@ model WorkerProfile {
   hourlyRate     String
 
   applications      Application[]
+  credentials       Credential[]
   reviewsReceived   Review[]        @relation("ReviewToWorker")
   reviewsGiven      Review[]        @relation("ReviewFromWorker")
 
@@ -57,6 +58,42 @@ model WorkerProfile {
   updatedAt      DateTime        @updatedAt
 
   @@map("worker_profiles")
+}
+
+enum CredentialType {
+  STATE_LICENSE
+  DEA_REGISTRATION
+  NPI_NUMBER
+  MALPRACTICE_INSURANCE
+  CPR_BLS
+  LOCAL_ANESTHESIA
+  NITROUS_OXIDE
+  RADIOLOGY
+  CDA_CERTIFICATION
+  OSHA_HIPAA
+  DENTAL_DEGREE
+  SPECIALTY_CERT
+  BACKGROUND_CHECK
+  OTHER
+}
+
+model Credential {
+  id          String         @id @default(uuid())
+  workerId    String
+  worker      WorkerProfile  @relation(fields: [workerId], references: [id])
+  type        CredentialType
+  name        String
+  fileUrl     String?
+  fileName    String?
+  number      String?
+  issuedBy    String?
+  expiresAt   DateTime?
+  verified    Boolean        @default(false)
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@map("credentials")
 }
 
 model ClinicProfile {

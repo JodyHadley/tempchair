@@ -4,15 +4,13 @@ import { prisma } from "./prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getWorkerDashboardData(workerId: string) {
-  const [worker, applications, reviews, reviewsGiven] = await Promise.all([
+  const [worker, applications, reviews, reviewsGiven, credentials] = await Promise.all([
     prisma.workerProfile.findUnique({ where: { id: workerId } }),
     prisma.application.findMany({
       where: { workerId },
       include: { job: { include: { clinic: true } } },
       orderBy: { createdAt: "desc" },
     }),
-    // Reviews received: only show public reviews (private clinic reviews of workers
-    // should only be visible to other premium clinics, not to the worker themselves)
     prisma.review.findMany({
       where: { toWorkerId: workerId, isPrivate: false },
       include: { job: true },
@@ -23,9 +21,13 @@ export async function getWorkerDashboardData(workerId: string) {
       include: { job: true },
       orderBy: { createdAt: "desc" },
     }),
+    prisma.credential.findMany({
+      where: { workerId },
+      orderBy: { createdAt: "desc" },
+    }),
   ]);
 
-  return { worker, applications, reviews, reviewsGiven };
+  return { worker, applications, reviews, reviewsGiven, credentials };
 }
 
 export async function getClinicDashboardData(clinicId: string) {
