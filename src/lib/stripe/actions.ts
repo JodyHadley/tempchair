@@ -96,6 +96,84 @@ export async function handlePaymentSuccess(clinicId: string, type: string) {
   }
 }
 
+export async function getClinicBillingData(clinicId: string) {
+  const clinic = await prisma.clinicProfile.findUnique({
+    where: { id: clinicId },
+    select: { stripeCustomerId: true, email: true },
+  });
+
+  if (!clinic) return null;
+
+  let payments: {
+    id: string;
+    amount: number;
+    description: string;
+    status: string;
+    date: string;
+    receiptUrl: string | null;
+  }[] = [];
+
+  let subscription: {
+    id: string;
+    status: string;
+    currentPeriodEnd: string;
+    cancelAtPeriodEnd: boolean;
+  } | null = null;
+
+  let customerId = clinic.stripeCustomerId;
+  if (!customerId && clinic.email) {
+    const customers = await stripe.customers.list({ email: clinic.email, limit: 1 });
+    if (customers.data.length > 0) {
+      customerId = customers.data[0].id;
+      await prisma.clinicProfile.update({
+        where: { id: clinicId },
+        data: { stripeCustomerId: customerId },
+      }).catch(() => {});
+    }
+  }
+
+  if (customerId) {
+    const charges = await stripe.charges.list({ customer: customerId, limit: 50 });
+    payments = charges.data.map((c) => ({
+      id: c.id,
+      amount: c.amount,
+      description: c.description || (c.amount === 3500 ? "Job Posting" : c.amount === 8900 ? "Premium Subscription" : "Payment"),
+      status: c.status,
+      date: new Date(c.created * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      receiptUrl: c.receipt_url,
+    }));
+
+    const subs = await stripe.subscriptions.list({ customer: customerId, status: "active", limit: 1 });
+    if (subs.data.length > 0) {
+      const sub = subs.data[0] as any;
+      subscription = {
+        id: sub.id,
+        status: sub.status,
+        currentPeriodEnd: new Date((sub.current_period_end || 0) * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        cancelAtPeriodEnd: sub.cancel_at_period_end ?? false,
+      };
+    }
+  }
+
+  return { payments, subscription };
+}
+
+export async function cancelPremiumSubscription(clinicId: string) {
+  const clinic = await prisma.clinicProfile.findUnique({
+    where: { id: clinicId },
+    select: { stripeCustomerId: true },
+  });
+
+  if (!clinic?.stripeCustomerId) return { error: "No subscription found." };
+
+  const subs = await stripe.subscriptions.list({ customer: clinic.stripeCustomerId, status: "active", limit: 1 });
+  if (subs.data.length === 0) return { error: "No active subscription found." };
+
+  await stripe.subscriptions.update(subs.data[0].id, { cancel_at_period_end: true });
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
 export async function getClinicPaymentStatus(clinicId: string) {
   const clinic = await prisma.clinicProfile.findUnique({
     where: { id: clinicId },

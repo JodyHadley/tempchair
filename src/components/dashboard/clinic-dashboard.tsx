@@ -14,6 +14,7 @@ import { ReviewEditForm } from "./review-edit-form";
 import { PostPositionForm } from "./post-position-form";
 import { EditPositionForm } from "./edit-position-form";
 import { MessageThread } from "./message-thread";
+import { BillingTab } from "./billing-tab";
 import {
   Star,
   MapPin,
@@ -84,6 +85,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
           <TabsTrigger value="applications">Applications ({allApplications.length})</TabsTrigger>
           <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
           <TabsTrigger value="my-reviews">My Reviews ({reviewsGiven.length})</TabsTrigger>
+          <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -613,6 +615,16 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
               ))
             )}
           </div>
+        </TabsContent>
+
+        {/* Billing Tab */}
+        <TabsContent value="billing">
+          <BillingTab
+            clinicId={clinic.id}
+            isPremium={isPremium}
+            isPaidPremium={clinic.premiumTier}
+            trialDaysLeft={trialDaysLeft}
+          />
         </TabsContent>
       </Tabs>
     </div>
