@@ -38,8 +38,10 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-semibold">Company</h3>
             <ul className="mt-3 space-y-2">
-              <li><Link href="/#how-it-works" className="text-sm text-muted-foreground hover:text-foreground">How It Works</Link></li>
+              <li><Link href="/pricing" className="text-sm text-muted-foreground hover:text-foreground">Pricing</Link></li>
               <li><Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground">Contact</Link></li>
+              <li><Link href="/terms" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link></li>
+              <li><Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</Link></li>
             </ul>
           </div>
         </div>
