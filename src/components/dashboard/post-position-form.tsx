@@ -13,15 +13,18 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { CheckCircle2, X, CalendarDays, Info } from "lucide-react";
+import { CheckCircle2, X, CalendarDays, Info, CreditCard } from "lucide-react";
 import { createJobPosting } from "@/lib/db/actions";
+import { createPostingCheckout } from "@/lib/stripe/actions";
 
 export function PostPositionForm({
   clinicId,
+  isPremium,
   onClose,
   onPosted,
 }: {
   clinicId: string;
+  isPremium: boolean;
   onClose: () => void;
   onPosted: () => void;
 }) {
@@ -75,6 +78,14 @@ export function PostPositionForm({
       });
 
       if (result.success) {
+        if (!isPremium) {
+          // Redirect to Stripe checkout for payment
+          const checkout = await createPostingCheckout(clinicId);
+          if (checkout.url) {
+            window.location.href = checkout.url;
+            return;
+          }
+        }
         setSaved(true);
         setTimeout(onPosted, 1500);
       }
@@ -209,17 +220,24 @@ export function PostPositionForm({
             />
           </div>
 
-          <div className="rounded-md bg-muted/50 px-3 py-2 text-xs text-muted-foreground flex items-start gap-2">
-            <Info className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-            <span>Standard posting fee: $35. Payment integration coming soon — postings are currently free during our launch period.</span>
-          </div>
+          {isPremium ? (
+            <div className="rounded-md bg-primary/5 border border-primary/20 px-3 py-2 text-xs text-primary flex items-start gap-2">
+              <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+              <span>Premium members post unlimited positions at no extra charge.</span>
+            </div>
+          ) : (
+            <div className="rounded-md bg-muted/50 px-3 py-2 text-xs text-muted-foreground flex items-start gap-2">
+              <CreditCard className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+              <span>Standard posting fee: $35. You&apos;ll be redirected to complete payment after posting.</span>
+            </div>
+          )}
 
           <div className="flex gap-3 pt-2">
             <Button type="button" variant="outline" className="flex-1" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" className="flex-1" disabled={saving}>
-              {saving ? "Posting..." : "Post Position"}
+              {saving ? "Posting..." : isPremium ? "Post Position" : "Post Position — $35"}
             </Button>
           </div>
         </form>
