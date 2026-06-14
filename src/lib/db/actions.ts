@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "./prisma";
+import { revalidatePath } from "next/cache";
 
 export async function getWorkerDashboardData(workerId: string) {
   const [worker, applications, reviews] = await Promise.all([
@@ -41,4 +42,33 @@ export async function getClinicDashboardData(clinicId: string) {
   ]);
 
   return { clinic, jobs, reviews };
+}
+
+export async function updateWorkerProfile(
+  workerId: string,
+  data: {
+    firstName: string;
+    lastName: string;
+    specialty: "Hygienist" | "Assistant" | "Dentist";
+    location: string;
+    bio: string;
+    experience: string;
+    hourlyRate: string;
+    availability: string;
+    certifications: string[];
+  },
+) {
+  const initials = (data.firstName[0] + data.lastName[0]).toUpperCase();
+
+  await prisma.workerProfile.update({
+    where: { id: workerId },
+    data: {
+      ...data,
+      initials,
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/workers");
+  return { success: true };
 }
