@@ -13,6 +13,7 @@ import { ReviewForm, PrivateBadge } from "./review-form";
 import { ReviewEditForm } from "./review-edit-form";
 import { PostPositionForm } from "./post-position-form";
 import { EditPositionForm } from "./edit-position-form";
+import { MessageThread } from "./message-thread";
 import {
   Star,
   MapPin,
@@ -483,6 +484,16 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                           )}
                         </div>
                       </div>
+                      {(app.status === "pending" || app.status === "accepted") && (
+                        <MessageThread
+                          applicationId={app.id}
+                          currentRole="clinic"
+                          currentName={clinic.name}
+                          currentId={clinic.id}
+                          otherName={`${app.worker.firstName} ${app.worker.lastName}`}
+                          unreadCount={app.messages?.filter((m: any) => m.senderRole === "worker" && !m.readAt).length || 0}
+                        />
+                      )}
                     </CardContent>
                   </Card>
                 );
