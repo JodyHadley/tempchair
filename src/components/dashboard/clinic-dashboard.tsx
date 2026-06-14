@@ -283,7 +283,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
 
               {/* Non-premium upsell */}
               {!isPremium && (
-                <Card className="border-dashed">
+                <Card className="border-dashed border-primary/30 hover:border-primary/50 transition-colors">
                   <CardContent className="p-4 flex items-center gap-3">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 shrink-0">
                       <Crown className="h-4 w-4 text-primary" />
@@ -291,9 +291,19 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                     <div className="flex-1">
                       <p className="text-sm font-medium">Upgrade to Premium</p>
                       <p className="text-xs text-muted-foreground">
-                        See market rate insights, write private reviews, and get unlimited postings for $89/mo.
+                        Market insights, private reviews, unlimited postings — $89/mo.
                       </p>
                     </div>
+                    <Button
+                      size="sm"
+                      onClick={async () => {
+                        const { createPremiumCheckout } = await import("@/lib/stripe/actions");
+                        const result = await createPremiumCheckout(clinic.id);
+                        if (result.url) window.location.href = result.url;
+                      }}
+                    >
+                      Upgrade
+                    </Button>
                   </CardContent>
                 </Card>
               )}
@@ -307,6 +317,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
             {showPostForm ? (
               <PostPositionForm
                 clinicId={clinic.id}
+                isPremium={isPremium}
                 onClose={() => setShowPostForm(false)}
                 onPosted={() => {
                   setShowPostForm(false);
