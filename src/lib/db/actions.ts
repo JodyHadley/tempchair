@@ -392,6 +392,67 @@ export async function updateJobPosting(
   return { success: true };
 }
 
+// ── Applications ────────────────────────────────────────────
+
+export async function applyToJob(data: {
+  jobId: string;
+  workerId: string;
+  coverNote: string;
+}) {
+  // Check for duplicate application
+  const existing = await prisma.application.findFirst({
+    where: { jobId: data.jobId, workerId: data.workerId },
+  });
+  if (existing) {
+    return { success: false, error: "You've already applied to this position." };
+  }
+
+  // Verify job is still open
+  const job = await prisma.jobPosting.findUnique({ where: { id: data.jobId } });
+  if (!job || job.status !== "open") {
+    return { success: false, error: "This position is no longer accepting applications." };
+  }
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  await prisma.application.create({
+    data: {
+      jobId: data.jobId,
+      workerId: data.workerId,
+      coverNote: data.coverNote,
+      appliedDate: dateStr,
+      status: "pending",
+    },
+  });
+
+  revalidatePath("/dashboard");
+  revalidatePath("/jobs");
+  return { success: true };
+}
+
+export async function withdrawApplication(applicationId: string, workerId: string) {
+  const app = await prisma.application.findUnique({ where: { id: applicationId } });
+  if (!app || app.workerId !== workerId) {
+    return { success: false, error: "Application not found." };
+  }
+  if (app.status !== "pending") {
+    return { success: false, error: "Only pending applications can be withdrawn." };
+  }
+
+  await prisma.application.update({
+    where: { id: applicationId },
+    data: { status: "withdrawn" },
+  });
+
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
 export async function expireOldJobs() {
   const now = new Date();
   await prisma.jobPosting.updateMany({
