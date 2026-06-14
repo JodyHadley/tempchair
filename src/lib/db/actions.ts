@@ -57,9 +57,35 @@ export async function getClinicDashboardData(clinicId: string) {
 
   // Market rate insights (premium only)
   let marketRates = null;
+  let marketName = "";
   if (clinic?.premiumTier) {
-    const allJobs = await prisma.jobPosting.findMany({
-      where: { clinicId: { not: clinicId } },
+    // Define market regions by state abbreviation
+    const marketRegions: Record<string, string> = {
+      ID: "Southwest Idaho (Treasure Valley)",
+      WA: "Washington",
+      OR: "Oregon",
+      UT: "Utah",
+      MT: "Montana",
+    };
+
+    // Extract state from clinic location (e.g., "Boise, ID" → "ID")
+    const stateMatch = clinic.location.match(/,\s*([A-Z]{2})$/);
+    const state = stateMatch?.[1] || "";
+    marketName = marketRegions[state] || clinic.location;
+
+    // Get all clinics in the same state
+    const localClinics = await prisma.clinicProfile.findMany({
+      where: {
+        id: { not: clinicId },
+        location: { contains: state ? `, ${state}` : clinic.location },
+      },
+      select: { id: true },
+    });
+    const localClinicIds = localClinics.map((c) => c.id);
+
+    // Get jobs from local clinics only
+    const localJobs = await prisma.jobPosting.findMany({
+      where: { clinicId: { in: localClinicIds } },
       select: { type: true, rate: true },
     });
 
@@ -72,7 +98,7 @@ export async function getClinicDashboardData(clinicId: string) {
     }
 
     const byType: Record<string, number[]> = {};
-    for (const j of allJobs) {
+    for (const j of localJobs) {
       const parsed = parseRate(j.rate);
       if (parsed !== null) {
         if (!byType[j.type]) byType[j.type] = [];
@@ -89,7 +115,7 @@ export async function getClinicDashboardData(clinicId: string) {
     }));
   }
 
-  return { clinic, jobs, reviews, reviewsGiven, marketRates };
+  return { clinic, jobs, reviews, reviewsGiven, marketRates, marketName };
 }
 
 export async function updateReview(

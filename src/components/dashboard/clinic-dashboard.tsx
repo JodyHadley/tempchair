@@ -51,7 +51,7 @@ const appStatusConfig: Record<StatusKey, { label: string; variant: "default" | "
 };
 
 export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
-  const { clinic, jobs, reviews, reviewsGiven, marketRates } = data;
+  const { clinic, jobs, reviews, reviewsGiven, marketRates, marketName } = data;
   const [editing, setEditing] = useState(false);
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
@@ -243,7 +243,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                   </CardHeader>
                   <CardContent>
                     <p className="text-xs text-muted-foreground mb-4">
-                      Average hourly rates posted by other clinics in your area.
+                      Average hourly rates posted by other clinics in {marketName || "your area"}.
                     </p>
                     <div className="space-y-3">
                       {marketRates.map((r) => (
@@ -260,7 +260,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                       ))}
                     </div>
                     <p className="mt-3 text-[10px] text-muted-foreground">
-                      Based on rates from all postings on TempChair. Updated in real-time.
+                      Based on postings from clinics in {marketName || "your market"}. Updated in real-time.
                     </p>
                   </CardContent>
                 </Card>
