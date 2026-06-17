@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { AdminSignOut } from "@/components/admin/admin-header";
+import { AdminNav } from "@/components/admin/admin-nav";
 
 export default async function AdminLayout({
   children,
@@ -25,6 +26,11 @@ export default async function AdminLayout({
             </div>
             <AdminSignOut />
           </div>
+        </div>
+      </div>
+      <div className="border-b">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AdminNav />
         </div>
       </div>
       {children}
