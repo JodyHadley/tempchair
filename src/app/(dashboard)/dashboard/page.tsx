@@ -39,10 +39,14 @@ export default function DashboardPage() {
     if (!isLoading && !user && !needsProfile) {
       router.replace("/sign-in");
     }
+    // Redirect admin users to /admin
+    if (!isLoading && user?.role === "admin") {
+      router.replace("/admin");
+    }
   }, [isLoading, user, needsProfile, router]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || user.role === "admin") return;
 
     setDataLoading(true);
     if (user.role === "worker") {

@@ -29,7 +29,7 @@ export default function SignInPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) router.replace("/dashboard");
+    if (user) router.replace(user.role === "admin" ? "/admin" : "/dashboard");
   }, [user, router]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -37,7 +37,7 @@ export default function SignInPage() {
     setError("");
     const result = await signIn(email, password);
     if (result.success) {
-      router.push("/dashboard");
+      // Redirect happens via useEffect when user state updates
     } else {
       setError(result.error || "Invalid credentials");
     }
