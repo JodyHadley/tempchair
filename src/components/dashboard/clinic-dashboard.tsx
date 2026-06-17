@@ -15,6 +15,7 @@ import { PostPositionForm } from "./post-position-form";
 import { EditPositionForm } from "./edit-position-form";
 import { MessageThread } from "./message-thread";
 import { BillingTab } from "./billing-tab";
+import { ChangePassword } from "./change-password";
 import {
   Star,
   MapPin,
@@ -86,6 +87,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
           <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
           <TabsTrigger value="my-reviews">My Reviews ({reviewsGiven.length})</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -625,6 +627,13 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
             isPaidPremium={clinic.premiumTier}
             trialDaysLeft={trialDaysLeft}
           />
+        </TabsContent>
+
+        {/* Settings Tab */}
+        <TabsContent value="settings">
+          <div className="max-w-lg">
+            <ChangePassword />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
