@@ -19,6 +19,7 @@ import {
 import { getAdminDashboardData, getPendingCredentials } from "@/lib/db/admin-actions";
 import { AdminClinicList } from "@/components/admin/clinic-list";
 import { AdminCredentialList } from "@/components/admin/credential-list";
+import { AdminPasswordReset } from "@/components/admin/password-reset";
 
 export default async function AdminPage() {
   const [data, pendingCreds] = await Promise.all([
@@ -182,6 +183,9 @@ export default async function AdminPage() {
 
         {/* Pending Credentials */}
         <AdminCredentialList credentials={pendingCreds} />
+
+        {/* Password Reset */}
+        <AdminPasswordReset />
       </div>
     </div>
   );

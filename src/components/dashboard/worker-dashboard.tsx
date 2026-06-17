@@ -13,6 +13,7 @@ import { ReviewForm, PrivateBadge } from "./review-form";
 import { ReviewEditForm } from "./review-edit-form";
 import { CredentialVault } from "./credential-vault";
 import { MessageThread } from "./message-thread";
+import { ChangePassword } from "./change-password";
 import {
   Star,
   MapPin,
@@ -78,6 +79,7 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
           <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
           <TabsTrigger value="my-reviews">My Reviews ({reviewsGiven.length})</TabsTrigger>
           <TabsTrigger value="credentials">Credentials ({credentials.length})</TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
         {/* Overview Tab */}
@@ -491,6 +493,13 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
             specialty={worker.specialty}
             onRefresh={onRefresh}
           />
+        </TabsContent>
+
+        {/* Settings Tab */}
+        <TabsContent value="settings">
+          <div className="max-w-lg">
+            <ChangePassword />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
