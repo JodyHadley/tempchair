@@ -7,7 +7,7 @@ import type { User } from "@supabase/supabase-js";
 
 export interface AuthUser {
   id: string;
-  role: "worker" | "clinic";
+  role: "worker" | "clinic" | "admin";
   email: string;
   name: string;
   initials: string;
@@ -29,6 +29,17 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 function toAuthUser(supaUser: User): AuthUser | null {
   const meta = supaUser.user_metadata;
+  // Admin users don't need a profileId
+  if (meta?.isAdmin) {
+    return {
+      id: supaUser.id,
+      role: "admin",
+      email: supaUser.email ?? "",
+      name: meta.name ?? supaUser.email ?? "",
+      initials: meta.initials ?? "",
+      authUserId: supaUser.id,
+    };
+  }
   if (!meta?.role || !meta?.profileId) return null;
   return {
     id: meta.profileId,
