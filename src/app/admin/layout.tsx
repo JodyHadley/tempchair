@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { AdminSignOut } from "@/components/admin/admin-header";
 
 export default async function AdminLayout({
   children,
@@ -17,9 +18,12 @@ export default async function AdminLayout({
     <div className="min-h-[calc(100vh-8rem)]">
       <div className="border-b bg-foreground/5">
         <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-primary">Admin Dashboard</span>
-            <span className="text-xs text-muted-foreground">— {user.email}</span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-semibold uppercase tracking-wider text-primary">Admin Dashboard</span>
+              <span className="text-xs text-muted-foreground">— {user.email}</span>
+            </div>
+            <AdminSignOut />
           </div>
         </div>
       </div>
