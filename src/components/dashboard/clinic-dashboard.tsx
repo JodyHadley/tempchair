@@ -28,6 +28,7 @@ import {
   Briefcase,
   Users,
   Phone,
+  Globe,
   Pencil,
   MessageSquarePlus,
   Plus,
@@ -216,6 +217,20 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                     <p className="text-sm">{clinic.address}</p>
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-3">Phone</p>
                     <p className="text-sm flex items-center gap-1"><Phone className="h-3.5 w-3.5" />{clinic.phone}</p>
+                    {clinic.website ? (
+                      <>
+                        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-3">Website</p>
+                        <a
+                          href={clinic.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm flex items-center gap-1 text-primary hover:underline break-all"
+                        >
+                          <Globe className="h-3.5 w-3.5 shrink-0" />
+                          {clinic.website.replace(/^https?:\/\//, "")}
+                        </a>
+                      </>
+                    ) : null}
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-3">About</p>
                     <p className="text-sm text-muted-foreground">{clinic.description}</p>
                   </div>

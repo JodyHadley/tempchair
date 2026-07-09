@@ -5,6 +5,7 @@
  * Instead scrapes known practice websites from data/scrape-queue.json:
  *  - Prefer schema.org Dentist / LocalBusiness / DentalClinic JSON-LD
  *  - Fallback: tel: links + simple address heuristics
+ *  - Website URL stored on clinic_profiles.website
  *  - Logo: schema.org logo/image, og:image, logo-ish <img> (download when possible)
  *  - Upserts into clinic_profiles (unclaimed preferred; fills empty fields)
  *
@@ -192,6 +193,20 @@ function absoluteUrl(maybe: string, pageUrl: string): string | null {
   }
 }
 
+/** Canonical practice homepage for storage (origin + path without trailing slash noise). */
+function normalizeWebsite(url: string): string {
+  try {
+    const u = new URL(url);
+    if (u.protocol !== "http:" && u.protocol !== "https:") return url.trim();
+    // Drop hash/query; keep path if not just "/"
+    let pathPart = u.pathname || "/";
+    if (pathPart !== "/" && pathPart.endsWith("/")) pathPart = pathPart.slice(0, -1);
+    return pathPart === "/" ? u.origin : `${u.origin}${pathPart}`;
+  } catch {
+    return url.trim();
+  }
+}
+
 function isPlausibleLogoUrl(url: string): boolean {
   const lower = url.toLowerCase();
   if (lower.startsWith("data:")) return false;
@@ -352,12 +367,17 @@ function scrapeFromHtml(html: string, pageUrl: string, nameHint?: string): Scrap
   let phone = "";
   let address = "";
   let description = "";
+  let websiteFromSchema = "";
 
   if (anyBiz) {
     name = String(anyBiz.name || name);
     phone = String(anyBiz.telephone || anyBiz.phone || "");
     address = addressFromSchema(anyBiz.address);
     description = String(anyBiz.description || "");
+    const schemaUrl = anyBiz.url;
+    if (typeof schemaUrl === "string" && /^https?:\/\//i.test(schemaUrl.trim())) {
+      websiteFromSchema = schemaUrl.trim();
+    }
   }
 
   // Fallback phone from tel: links
@@ -393,10 +413,12 @@ function scrapeFromHtml(html: string, pageUrl: string, nameHint?: string): Scrap
   // Need at least phone or street address to be useful
   if (!phone && !/\d/.test(address)) return null;
 
-  if (description && !description.includes(pageUrl)) {
-    description = `${description} Website: ${pageUrl}`.trim();
-  } else if (!description) {
-    description = `Dental practice in the Treasure Valley. Website: ${pageUrl}`;
+  // Prefer schema.org url when same host; else the page we scraped
+  const website = normalizeWebsite(websiteFromSchema || pageUrl);
+
+  // Keep a short description without stuffing the URL (website has its own column)
+  if (!description) {
+    description = "Dental practice in the Treasure Valley.";
   }
 
   const logoRemoteUrl = extractLogoUrl(html, pageUrl, anyBiz || null);
@@ -407,7 +429,7 @@ function scrapeFromHtml(html: string, pageUrl: string, nameHint?: string): Scrap
     phone,
     location: address ? locationFromAddress(address) : "Boise, ID",
     description,
-    website: pageUrl,
+    website,
     logoRemoteUrl,
   };
 }
@@ -490,6 +512,7 @@ async function upsertClinic(
       address: true,
       phone: true,
       description: true,
+      website: true,
       logoUrl: true,
       claimed: true,
     },
@@ -506,10 +529,12 @@ async function upsertClinic(
     if (scraped.address && /\d/.test(scraped.address) && !/\d/.test(match.address || "")) {
       data.address = scraped.address;
     }
+    if (scraped.website && !match.website) {
+      data.website = scraped.website;
+    }
     if (
       scraped.description &&
-      (match.description.length < scraped.description.length ||
-        !match.description.includes("Website:"))
+      match.description.length < scraped.description.length
     ) {
       data.description = scraped.description;
     }
@@ -538,6 +563,7 @@ async function upsertClinic(
       address: scraped.address,
       phone: scraped.phone,
       description: scraped.description,
+      website: scraped.website || null,
       logoUrl: logoUrl || null,
       email: "",
       contactName: "",
@@ -627,13 +653,17 @@ async function main() {
           if (action === "updated") updated++;
           if (action === "inserted") inserted++;
           const logoNote = scraped.logoRemoteUrl ? ` | logo: ${scraped.logoRemoteUrl.slice(0, 60)}` : " | no logo";
-          console.log(`  ${action}: ${scraped.name} | ${scraped.phone} | ${scraped.address}${logoNote}`);
+          console.log(
+            `  ${action}: ${scraped.name} | ${scraped.phone} | ${scraped.address} | ${scraped.website}${logoNote}`,
+          );
           results.push({
             url: target.url,
             action,
             scraped: {
-              ...scraped,
-              // keep log smaller
+              name: scraped.name,
+              phone: scraped.phone,
+              address: scraped.address,
+              website: scraped.website,
               logoRemoteUrl: scraped.logoRemoteUrl,
             },
           });

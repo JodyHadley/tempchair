@@ -221,6 +221,7 @@ export async function updateClinicProfile(
     location: string;
     address: string;
     phone: string;
+    website?: string | null;
     description: string;
   },
 ) {

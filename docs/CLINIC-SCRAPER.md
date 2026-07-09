@@ -22,10 +22,11 @@ scripts/nightly-clinic-scrape.ts
   fetch homepage (User-Agent, delay, robots.txt check)
   parse schema.org JSON-LD (Dentist / LocalBusiness)
   fallback: tel: links + address regex
+  website: schema.org url or scraped page URL → clinic_profiles.website
   logo: schema.org logo/image → og:image → logo <img> → apple-touch-icon
   download logo → public/clinic-logos/ (fallback: store remote URL)
         ↓
-  upsert clinic_profiles (fill empty fields / insert new / logoUrl)
+  upsert clinic_profiles (fill empty fields / insert new / website / logoUrl)
         ↓
 data/scrape-logs/scrape-YYYY-MM-DD.json
 ```
@@ -78,6 +79,15 @@ Find URLs by hand (Google once, copy the practice’s own domain) or from outrea
 - 3+ second delay between hosts
 - Only stores public contact fields for directory/claim use
 - Prefer practice sites that publish schema.org data
+
+## Website URL
+
+Each successful scrape stores the practice homepage on `clinic_profiles.website`:
+
+- Prefer schema.org `url` when present
+- Else the queue URL that was scraped
+- Normalized (scheme + host + path, no trailing slash on `/`)
+- Only fills when empty (does not overwrite a clinic-edited URL)
 
 ## Logos
 

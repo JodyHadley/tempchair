@@ -6,7 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Phone, Star, ShieldCheck } from "lucide-react";
+import { MapPin, Phone, Star, ShieldCheck, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getAllClinics } from "@/lib/db/queries";
 import { createMetadata } from "@/lib/seo";
@@ -94,6 +94,17 @@ export default async function ClinicsPage() {
                         {clinic.phone}
                       </span>
                     )}
+                    {clinic.website && (
+                      <a
+                        href={clinic.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 text-primary hover:underline"
+                      >
+                        <Globe className="h-3 w-3" />
+                        Website
+                      </a>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -147,6 +158,17 @@ export default async function ClinicsPage() {
                           <Phone className="h-3 w-3 shrink-0" />
                           {clinic.phone}
                         </p>
+                      )}
+                      {clinic.website && (
+                        <a
+                          href={clinic.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-primary hover:underline"
+                        >
+                          <Globe className="h-3 w-3 shrink-0" />
+                          {clinic.website.replace(/^https?:\/\//, "")}
+                        </a>
                       )}
                     </div>
                     <Link

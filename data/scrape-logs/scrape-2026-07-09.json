@@ -1,73 +1,41 @@
 {
-  "ranAt": "2026-07-09T03:25:05.848Z",
-  "batchSize": 5,
-  "updated": 5,
-  "inserted": 0,
+  "ranAt": "2026-07-09T03:26:48.603Z",
+  "batchSize": 3,
+  "updated": 2,
+  "inserted": 1,
   "errors": 0,
   "results": [
     {
-      "url": "https://www.lowrydental.com",
-      "action": "updated",
+      "url": "https://www.boisedentist.com",
+      "action": "inserted",
       "scraped": {
-        "name": "Lowry Dental",
-        "address": "9460 W Franklin Rd, Boise, ID 83709",
-        "phone": "(208) 377-0410",
-        "location": "Boise, ID",
-        "description": "Dental practice in the Treasure Valley. Website: https://www.lowrydental.com",
-        "website": "https://www.lowrydental.com",
-        "logoRemoteUrl": "https://www.lowrydental.com/assets/images/logo.svg"
+        "name": "Boise Family Dental Care",
+        "phone": "(208) 376-7413",
+        "address": "9931 W Cable Car St STE 150, Boise, ID 83709",
+        "website": "https://www.boisedentist.com",
+        "logoRemoteUrl": "https://www.boisedentist.com/wp-content/uploads/2026/05/family-dental-logo-latest.webp"
       }
     },
     {
-      "url": "https://www.emeraldsmilesdentistry.com",
+      "url": "https://dentalboise.com",
       "action": "updated",
       "scraped": {
-        "name": "Emerald Smiles Dentistry",
-        "address": "675 N Milwaukee St Ste 110, Boise, ID 83704",
-        "phone": "(208) 593-3221",
-        "location": "Boise, ID",
-        "description": "Dental practice in the Treasure Valley. Website: https://www.emeraldsmilesdentistry.com",
-        "website": "https://www.emeraldsmilesdentistry.com",
-        "logoRemoteUrl": "https://1.smilegeneration.com/uploadedimages/Office/respLogos/1058-Logo.png"
+        "name": "Lamb Family Dental",
+        "phone": "(208) 344-6300",
+        "address": "4255 N Eagle Rd, Boise, ID 83713",
+        "website": "https://dentalboise.com",
+        "logoRemoteUrl": "https://dentalboise.com/wp-content/themes/lfd-design/assets/images/homepage/og-default-1200x630.jpg"
       }
     },
     {
-      "url": "https://www.emeraldwest.net",
+      "url": "https://www.birdfamilydental.com",
       "action": "updated",
       "scraped": {
-        "name": "Emerald West Dental",
-        "address": "8850 West Emerald Street, Suite 150, Boise, Idaho, 83704",
-        "phone": "(208) 323-2294",
-        "location": "Boise, ID",
-        "description": "Dental practice in the Treasure Valley. Website: https://www.emeraldwest.net",
-        "website": "https://www.emeraldwest.net",
-        "logoRemoteUrl": "https://www.emeraldwest.net/wp-content/themes/charlie-child/images/logo.png"
-      }
-    },
-    {
-      "url": "https://wellsdentistry.com",
-      "action": "updated",
-      "scraped": {
-        "name": "Wells Dental",
-        "address": "1880 W. Judith Ln Suite 210, Boise, ID 83705",
-        "phone": "(208) 345-2771",
-        "location": "Boise, ID",
-        "description": "Dental practice in the Treasure Valley. Website: https://wellsdentistry.com",
-        "website": "https://wellsdentistry.com",
-        "logoRemoteUrl": "https://wellsdentistry.com/images/wells_logowhite.png"
-      }
-    },
-    {
-      "url": "https://idahofamilydental.com",
-      "action": "updated",
-      "scraped": {
-        "name": "Idaho Family Dental",
+        "name": "Bird Family Dental",
+        "phone": "(208) 322-1263",
         "address": "Boise, ID",
-        "phone": "(208) 375-1012",
-        "location": "Boise, ID",
-        "description": "Dental practice in the Treasure Valley. Website: https://idahofamilydental.com",
-        "website": "https://idahofamilydental.com",
-        "logoRemoteUrl": "https://idahofamilydental.com/wp-content/uploads/2014/04/logo-navy.png"
+        "website": "https://www.birdfamilydental.com",
+        "logoRemoteUrl": "https://framerusercontent.com/images/bLQD0QwJSsP7IBYel4FHjdb7Aw.png"
       }
     }
   ]

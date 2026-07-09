@@ -107,6 +107,8 @@ model ClinicProfile {
   address        String
   phone          String   @default("")
   description    String
+  /// Practice website URL from scrape or clinic edit
+  website        String?  @map("website")
   /// Practice logo: /clinic-logos/... (downloaded) or remote URL from scrape
   logoUrl        String?  @map("logo_url")
   rating         Float    @default(0)

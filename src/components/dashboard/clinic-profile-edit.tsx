@@ -17,6 +17,7 @@ interface ClinicData {
   location: string;
   address: string;
   phone: string;
+  website?: string | null;
   description: string;
 }
 
@@ -35,6 +36,7 @@ export function ClinicProfileEdit({
   const [location, setLocation] = useState(clinic.location);
   const [address, setAddress] = useState(clinic.address);
   const [phone, setPhone] = useState(clinic.phone);
+  const [website, setWebsite] = useState(clinic.website || "");
   const [description, setDescription] = useState(clinic.description);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -53,6 +55,7 @@ export function ClinicProfileEdit({
         location,
         address,
         phone,
+        website: website.trim() || null,
         description,
       });
 
@@ -139,6 +142,17 @@ export function ClinicProfileEdit({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="(208) 555-0000"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="website">Website</Label>
+            <Input
+              id="website"
+              type="url"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              placeholder="https://www.example-dental.com"
             />
           </div>
 

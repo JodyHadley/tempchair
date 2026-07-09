@@ -43,22 +43,22 @@
     {
       "url": "https://www.boisedentist.com",
       "nameHint": "Boise Family Dental Care",
-      "status": "pending",
-      "lastScrapedAt": null,
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:26:35.896Z",
       "lastError": null
     },
     {
       "url": "https://dentalboise.com",
       "nameHint": "Lamb Family Dental",
-      "status": "pending",
-      "lastScrapedAt": null,
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:26:44.783Z",
       "lastError": null
     },
     {
       "url": "https://www.birdfamilydental.com",
       "nameHint": "Bird Family Dental",
-      "status": "pending",
-      "lastScrapedAt": null,
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:26:48.602Z",
       "lastError": null
     },
     {
