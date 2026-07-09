@@ -18,9 +18,58 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TempChair — Temp Staffing for Dental Professionals",
+  metadataBase: new URL("https://www.tempchair.com"),
+  title: {
+    default: "TempChair — Dental Temp Staffing in Boise & Treasure Valley",
+    template: "%s | TempChair",
+  },
   description:
-    "Connect dental clinics with qualified hygienists, assistants, and dentists for temporary positions. Fast, reliable, and trusted.",
+    "Dental temp staffing for the Treasure Valley. Connect Boise-area clinics with hygienists, assistants, and dentists — no agency markup.",
+  applicationName: "TempChair",
+  keywords: [
+    "dental temp staffing Boise",
+    "dental hygienist temp jobs Idaho",
+    "temp dental assistant Boise",
+    "dental temp agency Boise",
+    "dental staffing Treasure Valley",
+    "TempChair",
+  ],
+  authors: [{ name: "TempChair", url: "https://www.tempchair.com" }],
+  creator: "TempChair",
+  publisher: "TempChair",
+  category: "healthcare",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://www.tempchair.com",
+    siteName: "TempChair",
+    title: "TempChair — Dental Temp Staffing in Boise & Treasure Valley",
+    description:
+      "Connect clinics with hygienists, assistants, and dentists for temporary shifts. Local to Boise — no agency markup.",
+    images: [
+      {
+        url: "/icon.png",
+        width: 512,
+        height: 512,
+        alt: "TempChair — dental temp staffing",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "TempChair — Dental Temp Staffing in Boise",
+    description:
+      "Connect clinics with hygienists, assistants, and dentists for temporary shifts. Local to Boise — no agency markup.",
+    images: ["/icon.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true },
+  },
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     // Bold filled mark — readable at 16–32px (thin line-art chair is not)
     icon: [

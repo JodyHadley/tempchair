@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { AdminSignOut } from "@/components/admin/admin-header";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata({
+  title: "Admin",
+  description: "TempChair administration.",
+  path: "/admin",
+  noIndex: true,
+});
 
 export default async function AdminLayout({
   children,

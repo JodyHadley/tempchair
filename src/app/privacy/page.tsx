@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata({
+  title: "Privacy Policy",
+  description:
+    "How TempChair collects, uses, and protects personal information for dental professionals and clinics on our platform.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

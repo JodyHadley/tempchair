@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +9,14 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MapPin, Phone, Star, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getAllClinics } from "@/lib/db/queries";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata({
+  title: "Dental Clinic Directory",
+  description:
+    "Browse Boise and Treasure Valley dental clinics on TempChair. Claim your practice or find clinics hiring temp hygienists, assistants, and dentists.",
+  path: "/clinics",
+});
 
 export default async function ClinicsPage() {
   const allClinics = await getAllClinics();

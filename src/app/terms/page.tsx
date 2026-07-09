@@ -1,4 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata({
+  title: "Terms of Service",
+  description:
+    "Terms governing use of TempChair, the dental temp staffing platform for clinics and professionals in Idaho and beyond.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

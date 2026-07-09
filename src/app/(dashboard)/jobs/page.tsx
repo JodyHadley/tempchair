@@ -1,5 +1,6 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -7,6 +8,20 @@ import { getOpenJobs } from "@/lib/db/queries";
 import { createClient } from "@/lib/supabase/server";
 import { prisma } from "@/lib/db/prisma";
 import { JobsPageClient } from "@/components/jobs/jobs-page-client";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata({
+  title: "Open Dental Positions",
+  description:
+    "Browse open temp dental jobs in Boise and the Treasure Valley. Hygienist, assistant, and dentist shifts — apply free on TempChair.",
+  path: "/jobs",
+  keywords: [
+    "dental hygienist temp jobs Idaho",
+    "dental assistant jobs Boise",
+    "temp dentist Boise",
+    "open dental shifts Treasure Valley",
+  ],
+});
 
 export default async function JobsPage() {
   const openJobs = await getOpenJobs();
