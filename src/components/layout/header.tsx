@@ -16,10 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Sparkles, LogOut, LayoutDashboard, HelpCircle, X } from "lucide-react";
+import { Menu, LogOut, LayoutDashboard, HelpCircle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHelp } from "@/lib/help-context";
 import { useAuth } from "@/lib/auth-context";
+import { Logo } from "@/components/layout/logo";
 
 const publicNav = [
   { name: "Find Workers", href: "/workers" },
@@ -71,12 +72,14 @@ export function Header() {
   return (
     <>
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <Sparkles className="h-7 w-7 text-primary" />
-          <span className="text-xl font-bold tracking-tight">
-            Temp<span className="text-primary">Chair</span>
-          </span>
+      <div className="mx-auto flex h-16 max-w-7xl items-stretch justify-between px-4 sm:px-6 lg:px-8">
+        {/* No vertical padding — logo may fill the full 64px bar height */}
+        <Link
+          href="/"
+          className="flex h-full items-center py-0"
+          aria-label="TempChair home"
+        >
+          <Logo size="lg" fillHeight />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -168,11 +171,8 @@ export function Header() {
           </SheetTrigger>
           <SheetContent side="right" className="w-[85vw] max-w-80">
             <div className="flex flex-col gap-6 px-5 pt-8 pb-6">
-              <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
-                <Sparkles className="h-7 w-7 text-primary" />
-                <span className="text-xl font-bold tracking-tight">
-                  Temp<span className="text-primary">Chair</span>
-                </span>
+              <Link href="/" className="flex h-14 items-center" onClick={() => setMobileOpen(false)} aria-label="TempChair home">
+                <Logo size="lg" fillHeight />
               </Link>
 
               {user && (

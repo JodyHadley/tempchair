@@ -274,7 +274,11 @@ export default function Home() {
               </Link>
               <Link
                 href="/sign-up?role=clinic"
-                className={cn(buttonVariants({ size: "lg", variant: "outline" }), "w-full sm:w-auto text-base px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10")}
+                className={cn(
+                  buttonVariants({ size: "lg", variant: "outline" }),
+                  // On primary band: transparent fill + light border/text (not white-on-white)
+                  "w-full sm:w-auto text-base px-8 border-2 border-primary-foreground bg-transparent text-primary-foreground hover:bg-primary-foreground/15 hover:text-primary-foreground",
+                )}
               >
                 Join as a clinic
               </Link>

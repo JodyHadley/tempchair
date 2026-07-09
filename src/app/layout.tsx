@@ -22,7 +22,11 @@ export const metadata: Metadata = {
   description:
     "Connect dental clinics with qualified hygienists, assistants, and dentists for temporary positions. Fast, reliable, and trusted.",
   icons: {
-    icon: "/icon.svg",
+    icon: [
+      { url: "/brand/logo-chair-mark.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 

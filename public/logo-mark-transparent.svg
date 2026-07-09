@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="TempChair">
+  <!-- Transparent-background mark for light UI -->
+  <!-- Base column -->
+  <path d="M22 36.5h5.5v3.5H20.5c0-1.8 1.1-3.5 2.5-3.5Z" fill="#0B3D4A"/>
+  <!-- Base foot -->
+  <path d="M16 40h16.5c.8 0 1.5.7 1.5 1.5v.5H14.5v-.5c0-.8.7-1.5 1.5-1.5Z" fill="#0B3D4A"/>
+  <!-- Seat (open / empty) — primary teal -->
+  <path d="M14 24.5c0-1.2.9-2.2 2.1-2.3l12.2-.8c1.6-.1 3 1.1 3.1 2.7l.2 2.6c.1 1.4-1 2.7-2.4 2.8l-12.4.7c-1.4.1-2.7-1-2.8-2.4L14 24.5Z" fill="#1A7A6D"/>
+  <!-- Backrest -->
+  <path d="M29.5 11.2c1.1-.9 2.7-.7 3.6.4l5.2 6.4c.9 1.1.7 2.7-.4 3.6l-1.5 1.2c-1.1.9-2.7.7-3.6-.4l-5.2-6.4c-.9-1.1-.7-2.7.4-3.6l1.5-1.2Z" fill="#0B3D4A"/>
+  <!-- Headrest -->
+  <path d="M34.8 8.5c1.3-1 3.1-.8 4.1.5.9 1.2.7 2.9-.5 3.9l-1.1.9c-1.2.9-2.9.7-3.9-.5-.9-1.2-.7-2.9.5-3.9l.9-.9Z" fill="#2A9B8C"/>
+  <!-- Armrest -->
+  <path d="M15.5 22.5c-2.2.4-3.8 1.6-4.2 3.2-.3 1.2.4 2 1.5 1.8" stroke="#0B3D4A" stroke-width="1.8" stroke-linecap="round"/>
+</svg>
