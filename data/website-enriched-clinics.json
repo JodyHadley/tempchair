@@ -342,5 +342,125 @@
     "address": "2803 N Bogus Basin Rd, Boise, ID 83702",
     "phone": "(208) 343-1393",
     "description": "General dentistry near Bogus Basin Road."
+  },
+  {
+    "name": "Maple Grove Dentistry",
+    "website": "https://maplegrovedentistry.net",
+    "location": "Boise, ID",
+    "address": "3270 N Maple Grove Rd, Boise, ID 83704",
+    "phone": "(208) 853-2221",
+    "description": "Cosmetic and family dentistry on Maple Grove Road."
+  },
+  {
+    "name": "Summit Dental Group Boise",
+    "website": "https://www.boise-dentists.com",
+    "location": "Boise, ID",
+    "address": "782 S Americana Blvd, Boise, ID 83702",
+    "phone": "(208) 345-8962",
+    "description": "General dentistry on Americana Boulevard."
+  },
+  {
+    "name": "Harrison Dental Boise",
+    "website": "https://harrisondentalboise.com",
+    "location": "Boise, ID",
+    "address": "1675 W Hill Rd, Boise, ID 83702",
+    "phone": "(208) 342-3695",
+    "description": "Personalized dental care on Hill Road."
+  },
+  {
+    "name": "Boise River Dental",
+    "website": "https://www.boiseriverdental.com",
+    "location": "Boise, ID",
+    "address": "8336 W Northview St, Boise, ID 83704",
+    "phone": "(208) 375-4544",
+    "description": "General dentistry on Northview Street."
+  },
+  {
+    "name": "McMillan Family Dental",
+    "website": "https://www.mcmillanfamilydental.com",
+    "location": "Meridian, ID",
+    "address": "1720 W McMillan Rd, Meridian, ID 83646",
+    "phone": "(208) 216-1718",
+    "description": "Family dentistry with Drs. Jake Gerard and Randall Smith — same-day appointments available."
+  },
+  {
+    "name": "Linder Road Family & Cosmetic Dentistry",
+    "website": "https://lrfcdentistry.com",
+    "location": "Meridian, ID",
+    "address": "1500 W Cayuse Creek Dr #100, Meridian, ID 83646",
+    "phone": "(208) 893-5435",
+    "description": "Family and cosmetic dentistry on Cayuse Creek Drive."
+  },
+  {
+    "name": "Peterson Family Dentistry",
+    "website": "",
+    "location": "Meridian, ID",
+    "address": "Meridian, ID",
+    "phone": "(208) 252-5763",
+    "description": "Family dentistry and Invisalign in Meridian — bilingual staff."
+  },
+  {
+    "name": "Endodontics of Idaho Meridian",
+    "website": "https://www.endoidaho.com",
+    "location": "Meridian, ID",
+    "address": "742 W Cherry Ln, Meridian, ID 83642",
+    "phone": "(208) 888-1010",
+    "description": "Specialty endodontic (root canal) practice — also serves Fruitland."
+  },
+  {
+    "name": "Oral Surgery Center of Idaho",
+    "website": "https://www.drmikedabell.com",
+    "location": "Meridian, ID",
+    "address": "4611 N Copper Cloud Way, Meridian, ID 83646",
+    "phone": "(208) 884-0100",
+    "description": "Oral surgery and dental implants with Dr. Michael DaBell."
+  },
+  {
+    "name": "Crystal Canyon Family Dental",
+    "website": "",
+    "location": "Caldwell, ID",
+    "address": "616 S 10th Ave, Caldwell, ID 83605",
+    "phone": "(208) 454-0473",
+    "description": "Family dentistry in Caldwell."
+  },
+  {
+    "name": "Today's Dentistry Caldwell West",
+    "website": "https://todaysdentistry.com",
+    "location": "Caldwell, ID",
+    "address": "1916 Ellis Ave, Caldwell, ID 83605",
+    "phone": "(208) 459-3388",
+    "description": "Today's Dentistry location in west Caldwell."
+  },
+  {
+    "name": "Caldwell Dental on Cleveland",
+    "website": "",
+    "location": "Caldwell, ID",
+    "address": "808 Cleveland Blvd, Caldwell, ID 83605",
+    "phone": "(208) 318-1231",
+    "description": "General dentistry on Cleveland Boulevard."
+  },
+  {
+    "name": "Silverstone Family Dental",
+    "website": "https://www.silverstonefamilydental.com",
+    "location": "Meridian, ID",
+    "address": "2026 S Eagle Rd, Meridian, ID 83642",
+    "phone": "(208) 888-3623",
+    "description": "Family dentistry on Eagle Road since 2003 — same-day care with Dr. Graham Hill."
+  },
+  {
+    "name": "Life Smiles Dental Boise",
+    "website": "https://www.lifesmilesdds.com",
+    "location": "Boise, ID",
+    "address": "Boise, ID",
+    "phone": "(208) 254-6365",
+    "description": "General and cosmetic dentistry in Boise."
+  },
+  {
+    "name": "Intermountain Dental Specialists Boise",
+    "website": "https://www.imtds.com",
+    "location": "Boise, ID",
+    "address": "Boise, ID",
+    "phone": "(208) 917-2855",
+    "description": "Dental specialists referral practice serving the Treasure Valley."
   }
 ]
