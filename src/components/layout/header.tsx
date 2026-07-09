@@ -161,93 +161,107 @@ export function Header() {
           )}
         </div>
 
-        {/* Mobile menu */}
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetTrigger
-            render={<Button variant="ghost" size="icon" className="md:hidden" />}
-          >
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle menu</span>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-[85vw] max-w-80">
-            <div className="flex flex-col gap-6 px-5 pt-8 pb-6">
-              <Link href="/" className="flex h-14 items-center" onClick={() => setMobileOpen(false)} aria-label="TempChair home">
-                <Logo size="lg" fillHeight />
-              </Link>
+        {/* Mobile menu — sized to match logo weight in the 64px bar */}
+        <div className="flex items-center self-center md:hidden">
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-12 shrink-0 rounded-xl [&_svg]:size-8"
+                  aria-label="Open menu"
+                />
+              }
+            >
+              <Menu className="size-8" strokeWidth={2} />
+              <span className="sr-only">Toggle menu</span>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[85vw] max-w-80">
+              <div className="flex flex-col gap-6 px-5 pt-8 pb-6">
+                <Link
+                  href="/"
+                  className="flex h-14 items-center"
+                  onClick={() => setMobileOpen(false)}
+                  aria-label="TempChair home"
+                >
+                  <Logo size="lg" fillHeight />
+                </Link>
 
-              {user && (
-                <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                      {user.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.email}</p>
+                {user && (
+                  <div className="flex items-center gap-3 rounded-lg bg-muted p-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                        {user.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">{user.name}</p>
+                      <p className="text-xs text-muted-foreground">{user.email}</p>
+                    </div>
                   </div>
-                </div>
-              )}
-
-              <nav className="flex flex-col gap-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="flex flex-col gap-3 pt-4 border-t">
-                {user ? (
-                  <>
-                  <Button
-                    variant={helpMode ? "default" : "outline"}
-                    onClick={() => {
-                      toggleHelp();
-                      setMobileOpen(false);
-                    }}
-                  >
-                    <HelpCircle className="h-4 w-4 mr-2" />
-                    {helpMode ? "Exit Help Mode" : "Help Mode"}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setMobileOpen(false);
-                      signOut();
-                    }}
-                  >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sign Out
-                  </Button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/sign-in"
-                      className={cn(buttonVariants({ variant: "outline" }))}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      href="/sign-up"
-                      className={cn(buttonVariants())}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      Get Started
-                    </Link>
-                  </>
                 )}
+
+                <nav className="flex flex-col gap-4">
+                  {navigation.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="text-base font-medium text-muted-foreground transition-colors hover:text-foreground"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="flex flex-col gap-3 border-t pt-4">
+                  {user ? (
+                    <>
+                      <Button
+                        variant={helpMode ? "default" : "outline"}
+                        onClick={() => {
+                          toggleHelp();
+                          setMobileOpen(false);
+                        }}
+                      >
+                        <HelpCircle className="mr-2 h-4 w-4" />
+                        {helpMode ? "Exit Help Mode" : "Help Mode"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setMobileOpen(false);
+                          signOut();
+                        }}
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/sign-in"
+                        className={cn(buttonVariants({ variant: "outline" }))}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        href="/sign-up"
+                        className={cn(buttonVariants())}
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        Get Started
+                      </Link>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
     {user && showHelpTip && !helpMode && (
