@@ -34,34 +34,40 @@ export default function Home() {
               for temporary positions. Fill shifts fast, find great work — all in
               one trusted platform.
             </p>
-            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:flex-wrap">
               <Link
-                href="/sign-up"
+                href="/sign-up?role=worker"
                 className={cn(buttonVariants({ size: "lg" }), "w-full sm:w-auto text-base px-8")}
               >
-                Get Started Free
+                I&apos;m looking for work
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link
-                href="/#how-it-works"
+                href="/sign-up?role=clinic"
                 className={cn(buttonVariants({ size: "lg", variant: "outline" }), "w-full sm:w-auto text-base px-8")}
               >
-                See How It Works
+                I need staff
+              </Link>
+              <Link
+                href="/#how-it-works"
+                className={cn(buttonVariants({ size: "lg", variant: "ghost" }), "w-full sm:w-auto text-base px-6 text-muted-foreground")}
+              >
+                See how it works
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Trust bar */}
+      {/* Trust bar — honest local proof */}
       <section className="border-y bg-muted/30">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-6 text-center md:grid-cols-4">
             {[
-              { value: "500+", label: "Dental Professionals" },
-              { value: "150+", label: "Partner Clinics" },
-              { value: "4.9/5", label: "Average Rating" },
-              { value: "24hr", label: "Avg. Time to Fill" },
+              { value: "Boise", label: "Treasure Valley focus" },
+              { value: "29", label: "Clinics pre-listed" },
+              { value: "Free", label: "For professionals" },
+              { value: "$0", label: "Agency markup" },
             ].map((stat) => (
               <div key={stat.label}>
                 <p className="text-2xl font-bold text-primary sm:text-3xl">{stat.value}</p>
@@ -256,15 +262,21 @@ export default function Home() {
               Ready to Get Started?
             </h2>
             <p className="mt-4 text-lg text-primary-foreground/80">
-              Join hundreds of dental professionals and clinics already using
-              TempChair in Boise.
+              Built for Boise-area clinics and dental professionals — claim a
+              clinic, post a shift, or find your next temp day.
             </p>
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
-                href="/sign-up"
+                href="/sign-up?role=worker"
                 className={cn(buttonVariants({ size: "lg", variant: "secondary" }), "w-full sm:w-auto text-base px-8")}
               >
-                Create Your Account
+                Join as a professional
+              </Link>
+              <Link
+                href="/sign-up?role=clinic"
+                className={cn(buttonVariants({ size: "lg", variant: "outline" }), "w-full sm:w-auto text-base px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10")}
+              >
+                Join as a clinic
               </Link>
             </div>
           </div>

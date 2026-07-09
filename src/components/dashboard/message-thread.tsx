@@ -28,6 +28,7 @@ export function MessageThread({
   currentId,
   otherName,
   unreadCount,
+  defaultOpen = false,
 }: {
   applicationId: string;
   currentRole: "worker" | "clinic";
@@ -35,8 +36,9 @@ export function MessageThread({
   currentId: string;
   otherName: string;
   unreadCount: number;
+  defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen || unreadCount > 0);
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);

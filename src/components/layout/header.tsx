@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, Sparkles, LogOut, LayoutDashboard, HelpCircle } from "lucide-react";
+import { Menu, Sparkles, LogOut, LayoutDashboard, HelpCircle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useHelp } from "@/lib/help-context";
 import { useAuth } from "@/lib/auth-context";
@@ -40,13 +40,36 @@ const clinicNav = [
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showHelpTip, setShowHelpTip] = useState(false);
   const { user, isLoading, signOut } = useAuth();
   const { helpMode, toggleHelp } = useHelp();
   const router = useRouter();
 
   const navigation = !user ? publicNav : user.role === "worker" ? workerNav : clinicNav;
 
+  useEffect(() => {
+    if (!user) {
+      setShowHelpTip(false);
+      return;
+    }
+    try {
+      setShowHelpTip(localStorage.getItem("help-tip-dismissed") !== "1");
+    } catch {
+      setShowHelpTip(true);
+    }
+  }, [user]);
+
+  function dismissHelpTip() {
+    try {
+      localStorage.setItem("help-tip-dismissed", "1");
+    } catch {
+      /* ignore */
+    }
+    setShowHelpTip(false);
+  }
+
   return (
+    <>
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center gap-2">
@@ -75,12 +98,13 @@ export function Header() {
             <>
             <Button
               variant={helpMode ? "default" : "ghost"}
-              size="icon"
+              size="sm"
               onClick={toggleHelp}
-              title={helpMode ? "Exit help mode" : "Toggle help mode"}
-              className="relative"
+              title={helpMode ? "Exit help mode" : "Turn on guided help"}
+              className="relative gap-1.5"
             >
               <HelpCircle className="h-4 w-4" />
+              <span className="text-sm">Help</span>
               {helpMode && (
                 <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary border-2 border-background" />
               )}
@@ -226,5 +250,32 @@ export function Header() {
         </Sheet>
       </div>
     </header>
+    {user && showHelpTip && !helpMode && (
+      <div className="border-b bg-primary/5">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 sm:px-6 lg:px-8">
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">New here?</span>{" "}
+            Turn on <strong>Help</strong> for guided tooltips on your dashboard.
+          </p>
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                toggleHelp();
+                dismissHelpTip();
+              }}
+            >
+              <HelpCircle className="h-3.5 w-3.5 mr-1" />
+              Try Help
+            </Button>
+            <Button size="icon-sm" variant="ghost" onClick={dismissHelpTip} aria-label="Dismiss tip">
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

@@ -15,9 +15,12 @@ interface JobData {
   rate: string;
   description: string;
   posted: string;
+  createdAt?: string;
   clinic: {
     name: string;
     location: string;
+    rating?: number;
+    reviewCount?: number;
   };
 }
 
