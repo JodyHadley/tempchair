@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { HelpTooltip } from "@/components/ui/help-tooltip";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -180,6 +180,9 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
               <CardContent className="p-6">
                 <div className="flex flex-col items-center text-center">
                   <Avatar className="h-20 w-20">
+                    {clinic.logoUrl ? (
+                      <AvatarImage src={clinic.logoUrl} alt={`${clinic.name} logo`} className="object-contain p-1" />
+                    ) : null}
                     <AvatarFallback className="bg-primary/10 text-primary text-xl font-semibold">{clinic.initials}</AvatarFallback>
                   </Avatar>
                   <h2 className="mt-4 text-lg font-semibold">{clinic.name}</h2>

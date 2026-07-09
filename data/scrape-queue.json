@@ -5,50 +5,320 @@
     "userAgent": "TempChairBot/1.0 (+https://www.tempchair.com; clinic directory enrichment; contact info@tempchair.com)"
   },
   "targets": [
-    { "url": "https://www.lowrydental.com", "nameHint": "Lowry Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.emeraldsmilesdentistry.com", "nameHint": "Emerald Smiles Dentistry", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.emeraldwest.net", "nameHint": "Emerald West Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://wellsdentistry.com", "nameHint": "Wells Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://idahofamilydental.com", "nameHint": "Idaho Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.boisedentist.com", "nameHint": "Boise Family Dental Care", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://dentalboise.com", "nameHint": "Lamb Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.birdfamilydental.com", "nameHint": "Bird Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.ustickdental.com", "nameHint": "Ustick Dental Office", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.drritaharding.com", "nameHint": "Rita Ann Harding DDS", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.atlantisdental.com", "nameHint": "Atlantis Dental Care", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://horizondentalbench.com", "nameHint": "Horizon Dental Bench", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.mintydentists.com", "nameHint": "Mint Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.208dental.com", "nameHint": "208 Dental Meridian", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.millenniumfamilydentistry.com", "nameHint": "Millennium Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://scottwgrantdmd.com", "nameHint": "Grant Dental Meridian", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.newleafdentalidaho.com", "nameHint": "New Leaf Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.legacysmiles.com", "nameHint": "Legacy Smiles Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.eaglesmilesdentistry.com", "nameHint": "Eagle Smiles Dentistry and Orthodontics", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.copperstonedental.com", "nameHint": "Copperstone Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://riverbendfamilydentist.com", "nameHint": "Riverbend Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.caresmiles.com", "nameHint": "Care Smiles Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.silverstonefamilydental.com", "nameHint": "Silverstone Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://treasurevalleyfamilydentistry.com", "nameHint": "Treasure Valley Family Dentistry", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.drbaby2th.com", "nameHint": "Dental Care for Kids — Meridian", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://locations.willamettedental.com/office/boise/", "nameHint": "Willamette Dental Boise", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://locations.willamettedental.com/office/meridian/", "nameHint": "Willamette Dental Meridian", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://locations.willamettedental.com/office/nampa/", "nameHint": "Willamette Dental Nampa", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.isu.edu/clinics/family-dentistry-meridian/", "nameHint": "ISU Family Dentistry Meridian", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.owyheeoralsurgery.com", "nameHint": "Owyhee Oral & Facial Surgery", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.trhs.org/locations", "nameHint": "Terry Reilly Health Services", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://maplegrovedentistry.net", "nameHint": "Maple Grove Dentistry", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.boise-dentists.com", "nameHint": "Summit Dental Group Boise", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://harrisondentalboise.com", "nameHint": "Harrison Dental Boise", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.boiseriverdental.com", "nameHint": "Boise River Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.mcmillanfamilydental.com", "nameHint": "McMillan Family Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://lrfcdentistry.com", "nameHint": "Linder Road Family & Cosmetic Dentistry", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.endoidaho.com", "nameHint": "Endodontics of Idaho Meridian", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.drmikedabell.com", "nameHint": "Oral Surgery Center of Idaho", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.boise-dentist.com", "nameHint": "Boise Integrative Dentistry", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.rivercitydental.net", "nameHint": "River City Dental", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://smilenowdenturesandimplants.com", "nameHint": "Smile Now Dentures & Implants Eagle", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.affordabledentures.com/locations/id/nampa", "nameHint": "Affordable Dentures & Implants Nampa", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://todaysdentistry.com/locations/boise/", "nameHint": "Today's Dentistry Boise", "status": "pending", "lastScrapedAt": null, "lastError": null },
-    { "url": "https://www.lifesmilesdds.com", "nameHint": "Life Smiles Dental Boise", "status": "pending", "lastScrapedAt": null, "lastError": null }
+    {
+      "url": "https://www.lowrydental.com",
+      "nameHint": "Lowry Dental",
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:24:49.466Z",
+      "lastError": null
+    },
+    {
+      "url": "https://www.emeraldsmilesdentistry.com",
+      "nameHint": "Emerald Smiles Dentistry",
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:24:53.163Z",
+      "lastError": null
+    },
+    {
+      "url": "https://www.emeraldwest.net",
+      "nameHint": "Emerald West Dental",
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:24:56.933Z",
+      "lastError": null
+    },
+    {
+      "url": "https://wellsdentistry.com",
+      "nameHint": "Wells Dental",
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:25:00.431Z",
+      "lastError": null
+    },
+    {
+      "url": "https://idahofamilydental.com",
+      "nameHint": "Idaho Family Dental",
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:25:05.847Z",
+      "lastError": null
+    },
+    {
+      "url": "https://www.boisedentist.com",
+      "nameHint": "Boise Family Dental Care",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://dentalboise.com",
+      "nameHint": "Lamb Family Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.birdfamilydental.com",
+      "nameHint": "Bird Family Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.ustickdental.com",
+      "nameHint": "Ustick Dental Office",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.drritaharding.com",
+      "nameHint": "Rita Ann Harding DDS",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.atlantisdental.com",
+      "nameHint": "Atlantis Dental Care",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://horizondentalbench.com",
+      "nameHint": "Horizon Dental Bench",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.mintydentists.com",
+      "nameHint": "Mint Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.208dental.com",
+      "nameHint": "208 Dental Meridian",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.millenniumfamilydentistry.com",
+      "nameHint": "Millennium Family Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://scottwgrantdmd.com",
+      "nameHint": "Grant Dental Meridian",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.newleafdentalidaho.com",
+      "nameHint": "New Leaf Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.legacysmiles.com",
+      "nameHint": "Legacy Smiles Family Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.eaglesmilesdentistry.com",
+      "nameHint": "Eagle Smiles Dentistry and Orthodontics",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.copperstonedental.com",
+      "nameHint": "Copperstone Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://riverbendfamilydentist.com",
+      "nameHint": "Riverbend Family Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.caresmiles.com",
+      "nameHint": "Care Smiles Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.silverstonefamilydental.com",
+      "nameHint": "Silverstone Family Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://treasurevalleyfamilydentistry.com",
+      "nameHint": "Treasure Valley Family Dentistry",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.drbaby2th.com",
+      "nameHint": "Dental Care for Kids — Meridian",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://locations.willamettedental.com/office/boise/",
+      "nameHint": "Willamette Dental Boise",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://locations.willamettedental.com/office/meridian/",
+      "nameHint": "Willamette Dental Meridian",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://locations.willamettedental.com/office/nampa/",
+      "nameHint": "Willamette Dental Nampa",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.isu.edu/clinics/family-dentistry-meridian/",
+      "nameHint": "ISU Family Dentistry Meridian",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.owyheeoralsurgery.com",
+      "nameHint": "Owyhee Oral & Facial Surgery",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.trhs.org/locations",
+      "nameHint": "Terry Reilly Health Services",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://maplegrovedentistry.net",
+      "nameHint": "Maple Grove Dentistry",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.boise-dentists.com",
+      "nameHint": "Summit Dental Group Boise",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://harrisondentalboise.com",
+      "nameHint": "Harrison Dental Boise",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.boiseriverdental.com",
+      "nameHint": "Boise River Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.mcmillanfamilydental.com",
+      "nameHint": "McMillan Family Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://lrfcdentistry.com",
+      "nameHint": "Linder Road Family & Cosmetic Dentistry",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.endoidaho.com",
+      "nameHint": "Endodontics of Idaho Meridian",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.drmikedabell.com",
+      "nameHint": "Oral Surgery Center of Idaho",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.boise-dentist.com",
+      "nameHint": "Boise Integrative Dentistry",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.rivercitydental.net",
+      "nameHint": "River City Dental",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://smilenowdenturesandimplants.com",
+      "nameHint": "Smile Now Dentures & Implants Eagle",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.affordabledentures.com/locations/id/nampa",
+      "nameHint": "Affordable Dentures & Implants Nampa",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://todaysdentistry.com/locations/boise/",
+      "nameHint": "Today's Dentistry Boise",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    },
+    {
+      "url": "https://www.lifesmilesdds.com",
+      "nameHint": "Life Smiles Dental Boise",
+      "status": "pending",
+      "lastScrapedAt": null,
+      "lastError": null
+    }
   ]
 }

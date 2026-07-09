@@ -22,6 +22,7 @@ export default async function ClaimPage() {
     location: c.location,
     address: c.address,
     phone: c.phone,
+    logoUrl: c.logoUrl,
   }));
 
   return <ClaimForm clinics={clinics} />;

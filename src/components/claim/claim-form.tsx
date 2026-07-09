@@ -8,7 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import {
   Search,
@@ -26,6 +26,7 @@ interface ClinicData {
   location: string;
   address: string;
   phone: string;
+  logoUrl?: string | null;
 }
 
 export function ClaimForm({ clinics }: { clinics: ClinicData[] }) {
@@ -202,6 +203,9 @@ export function ClaimForm({ clinics }: { clinics: ClinicData[] }) {
             <CardContent className="p-5">
               <div className="flex items-start gap-3">
                 <Avatar className="h-11 w-11">
+                  {clinic.logoUrl ? (
+                    <AvatarImage src={clinic.logoUrl} alt={`${clinic.name} logo`} className="object-contain p-0.5" />
+                  ) : null}
                   <AvatarFallback className="bg-muted text-muted-foreground font-semibold text-sm">
                     {clinic.initials}
                   </AvatarFallback>

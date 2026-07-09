@@ -5,7 +5,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Phone, Star, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getAllClinics } from "@/lib/db/queries";
@@ -53,6 +53,9 @@ export default async function ClinicsPage() {
                 <CardContent className="p-5">
                   <div className="flex items-start gap-3">
                     <Avatar className="h-12 w-12">
+                      {clinic.logoUrl ? (
+                        <AvatarImage src={clinic.logoUrl} alt={`${clinic.name} logo`} className="object-contain p-0.5" />
+                      ) : null}
                       <AvatarFallback className="bg-primary/10 text-primary font-semibold">
                         {clinic.initials}
                       </AvatarFallback>
@@ -112,6 +115,9 @@ export default async function ClinicsPage() {
                   <CardContent className="p-5">
                     <div className="flex items-start gap-3">
                       <Avatar className="h-12 w-12">
+                        {clinic.logoUrl ? (
+                          <AvatarImage src={clinic.logoUrl} alt={`${clinic.name} logo`} className="object-contain p-0.5" />
+                        ) : null}
                         <AvatarFallback className="bg-muted text-muted-foreground font-semibold">
                           {clinic.initials}
                         </AvatarFallback>

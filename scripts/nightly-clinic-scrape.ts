@@ -5,6 +5,7 @@
  * Instead scrapes known practice websites from data/scrape-queue.json:
  *  - Prefer schema.org Dentist / LocalBusiness / DentalClinic JSON-LD
  *  - Fallback: tel: links + simple address heuristics
+ *  - Logo: schema.org logo/image, og:image, logo-ish <img> (download when possible)
  *  - Upserts into clinic_profiles (unclaimed preferred; fills empty fields)
  *
  * Usage:
@@ -17,7 +18,7 @@
 import dotenv from "dotenv";
 import path from "node:path";
 import fs from "node:fs";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { PrismaClient } from "../src/generated/prisma/client.js";
 import { PrismaPg } from "@prisma/adapter-pg";
 
@@ -25,6 +26,8 @@ dotenv.config({ path: path.resolve(process.cwd(), ".env.local") });
 
 const QUEUE_PATH = path.resolve(process.cwd(), "data/scrape-queue.json");
 const LOG_DIR = path.resolve(process.cwd(), "data/scrape-logs");
+const LOGO_DIR = path.resolve(process.cwd(), "public/clinic-logos");
+const MAX_LOGO_BYTES = 2 * 1024 * 1024; // 2 MB
 
 type QueueTarget = {
   url: string;
@@ -50,6 +53,8 @@ type ScrapedClinic = {
   location: string;
   description: string;
   website: string;
+  /** Remote logo URL discovered on the page (before download). */
+  logoRemoteUrl: string | null;
 };
 
 const dryRun = process.argv.includes("--dry-run");
@@ -157,6 +162,184 @@ function addressFromSchema(addr: unknown): string {
   return "";
 }
 
+/** Resolve logo URL from schema.org logo / image fields (string | ImageObject | array). */
+function urlFromSchemaImage(value: unknown): string | null {
+  if (!value) return null;
+  if (typeof value === "string") {
+    const s = value.trim();
+    return s.startsWith("http") || s.startsWith("/") ? s : null;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const u = urlFromSchemaImage(item);
+      if (u) return u;
+    }
+    return null;
+  }
+  if (typeof value === "object" && value !== null) {
+    const o = value as Record<string, unknown>;
+    const u = o.url || o.contentUrl || o["@id"];
+    if (typeof u === "string" && u.trim()) return u.trim();
+  }
+  return null;
+}
+
+function absoluteUrl(maybe: string, pageUrl: string): string | null {
+  try {
+    return new URL(maybe, pageUrl).href;
+  } catch {
+    return null;
+  }
+}
+
+function isPlausibleLogoUrl(url: string): boolean {
+  const lower = url.toLowerCase();
+  if (lower.startsWith("data:")) return false;
+  if (/pixel|tracking|1x1|spacer|blank\.|facebook\.com|twitter\.com|linkedin\.com|instagram\.com|gstatic\.com\/.*badge/i.test(lower)) {
+    return false;
+  }
+  // Prefer image-like paths; allow CDN URLs without extension
+  if (/\.(svg|png|jpe?g|webp|gif|ico)(\?|$)/i.test(lower)) return true;
+  if (/logo|brand|header|site-?icon|apple-touch/i.test(lower)) return true;
+  if (/\/wp-content\/uploads\//i.test(lower)) return true;
+  return false;
+}
+
+/**
+ * Extract best logo candidate from page HTML.
+ * Priority: schema.org logo → schema.org image → og:image → logo-ish <img> → apple-touch-icon
+ */
+function extractLogoUrl(html: string, pageUrl: string, schemaNode?: Record<string, unknown> | null): string | null {
+  const candidates: string[] = [];
+
+  if (schemaNode) {
+    const fromLogo = urlFromSchemaImage(schemaNode.logo);
+    const fromImage = urlFromSchemaImage(schemaNode.image);
+    if (fromLogo) candidates.push(fromLogo);
+    if (fromImage) candidates.push(fromImage);
+  }
+
+  // og:image / twitter:image
+  const metaRe =
+    /<meta[^>]+(?:property|name)=["'](?:og:image|twitter:image|og:image:url)["'][^>]+content=["']([^"']+)["'][^>]*>/gi;
+  const metaReAlt =
+    /<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["'](?:og:image|twitter:image|og:image:url)["'][^>]*>/gi;
+  for (const re of [metaRe, metaReAlt]) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(html)) !== null) {
+      if (m[1]) candidates.push(m[1].trim());
+    }
+  }
+
+  // <img> with logo-ish attributes
+  const imgRe = /<img\b([^>]*)>/gi;
+  let im: RegExpExecArray | null;
+  while ((im = imgRe.exec(html)) !== null) {
+    const attrs = im[1];
+    const srcMatch = attrs.match(/\b(?:src|data-src|data-lazy-src)=["']([^"']+)["']/i);
+    if (!srcMatch) continue;
+    const src = srcMatch[1];
+    const blob = `${attrs} ${src}`.toLowerCase();
+    if (
+      /\blogo\b/.test(blob) ||
+      /site-logo|brand|navbar|header-logo|custom-logo/.test(blob)
+    ) {
+      // Skip tiny width/height if declared
+      const w = attrs.match(/\bwidth=["']?(\d+)/i);
+      const h = attrs.match(/\bheight=["']?(\d+)/i);
+      if (w && Number(w[1]) > 0 && Number(w[1]) < 40) continue;
+      if (h && Number(h[1]) > 0 && Number(h[1]) < 40) continue;
+      candidates.push(src);
+    }
+  }
+
+  // link rel icon / apple-touch-icon (last resort — often just favicon)
+  const linkRe =
+    /<link[^>]+rel=["'][^"']*(?:apple-touch-icon|icon)[^"']*["'][^>]+href=["']([^"']+)["'][^>]*>/gi;
+  const linkReAlt =
+    /<link[^>]+href=["']([^"']+)["'][^>]+rel=["'][^"']*(?:apple-touch-icon|icon)[^"']*["'][^>]*>/gi;
+  for (const re of [linkRe, linkReAlt]) {
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(html)) !== null) {
+      if (m[1] && /apple-touch|180x180|192x192|512x512/i.test(m[0] + m[1])) {
+        candidates.push(m[1].trim());
+      }
+    }
+  }
+
+  for (const c of candidates) {
+    const abs = absoluteUrl(c.replace(/&amp;/g, "&"), pageUrl);
+    if (abs && isPlausibleLogoUrl(abs)) return abs;
+  }
+  // If nothing passed filter but we had schema/og candidates, take first absolute http URL
+  for (const c of candidates) {
+    const abs = absoluteUrl(c.replace(/&amp;/g, "&"), pageUrl);
+    if (abs && abs.startsWith("http") && !abs.startsWith("data:")) return abs;
+  }
+  return null;
+}
+
+function slugForLogo(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48) || "clinic";
+}
+
+function extFromContentType(ct: string | null, url: string): string {
+  const t = (ct || "").toLowerCase();
+  if (t.includes("svg")) return "svg";
+  if (t.includes("png")) return "png";
+  if (t.includes("webp")) return "webp";
+  if (t.includes("gif")) return "gif";
+  if (t.includes("jpeg") || t.includes("jpg")) return "jpg";
+  const m = url.toLowerCase().match(/\.(svg|png|jpe?g|webp|gif)(\?|$)/);
+  if (m) return m[1] === "jpeg" ? "jpg" : m[1];
+  return "png";
+}
+
+/**
+ * Download logo into public/clinic-logos/. Returns public path `/clinic-logos/...`
+ * or null if download failed (caller can fall back to remote URL).
+ */
+async function downloadLogo(
+  remoteUrl: string,
+  clinicName: string,
+  userAgent: string,
+): Promise<string | null> {
+  try {
+    fs.mkdirSync(LOGO_DIR, { recursive: true });
+    const res = await fetch(remoteUrl, {
+      headers: {
+        "User-Agent": userAgent,
+        Accept: "image/*,*/*",
+        Referer: new URL(remoteUrl).origin + "/",
+      },
+      redirect: "follow",
+      signal: AbortSignal.timeout(12000),
+    });
+    if (!res.ok) return null;
+    const ct = res.headers.get("content-type") || "";
+    if (ct && !ct.startsWith("image/") && !ct.includes("svg") && !ct.includes("octet-stream")) {
+      return null;
+    }
+    const buf = Buffer.from(await res.arrayBuffer());
+    if (buf.length < 200 || buf.length > MAX_LOGO_BYTES) return null;
+
+    const hash = createHash("sha1").update(buf).digest("hex").slice(0, 10);
+    const ext = extFromContentType(ct, remoteUrl);
+    const filename = `${slugForLogo(clinicName)}-${hash}.${ext}`;
+    const dest = path.join(LOGO_DIR, filename);
+    if (!fs.existsSync(dest)) {
+      fs.writeFileSync(dest, buf);
+    }
+    return `/clinic-logos/${filename}`;
+  } catch {
+    return null;
+  }
+}
+
 function scrapeFromHtml(html: string, pageUrl: string, nameHint?: string): ScrapedClinic | null {
   const nodes = extractJsonLd(html).filter(
     (n): n is Record<string, unknown> => !!n && typeof n === "object",
@@ -216,6 +399,8 @@ function scrapeFromHtml(html: string, pageUrl: string, nameHint?: string): Scrap
     description = `Dental practice in the Treasure Valley. Website: ${pageUrl}`;
   }
 
+  const logoRemoteUrl = extractLogoUrl(html, pageUrl, anyBiz || null);
+
   return {
     name,
     address: address || locationFromAddress(address) || "Boise, ID",
@@ -223,6 +408,7 @@ function scrapeFromHtml(html: string, pageUrl: string, nameHint?: string): Scrap
     location: address ? locationFromAddress(address) : "Boise, ID",
     description,
     website: pageUrl,
+    logoRemoteUrl,
   };
 }
 
@@ -282,9 +468,20 @@ async function fetchHtml(url: string, userAgent: string): Promise<string> {
   return await res.text();
 }
 
+async function resolveLogoUrl(
+  scraped: ScrapedClinic,
+  userAgent: string,
+): Promise<string | null> {
+  if (!scraped.logoRemoteUrl) return null;
+  if (dryRun) return scraped.logoRemoteUrl; // don't download on dry-run
+  const local = await downloadLogo(scraped.logoRemoteUrl, scraped.name, userAgent);
+  return local || scraped.logoRemoteUrl;
+}
+
 async function upsertClinic(
   prisma: PrismaClient,
   scraped: ScrapedClinic,
+  userAgent: string,
 ): Promise<"updated" | "inserted" | "unchanged"> {
   const existing = await prisma.clinicProfile.findMany({
     select: {
@@ -293,12 +490,15 @@ async function upsertClinic(
       address: true,
       phone: true,
       description: true,
+      logoUrl: true,
       claimed: true,
     },
   });
   const match = existing.find(
     (c) => normalizeName(c.name) === normalizeName(scraped.name),
   );
+
+  const logoUrl = await resolveLogoUrl(scraped, userAgent);
 
   if (match) {
     const data: Record<string, string> = {};
@@ -312,6 +512,15 @@ async function upsertClinic(
         !match.description.includes("Website:"))
     ) {
       data.description = scraped.description;
+    }
+    // Fill logo if missing; prefer local /clinic-logos/ over remote
+    if (logoUrl) {
+      const hasLocal = match.logoUrl?.startsWith("/clinic-logos/");
+      if (!match.logoUrl) {
+        data.logoUrl = logoUrl;
+      } else if (!hasLocal && logoUrl.startsWith("/clinic-logos/")) {
+        data.logoUrl = logoUrl;
+      }
     }
     if (Object.keys(data).length === 0) return "unchanged";
     if (dryRun) return "updated";
@@ -329,6 +538,7 @@ async function upsertClinic(
       address: scraped.address,
       phone: scraped.phone,
       description: scraped.description,
+      logoUrl: logoUrl || null,
       email: "",
       contactName: "",
       rating: 0,
@@ -410,14 +620,23 @@ async function main() {
           errors++;
           console.log("  no data extracted");
         } else {
-          const action = await upsertClinic(prisma, scraped);
+          const action = await upsertClinic(prisma, scraped, ua);
           queueItem.status = "ok";
           queueItem.lastError = null;
           queueItem.lastScrapedAt = new Date().toISOString();
           if (action === "updated") updated++;
           if (action === "inserted") inserted++;
-          console.log(`  ${action}: ${scraped.name} | ${scraped.phone} | ${scraped.address}`);
-          results.push({ url: target.url, action, scraped });
+          const logoNote = scraped.logoRemoteUrl ? ` | logo: ${scraped.logoRemoteUrl.slice(0, 60)}` : " | no logo";
+          console.log(`  ${action}: ${scraped.name} | ${scraped.phone} | ${scraped.address}${logoNote}`);
+          results.push({
+            url: target.url,
+            action,
+            scraped: {
+              ...scraped,
+              // keep log smaller
+              logoRemoteUrl: scraped.logoRemoteUrl,
+            },
+          });
         }
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);

@@ -22,8 +22,10 @@ scripts/nightly-clinic-scrape.ts
   fetch homepage (User-Agent, delay, robots.txt check)
   parse schema.org JSON-LD (Dentist / LocalBusiness)
   fallback: tel: links + address regex
+  logo: schema.org logo/image → og:image → logo <img> → apple-touch-icon
+  download logo → public/clinic-logos/ (fallback: store remote URL)
         ↓
-  upsert clinic_profiles (fill empty fields / insert new)
+  upsert clinic_profiles (fill empty fields / insert new / logoUrl)
         ↓
 data/scrape-logs/scrape-YYYY-MM-DD.json
 ```
@@ -77,9 +79,31 @@ Find URLs by hand (Google once, copy the practice’s own domain) or from outrea
 - Only stores public contact fields for directory/claim use
 - Prefer practice sites that publish schema.org data
 
+## Logos
+
+When demographic data is scraped, the script also tries to grab a practice logo:
+
+| Priority | Source |
+|----------|--------|
+| 1 | schema.org `logo` (JSON-LD) |
+| 2 | schema.org `image` |
+| 3 | `og:image` / `twitter:image` meta |
+| 4 | `<img>` with logo-ish class/id/alt/src |
+| 5 | large `apple-touch-icon` (last resort) |
+
+**Storage**
+
+- Prefer **download** into `public/clinic-logos/{slug}-{hash}.{ext}` and set `logo_url` to `/clinic-logos/...`
+- If download fails (hotlink block, non-image, too large), store the **remote URL** instead
+- Only fills `logo_url` when empty; upgrades remote → local if a later scrape succeeds
+- Commit downloaded logos so Vercel can serve them (scraper runs locally or in CI, not on the Vercel runtime)
+
+UI: directory (`/clinics`), claim picker, and clinic dashboard avatars show `logoUrl` when present, with initials fallback.
+
 ## Limitations
 
 - Many sites block bots (403) — marked `error` and retried later
 - Some sites have no structured data — may extract little
+- Logos may be missing, low-res, or wrong (hero photo as og:image) — initials remain the fallback
 - Not a complete market census without Places/board data
 - Re-scrapes successful sites after **14 days** for freshness
