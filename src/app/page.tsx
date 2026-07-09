@@ -74,7 +74,7 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-6 text-center md:grid-cols-4">
             {[
               { value: "Boise", label: "Treasure Valley focus" },
-              { value: "29", label: "Clinics pre-listed" },
+              { value: "100+", label: "Clinics pre-listed" },
               { value: "Free", label: "For professionals" },
               { value: "$0", label: "Agency markup" },
             ].map((stat) => (
