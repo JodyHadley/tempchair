@@ -7,7 +7,9 @@
     "postinstall": "prisma generate",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "scrape:clinics": "tsx scripts/nightly-clinic-scrape.ts",
+    "scrape:clinics:dry": "tsx scripts/nightly-clinic-scrape.ts --dry-run"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
