@@ -1,0 +1,59 @@
+# Free nightly scrape of 20–30 known dental practice websites.
+# Does NOT scrape Google Search (ToS + blocks).
+#
+# Required GitHub repo secrets:
+#   DATABASE_URL  — Supabase pooler connection string
+#
+# Optional:
+#   SCRAPE_BATCH_SIZE  — override batch (default 25)
+
+name: Nightly clinic website scrape
+
+on:
+  schedule:
+    # 08:00 UTC ≈ 1:00–2:00 AM Mountain
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: "Sites to scrape this run"
+        required: false
+        default: "25"
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run nightly scrape
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          BATCH="${{ github.event.inputs.batch }}"
+          if [ -z "$BATCH" ]; then BATCH=25; fi
+          npx tsx scripts/nightly-clinic-scrape.ts --batch="$BATCH"
+
+      - name: Commit queue + logs (if changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/scrape-queue.json data/scrape-logs || true
+          if git diff --staged --quiet; then
+            echo "No queue/log changes to commit"
+          else
+            git commit -m "chore: nightly clinic scrape queue update"
+            git push
+          fi
