@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { createMetadata } from "@/lib/seo";
 import {
   Clock,
   Star,
@@ -14,6 +16,19 @@ import {
   DollarSign,
   Sparkles,
 } from "lucide-react";
+
+export const metadata: Metadata = createMetadata({
+  title: "Your Clinic Is Already Listed",
+  description:
+    "Stop scrambling for temp dental staff. Claim your Boise-area clinic on TempChair free, post shifts, and connect with qualified hygienists, assistants, and dentists.",
+  path: "/welcome",
+  keywords: [
+    "claim dental clinic Boise",
+    "temp dental staffing Boise",
+    "fill hygienist shift Idaho",
+    "TempChair clinic",
+  ],
+});
 
 export default function WelcomePage() {
   return (

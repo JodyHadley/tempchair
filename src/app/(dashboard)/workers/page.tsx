@@ -1,10 +1,19 @@
 export const dynamic = "force-dynamic";
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getAllWorkers } from "@/lib/db/queries";
 import { WorkersDirectory } from "@/components/jobs/workers-directory";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata({
+  title: "Find Dental Professionals",
+  description:
+    "Browse qualified dental hygienists, assistants, and dentists available for temp work in the Boise area. Post a position and get applicants on TempChair.",
+  path: "/workers",
+});
 
 export default async function WorkersPage() {
   const workers = await getAllWorkers();

@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { createMetadata } from "@/lib/seo";
 import {
   CheckCircle2,
   Users,
@@ -12,6 +14,13 @@ import {
   Star,
   ArrowRight,
 } from "lucide-react";
+
+export const metadata: Metadata = createMetadata({
+  title: "Pricing",
+  description:
+    "Simple dental staffing pricing: free for professionals, $35 per clinic posting, or $89/mo Premium with unlimited posts and market insights. 60-day premium trial for new clinics.",
+  path: "/pricing",
+});
 
 const tiers = [
   {

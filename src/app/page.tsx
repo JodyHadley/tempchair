@@ -1,8 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { createMetadata } from "@/lib/seo";
 import {
   Search,
   CalendarCheck,
@@ -13,6 +15,13 @@ import {
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
+
+export const metadata: Metadata = createMetadata({
+  title: "TempChair — Dental Temp Staffing in Boise & Treasure Valley",
+  description:
+    "Fill dental shifts fast or find temp work in Boise. Connect clinics with hygienists, assistants, and dentists — no agency markup. Free for professionals.",
+  path: "/",
+});
 
 export default function Home() {
   return (
