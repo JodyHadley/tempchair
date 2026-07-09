@@ -22,11 +22,14 @@ export const metadata: Metadata = {
   description:
     "Connect dental clinics with qualified hygienists, assistants, and dentists for temporary positions. Fast, reliable, and trusted.",
   icons: {
+    // Bold filled mark — readable at 16–32px (thin line-art chair is not)
     icon: [
-      { url: "/brand/logo-chair-mark.png", type: "image/png" },
-      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/brand/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/brand/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
 };
 
