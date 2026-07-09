@@ -70,6 +70,13 @@
     "description": "Integrative general dentistry in downtown Boise."
   },
   {
+    "name": "Boise River Dental",
+    "location": "Boise, ID",
+    "address": "8336 W Northview St, Boise, ID 83704",
+    "phone": "(208) 375-4544",
+    "description": "General dentistry on Northview Street. Website: https://www.boiseriverdental.com"
+  },
+  {
     "name": "Boise Smile Design",
     "location": "Boise, ID",
     "address": "800 W Main St, Ste 205, Boise, ID 83702",
@@ -161,6 +168,13 @@
     "description": "Grant Dental Boise location — family and cosmetic care. Website: https://scottwgrantdmd.com"
   },
   {
+    "name": "Harrison Dental Boise",
+    "location": "Boise, ID",
+    "address": "1675 W Hill Rd, Boise, ID 83702",
+    "phone": "(208) 342-3695",
+    "description": "Personalized dental care on Hill Road. Website: https://harrisondentalboise.com"
+  },
+  {
     "name": "Horizon Dental Bench",
     "location": "Boise, ID",
     "address": "Boise, ID",
@@ -182,6 +196,13 @@
     "description": "General dentistry near downtown Boise."
   },
   {
+    "name": "Intermountain Dental Specialists Boise",
+    "location": "Boise, ID",
+    "address": "Boise, ID",
+    "phone": "(208) 917-2855",
+    "description": "Dental specialists referral practice serving the Treasure Valley. Website: https://www.imtds.com"
+  },
+  {
     "name": "Lamb Family Dental",
     "location": "Boise, ID",
     "address": "4255 N Eagle Rd Ste 102, Boise, ID 83713",
@@ -189,11 +210,25 @@
     "description": "Gentle family dentistry on Eagle Road serving Boise, Meridian, and Eagle. Website: https://dentalboise.com"
   },
   {
+    "name": "Life Smiles Dental Boise",
+    "location": "Boise, ID",
+    "address": "Boise, ID",
+    "phone": "(208) 254-6365",
+    "description": "General and cosmetic dentistry in Boise. Website: https://www.lifesmilesdds.com"
+  },
+  {
     "name": "Lowry Dental",
     "location": "Boise, ID",
     "address": "9460 W Franklin Rd, Boise, ID 83709",
     "phone": "(208) 377-0410",
     "description": "Family dental practice on Franklin Road. Website: https://www.lowrydental.com"
+  },
+  {
+    "name": "Maple Grove Dentistry",
+    "location": "Boise, ID",
+    "address": "3270 N Maple Grove Rd, Boise, ID 83704",
+    "phone": "(208) 853-2221",
+    "description": "Cosmetic and family dentistry on Maple Grove Road. Website: https://maplegrovedentistry.net"
   },
   {
     "name": "North End Dental",
@@ -236,6 +271,13 @@
     "address": "403 S 11th St Ste 230, Boise, ID 83702",
     "phone": "(208) 386-3636",
     "description": "Specialty endodontics practice."
+  },
+  {
+    "name": "Summit Dental Group Boise",
+    "location": "Boise, ID",
+    "address": "782 S Americana Blvd, Boise, ID 83702",
+    "phone": "(208) 345-8962",
+    "description": "General dentistry on Americana Boulevard. Website: https://www.boise-dentists.com"
   },
   {
     "name": "Terry Reilly Health Services Dental — Whitney",
@@ -294,11 +336,32 @@
     "description": "Modern dental practice in southeast Boise."
   },
   {
+    "name": "Caldwell Dental on Cleveland",
+    "location": "Caldwell, ID",
+    "address": "808 Cleveland Blvd, Caldwell, ID 83605",
+    "phone": "(208) 318-1231",
+    "description": "General dentistry on Cleveland Boulevard."
+  },
+  {
     "name": "Caldwell Dentistry Co.",
     "location": "Caldwell, ID",
     "address": "1711 S 10th Ave, Caldwell, ID 83605",
     "phone": "(208) 454-9217",
     "description": "General dentistry in Caldwell."
+  },
+  {
+    "name": "Crystal Canyon Family Dental",
+    "location": "Caldwell, ID",
+    "address": "616 S 10th Ave, Caldwell, ID 83605",
+    "phone": "(208) 454-0473",
+    "description": "Family dentistry in Caldwell."
+  },
+  {
+    "name": "Today's Dentistry Caldwell West",
+    "location": "Caldwell, ID",
+    "address": "1916 Ellis Ave, Caldwell, ID 83605",
+    "phone": "(208) 459-3388",
+    "description": "Today's Dentistry location in west Caldwell. Website: https://todaysdentistry.com"
   },
   {
     "name": "Alexander Hoffman Orthodontics",
@@ -427,6 +490,13 @@
     "description": "Dentistry and orthodontics on Linder Road in Meridian. Website: https://www.eaglesmilesdentistry.com"
   },
   {
+    "name": "Endodontics of Idaho Meridian",
+    "location": "Meridian, ID",
+    "address": "742 W Cherry Ln, Meridian, ID 83642",
+    "phone": "(208) 888-1010",
+    "description": "Specialty endodontic (root canal) practice — also serves Fruitland. Website: https://www.endoidaho.com"
+  },
+  {
     "name": "Grant Dental Meridian",
     "location": "Meridian, ID",
     "address": "2275 S Eagle Rd Suite 140, Meridian, ID 83642",
@@ -446,6 +516,20 @@
     "address": "1180 N Olive Ave, Meridian, ID 83642",
     "phone": "(208) 888-3311",
     "description": "Family dental practice on Olive Avenue in Meridian. Website: https://www.legacysmiles.com"
+  },
+  {
+    "name": "Linder Road Family & Cosmetic Dentistry",
+    "location": "Meridian, ID",
+    "address": "1500 W Cayuse Creek Dr #100, Meridian, ID 83646",
+    "phone": "(208) 893-5435",
+    "description": "Family and cosmetic dentistry on Cayuse Creek Drive. Website: https://lrfcdentistry.com"
+  },
+  {
+    "name": "McMillan Family Dental",
+    "location": "Meridian, ID",
+    "address": "1720 W McMillan Rd, Meridian, ID 83646",
+    "phone": "(208) 216-1718",
+    "description": "Family dentistry with Drs. Jake Gerard and Randall Smith — same-day appointments available. Website: https://www.mcmillanfamilydental.com"
   },
   {
     "name": "Meridian Dental",
@@ -476,11 +560,25 @@
     "description": "Comprehensive, gentle dentistry at Linder and Pine. Serving Boise, Nampa, Eagle, Caldwell, and Star. Website: https://www.newleafdentalidaho.com"
   },
   {
+    "name": "Oral Surgery Center of Idaho",
+    "location": "Meridian, ID",
+    "address": "4611 N Copper Cloud Way, Meridian, ID 83646",
+    "phone": "(208) 884-0100",
+    "description": "Oral surgery and dental implants with Dr. Michael DaBell. Website: https://www.drmikedabell.com"
+  },
+  {
     "name": "Owyhee Oral & Facial Surgery",
     "location": "Meridian, ID",
     "address": "1554 S Labrador Way, Meridian, ID 83642",
     "phone": "(208) 505-1946",
     "description": "Oral and facial surgery including wisdom teeth removal. Website: https://www.owyheeoralsurgery.com"
+  },
+  {
+    "name": "Peterson Family Dentistry",
+    "location": "Meridian, ID",
+    "address": "Meridian, ID",
+    "phone": "(208) 252-5763",
+    "description": "Family dentistry and Invisalign in Meridian — bilingual staff."
   },
   {
     "name": "Riverbend Family Dental",
@@ -506,7 +604,7 @@
   {
     "name": "Silverstone Family Dental",
     "location": "Meridian, ID",
-    "address": "Meridian, ID 83642",
+    "address": "2026 S Eagle Rd, Meridian, ID 83642",
     "phone": "(208) 888-3623",
     "description": "Local family dental office in Meridian — same-day care and emergency help with Dr. Graham Hill. Website: https://www.silverstonefamilydental.com"
   },
