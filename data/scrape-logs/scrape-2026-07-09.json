@@ -1,239 +1,118 @@
 {
-  "ranAt": "2026-07-09T03:46:55.606Z",
-  "batchSize": 30,
-  "updated": 11,
-  "inserted": 10,
-  "errors": 8,
+  "ranAt": "2026-07-09T03:52:40.982Z",
+  "batchSize": 15,
+  "updated": 5,
+  "inserted": 5,
+  "errors": 5,
   "results": [
     {
-      "url": "https://www.ustickdental.com",
+      "url": "https://www.boise-dentist.com",
       "action": "updated",
       "scraped": {
-        "name": "Ustick Dental Office",
-        "phone": "(208) 375-8720",
-        "address": "9733 W Ustick Rd, Boise, ID ID, 83704",
-        "website": "https://www.ustickdental.com",
-        "logoRemoteUrl": "https://ustickdental.com/wp-content/uploads/2025/08/1-383waa_migrated.png"
+        "name": "Boise Integrative Dentistry",
+        "phone": "+1 208.376.2920,+1 208.336.0003",
+        "address": "Boise, ID",
+        "website": "https://www.boise-dentist.com",
+        "logoRemoteUrl": "https://www.boise-dentist.com/wp-content/uploads/2026/01/boise-integrative-dentistry-logo-e1768331034507.webp"
       }
     },
     {
-      "url": "https://www.atlantisdental.com",
-      "action": "updated",
-      "scraped": {
-        "name": "Atlantis Dental Care",
-        "phone": "(208) 938-2468",
-        "address": "13238 W Persimmon Ln Ste 100, Boise, ID 83713",
-        "website": "https://www.desertsmiles.com",
-        "logoRemoteUrl": "https://irp.cdn-website.com/f10e1df7/import/clib/atlantisdental_com/dms3rep/multi/logo-419x111.svg"
-      }
-    },
-    {
-      "url": "https://www.208dental.com",
+      "url": "https://smilenowdenturesandimplants.com",
       "action": "inserted",
       "scraped": {
-        "name": "208 Dental",
-        "phone": "(208) 501-8860",
-        "address": "53 E Calderwood Drive #110, Meridian, ID 83642",
-        "website": "https://www.208dental.com",
-        "logoRemoteUrl": "https://www.208dental.com/client/images/logo-main-color.jpg"
+        "name": "Smile Now Boise Dentures & Implants",
+        "phone": "(208) 792-6473",
+        "address": "467 S Rivershore Ln, Eagle, ID 83616",
+        "website": "https://smilenowdenturesandimplants.com",
+        "logoRemoteUrl": "https://smilenowdenturesandimplants.com/wp-content/uploads/2024/12/Square-Logo.jpg"
       }
     },
     {
-      "url": "https://www.eaglesmilesdentistry.com",
-      "action": "updated",
+      "url": "https://www.affordabledentures.com/locations/id/nampa",
+      "action": "inserted",
       "scraped": {
-        "name": "Eagle Smiles Dentistry and Orthodontics",
-        "phone": "(208) 895-8555",
-        "address": "6700 N Linder Rd Ste 132, Meridian, ID 83646",
-        "website": "https://www.eaglesmilesdentistry.com",
-        "logoRemoteUrl": "https://1.smilegeneration.com/uploadedimages/Office/respLogos/571-Logo.png"
+        "name": "Affordable Dentures & Implants",
+        "phone": "(800) 336-8873",
+        "address": "629 Davis Drive, Suite 300, Morrisville, NC, 27560",
+        "website": "https://www.affordabledentures.com",
+        "logoRemoteUrl": "https://cdn.sanity.io/images/w75voqed/production/bb2177fb9c9e69c0c58403757e0017edc959f1fc-142x44.svg"
       }
     },
     {
-      "url": "https://www.copperstonedental.com",
-      "action": "updated",
+      "url": "https://todaysdentistry.com/locations/boise/",
+      "action": "inserted",
       "scraped": {
-        "name": "Copperstone Dental",
-        "phone": "(208) 218-0329",
-        "address": "3250 N Leslie Way, Meridian, ID 83646",
-        "website": "https://www.copperstonedental.com",
-        "logoRemoteUrl": "https://a.mktgcdn.com/p/Y0X71BVvUjUKj9P3fSUJG8_Y3iYRsAqDoKsXv6E0K28/1080x1080.jpg"
+        "name": "Dentistry",
+        "phone": "(208) 639-4390",
+        "address": "Boise, ID",
+        "website": "https://todaysdentistry.com/locations/boise",
+        "logoRemoteUrl": "https://todaysdentistry.com/wp-content/uploads/2026/04/images.webp"
       }
     },
     {
-      "url": "https://riverbendfamilydentist.com",
+      "url": "https://horizondentalbench.com",
+      "action": "inserted",
+      "scraped": {
+        "name": "Horizon Dental Group - Family Dentistry in Boise, ID",
+        "phone": "(208) 345-2325",
+        "address": "5213 W. Overland Rd., Boise, ID 83705",
+        "website": "https://horizondentalbench.com",
+        "logoRemoteUrl": "https://horizondentalbench.com/wp-content/uploads/2023/10/horizon-dental.jpg"
+      }
+    },
+    {
+      "url": "https://www.mintydentists.com",
       "action": "updated",
       "scraped": {
-        "name": "Riverbend Family Dental",
-        "phone": "(986) 256-3244",
+        "name": "Mint Dental",
+        "phone": "(208) 900-4669",
+        "address": "3877 E Amity Rd, Meridian, ID 83642",
+        "website": "https://www.mintydentists.com",
+        "logoRemoteUrl": "https://www.mintydentists.com/wp-content/uploads/2023/04/site-logo.jpg"
+      }
+    },
+    {
+      "url": "https://www.millenniumfamilydentistry.com",
+      "action": "updated",
+      "scraped": {
+        "name": "Millennium Family Dental",
+        "phone": "(208) 888-2026",
+        "address": "Boise, ID",
+        "website": "https://www.millenniumfamilydentistry.com",
+        "logoRemoteUrl": "https://www.millenniumfamilydentistry.com/wp-content/uploads/2025/03/favicon_hd.png"
+      }
+    },
+    {
+      "url": "https://scottwgrantdmd.com",
+      "action": "inserted",
+      "scraped": {
+        "name": "Grant Dental",
+        "phone": "+1-",
         "address": "ID",
-        "website": "https://riverbendfamilydentist.com",
-        "logoRemoteUrl": "https://riverbendfamilydentist.com/wp-content/uploads/2025/07/487465760_1201099168688471_6951812715864390644_n-1.jpg"
+        "website": "https://scottwgrantdmd.com",
+        "logoRemoteUrl": "https://scottwgrantdmd.com/wp-content/uploads/2024/04/GrantDental_logo_horizontal.png"
       }
     },
     {
-      "url": "https://www.caresmiles.com",
-      "action": "inserted",
-      "scraped": {
-        "name": "Care Dental Implant & Cosmetic Center",
-        "phone": "(208) 906-2273",
-        "address": "1144 S Silverstone Way Suite 140, Meridian, ID 83642",
-        "website": "https://www.caresmiles.com",
-        "logoRemoteUrl": "https://www.caresmiles.com/wp-content/uploads/2023/10/care-dental-logo-white-no-tag-1.svg"
-      }
-    },
-    {
-      "url": "https://www.silverstonefamilydental.com",
+      "url": "https://www.newleafdentalidaho.com",
       "action": "updated",
       "scraped": {
-        "name": "Silverstone Family Dental",
-        "phone": "(208) 943-2265",
-        "address": "2026 S Eagle Rd, Meridian, ID 83642",
-        "website": "https://www.silverstonefamilydental.com",
-        "logoRemoteUrl": "https://www.silverstonefamilydental.com/path-to-your-logo.jpg"
+        "name": "New Leaf Dental",
+        "phone": "(208) 896-2284",
+        "address": "870 N Linder Rd Suite G, Meridian, ID 83642",
+        "website": "https://www.newleafdentalidaho.com",
+        "logoRemoteUrl": "https://www.newleafdentalidaho.com/wp-content/uploads/2022/02/NLD-Logo.png"
       }
     },
     {
-      "url": "https://treasurevalleyfamilydentistry.com",
+      "url": "https://www.legacysmiles.com",
       "action": "updated",
       "scraped": {
-        "name": "Treasure Valley Family Dentistry",
-        "phone": "(208) 884-8066",
-        "address": "Boise, ID",
-        "website": "https://treasurevalleyfamilydentistry.com",
-        "logoRemoteUrl": "https://treasurevalleyfamilydentistry.com/wp-content/uploads/2016/01/logo.png"
-      }
-    },
-    {
-      "url": "https://www.drbaby2th.com",
-      "action": "inserted",
-      "scraped": {
-        "name": "Joel Whitt",
-        "phone": "(208) 888-7711",
-        "address": "3235 N Towerbridge Way Suite #200, Meridian, ID ID, 83646",
-        "website": "https://www.drbaby2th.com",
-        "logoRemoteUrl": "https://drbaby2th.com/wp-content/uploads/2025/05/logo_4_migrated.jpg"
-      }
-    },
-    {
-      "url": "https://locations.willamettedental.com/office/boise/",
-      "action": "inserted",
-      "scraped": {
-        "name": "Willamette DentalBoise",
-        "phone": "(855) 433-6825",
-        "address": "607 N Mitchell St, Boise, ID 83704, Boise, ID 83704",
-        "website": "https://locations.willamettedental.com/office/boise",
-        "logoRemoteUrl": "https://locations.willamettedental.com/wp-content/themes/willamette-dental/resources/images/logo-text.webp"
-      }
-    },
-    {
-      "url": "https://locations.willamettedental.com/office/meridian/",
-      "action": "inserted",
-      "scraped": {
-        "name": "Willamette DentalMeridian",
-        "phone": "(855) 433-6825",
-        "address": "1075 S Wells Street, Meridian, ID 83642, Meridian, ID 83642",
-        "website": "https://locations.willamettedental.com/office/meridian",
-        "logoRemoteUrl": "https://locations.willamettedental.com/wp-content/themes/willamette-dental/resources/images/logo-text.webp"
-      }
-    },
-    {
-      "url": "https://locations.willamettedental.com/office/nampa/",
-      "action": "inserted",
-      "scraped": {
-        "name": "Willamette DentalNampa",
-        "phone": "(855) 433-6825",
-        "address": "16145 N High Desert St, Nampa, ID 83687, Nampa, ID 83687",
-        "website": "https://locations.willamettedental.com/office/nampa",
-        "logoRemoteUrl": "https://locations.willamettedental.com/wp-content/themes/willamette-dental/resources/images/logo-text.webp"
-      }
-    },
-    {
-      "url": "https://www.isu.edu/clinics/family-dentistry-meridian/",
-      "action": "updated",
-      "scraped": {
-        "name": "ISU Family Dentistry Meridian",
-        "phone": "(208) 373-1858",
-        "address": "Boise, ID",
-        "website": "https://www.isu.edu/clinics/family-dentistry-meridian",
-        "logoRemoteUrl": "https://www.isu.edu/media/top-level/ISUAnniversaryLogo-SmallHorizontalSimplified-FullColorReversed-Big.png"
-      }
-    },
-    {
-      "url": "https://www.trhs.org/locations",
-      "action": "inserted",
-      "scraped": {
-        "name": "Terry Reilly Health Services",
-        "phone": "",
-        "address": "300 South 23rd Street, Boise, ID 83702",
-        "website": "https://www.trhs.org/locations",
-        "logoRemoteUrl": "https://static.wixstatic.com/media/60aa73_1a1af492647b4a72851c0e204a278872%7Emv2.png/v1/fit/w_2500,h_1330,al_c/60aa73_1a1af492647b4a72851c0e204a278872%7Emv2.png"
-      }
-    },
-    {
-      "url": "https://maplegrovedentistry.net",
-      "action": "inserted",
-      "scraped": {
-        "name": "Maple Grove Dentistry - Dental Boise ID - Cosmetic Dentistry - Family Dentistry",
-        "phone": "(208) 853-2221",
-        "address": "Boise, ID",
-        "website": "https://maplegrovedentistry.net",
-        "logoRemoteUrl": "https://maplegrovedentistry.net/wp-content/uploads/2021/04/cropped-mgd-logo.png"
-      }
-    },
-    {
-      "url": "https://www.boise-dentists.com",
-      "action": "inserted",
-      "scraped": {
-        "name": "Summit Dental Group",
-        "phone": "(208) 345-8962",
-        "address": "782 S Americana Blvd, Boise, ID 83702",
-        "website": "https://www.boise-dentists.com",
-        "logoRemoteUrl": "https://www.boise-dentists.com/wp-content/uploads/2024/10/Summit-Dental-Group-logo-1-3.svg"
-      }
-    },
-    {
-      "url": "https://harrisondentalboise.com",
-      "action": "inserted",
-      "scraped": {
-        "name": "Harrison Dental | Boise Cosmetic Dentistry",
-        "phone": "(208) 342-3695",
-        "address": "1675 W Hill Rd, Boise, ID 83702",
-        "website": "https://harrisondentalboise.com",
-        "logoRemoteUrl": "https://harrisondentalboise.com/#logo"
-      }
-    },
-    {
-      "url": "https://www.boiseriverdental.com",
-      "action": "updated",
-      "scraped": {
-        "name": "Boise River Dental",
-        "phone": "(208) 375-4544",
-        "address": "Boise, ID",
-        "website": "https://www.boiseriverdental.com",
-        "logoRemoteUrl": "https://www.boiseriverdental.com/assets/Social-Share[1].jpg"
-      }
-    },
-    {
-      "url": "https://www.mcmillanfamilydental.com",
-      "action": "updated",
-      "scraped": {
-        "name": "McMillan Family Dental",
-        "phone": "(208) 216-1718",
-        "address": "1720 W. McMillan Road, Meridian, ID 83646",
-        "website": "https://www.mcmillanfamilydental.com",
-        "logoRemoteUrl": "https://www.mcmillanfamilydental.com/wp-content/uploads/2023/05/Logo_1-color-mobile.png"
-      }
-    },
-    {
-      "url": "https://lrfcdentistry.com",
-      "action": "updated",
-      "scraped": {
-        "name": "Linder Road Family & Cosmetic Dentistry",
-        "phone": "(208) 893-5435",
-        "address": "Boise, ID",
-        "website": "https://lrfcdentistry.com",
-        "logoRemoteUrl": "https://lrfcdentistry.com/wp-content/uploads/2022/09/linder-road-banner-1024x670.png"
+        "name": "Legacy Smiles Family Dental",
+        "phone": "(208) 888-3311",
+        "address": "1180 N. Olive Ave., Meridian, ID 83642",
+        "website": "https://ylegacysmiles.com",
+        "logoRemoteUrl": "https://www.legacysmiles.com/images/new-logo.webp"
       }
     }
   ]

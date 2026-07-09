@@ -85,16 +85,16 @@
     {
       "url": "https://horizondentalbench.com",
       "nameHint": "Horizon Dental Bench",
-      "status": "error",
-      "lastScrapedAt": "2026-07-09T03:41:54.178Z",
-      "lastError": "fetch failed"
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:14.187Z",
+      "lastError": null
     },
     {
       "url": "https://www.mintydentists.com",
       "nameHint": "Mint Dental",
-      "status": "error",
-      "lastScrapedAt": "2026-07-09T03:42:15.680Z",
-      "lastError": "fetch failed"
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:18.415Z",
+      "lastError": null
     },
     {
       "url": "https://www.208dental.com",
@@ -106,30 +106,30 @@
     {
       "url": "https://www.millenniumfamilydentistry.com",
       "nameHint": "Millennium Family Dental",
-      "status": "error",
-      "lastScrapedAt": "2026-07-09T03:43:27.701Z",
-      "lastError": "fetch failed"
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:22.333Z",
+      "lastError": null
     },
     {
       "url": "https://scottwgrantdmd.com",
       "nameHint": "Grant Dental Meridian",
-      "status": "error",
-      "lastScrapedAt": "2026-07-09T03:43:48.705Z",
-      "lastError": "fetch failed"
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:26.955Z",
+      "lastError": null
     },
     {
       "url": "https://www.newleafdentalidaho.com",
       "nameHint": "New Leaf Dental",
-      "status": "error",
-      "lastScrapedAt": "2026-07-09T03:44:10.208Z",
-      "lastError": "fetch failed"
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:30.954Z",
+      "lastError": null
     },
     {
       "url": "https://www.legacysmiles.com",
       "nameHint": "Legacy Smiles Family Dental",
-      "status": "error",
-      "lastScrapedAt": "2026-07-09T03:44:31.710Z",
-      "lastError": "fetch failed"
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:34.513Z",
+      "lastError": null
     },
     {
       "url": "https://www.eaglesmilesdentistry.com",
@@ -212,7 +212,7 @@
       "url": "https://www.owyheeoralsurgery.com",
       "nameHint": "Owyhee Oral & Facial Surgery",
       "status": "error",
-      "lastScrapedAt": "2026-07-09T03:46:04.432Z",
+      "lastScrapedAt": "2026-07-09T03:52:37.769Z",
       "lastError": "HTTP 403"
     },
     {
@@ -268,57 +268,57 @@
       "url": "https://www.endoidaho.com",
       "nameHint": "Endodontics of Idaho Meridian",
       "status": "error",
-      "lastScrapedAt": "2026-07-09T03:46:55.605Z",
+      "lastScrapedAt": "2026-07-09T03:52:40.981Z",
       "lastError": "HTTP 403"
     },
     {
       "url": "https://www.drmikedabell.com",
       "nameHint": "Oral Surgery Center of Idaho",
-      "status": "pending",
-      "lastScrapedAt": null,
-      "lastError": null
+      "status": "error",
+      "lastScrapedAt": "2026-07-09T03:51:46.692Z",
+      "lastError": "HTTP 403"
     },
     {
       "url": "https://www.boise-dentist.com",
       "nameHint": "Boise Integrative Dentistry",
-      "status": "pending",
-      "lastScrapedAt": null,
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:51:50.921Z",
       "lastError": null
     },
     {
       "url": "https://www.rivercitydental.net",
       "nameHint": "River City Dental",
-      "status": "pending",
-      "lastScrapedAt": null,
-      "lastError": null
+      "status": "error",
+      "lastScrapedAt": "2026-07-09T03:51:54.155Z",
+      "lastError": "HTTP 403"
     },
     {
       "url": "https://smilenowdenturesandimplants.com",
       "nameHint": "Smile Now Dentures & Implants Eagle",
-      "status": "pending",
-      "lastScrapedAt": null,
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:51:58.712Z",
       "lastError": null
     },
     {
       "url": "https://www.affordabledentures.com/locations/id/nampa",
       "nameHint": "Affordable Dentures & Implants Nampa",
-      "status": "pending",
-      "lastScrapedAt": null,
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:02.998Z",
       "lastError": null
     },
     {
       "url": "https://todaysdentistry.com/locations/boise/",
       "nameHint": "Today's Dentistry Boise",
-      "status": "pending",
-      "lastScrapedAt": null,
+      "status": "ok",
+      "lastScrapedAt": "2026-07-09T03:52:06.853Z",
       "lastError": null
     },
     {
       "url": "https://www.lifesmilesdds.com",
       "nameHint": "Life Smiles Dental Boise",
-      "status": "pending",
-      "lastScrapedAt": null,
-      "lastError": null
+      "status": "error",
+      "lastScrapedAt": "2026-07-09T03:52:10.406Z",
+      "lastError": "No structured contact data found"
     }
   ]
 }
