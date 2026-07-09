@@ -4,7 +4,7 @@
     "location": "Boise, ID",
     "address": "1410 S Entertainment Ave, Boise, ID 83709",
     "phone": "(208) 358-9942",
-    "description": "Dentures and implants practice in Boise."
+    "description": "Dentures and implants practice in Boise. Website: https://www.affordabledentures.com"
   },
   {
     "name": "Alpine Surgical Arts",
@@ -21,11 +21,25 @@
     "description": "Full-service dental office on Overland Road."
   },
   {
+    "name": "Atlantis Dental Care",
+    "location": "Boise, ID",
+    "address": "Boise, ID",
+    "phone": "(208) 646-1379",
+    "description": "General dentistry with Dr. David Cantwell — accepting new patients. Website: https://www.atlantisdental.com"
+  },
+  {
     "name": "Bird Family Dental",
     "location": "Boise, ID",
     "address": "1744 N Mitchell St, Boise, ID 83704",
     "phone": "(208) 322-1263",
-    "description": "Family dental practice near Fairview and Mitchell."
+    "description": "Family dental practice near Fairview and Mitchell. Website: https://www.birdfamilydental.com"
+  },
+  {
+    "name": "Bogus Basin Road Dental",
+    "location": "Boise, ID",
+    "address": "2803 N Bogus Basin Rd, Boise, ID 83702",
+    "phone": "(208) 343-1393",
+    "description": "General dentistry near Bogus Basin Road."
   },
   {
     "name": "Boise Caring Dentistry",
@@ -39,14 +53,14 @@
     "location": "Boise, ID",
     "address": "6363 W Emerald St Ste 102, Boise, ID 83704",
     "phone": "(208) 376-7413",
-    "description": "Family dental care on Emerald Street."
+    "description": "Comfort-focused family dentistry — Emerald Street location. Website: https://www.boisedentist.com"
   },
   {
     "name": "Boise Family Dental Care — Overland",
     "location": "Boise, ID",
     "address": "9931 W Cable Car St Ste 150, Boise, ID 83709",
     "phone": "(208) 369-2255",
-    "description": "Family dental care near Overland Road."
+    "description": "Comfort-focused family dentistry — Overland / Cable Car location. Website: https://www.boisedentist.com"
   },
   {
     "name": "Boise Integrative Dentistry",
@@ -84,6 +98,13 @@
     "description": "Teaching dental hygiene clinic open to the public."
   },
   {
+    "name": "Carter Family Dentistry",
+    "location": "Boise, ID",
+    "address": "7878 W Ustick Rd #102, Boise, ID 83704",
+    "phone": "(208) 376-6346",
+    "description": "Family dentistry on Ustick Road."
+  },
+  {
     "name": "Central District Health Dental Clinic",
     "location": "Boise, ID",
     "address": "707 N Armstrong Pl, Boise, ID 83704",
@@ -109,21 +130,21 @@
     "location": "Boise, ID",
     "address": "675 N Milwaukee St Ste 110, Boise, ID 83704",
     "phone": "(208) 593-3221",
-    "description": "Family dentistry near Milwaukee and Emerald."
+    "description": "Family dentistry near Milwaukee and Emerald. Website: https://www.emeraldsmilesdentistry.com"
   },
   {
     "name": "Emerald West Dental",
     "location": "Boise, ID",
     "address": "8850 W Emerald St Suite 150, Boise, ID 83704",
     "phone": "(208) 323-2294",
-    "description": "General dentistry on Emerald Street."
+    "description": "General dentistry on Emerald Street for healthier smiles. Website: https://www.emeraldwest.net"
   },
   {
     "name": "European Denture Center Boise",
     "location": "Boise, ID",
     "address": "10480 Garverdale Court, Boise, ID 83704",
     "phone": "(208) 584-5433",
-    "description": "Denture services in Boise."
+    "description": "Denture care services in Boise."
   },
   {
     "name": "Genesis Community Health Dental",
@@ -133,11 +154,25 @@
     "description": "Community health center dental services."
   },
   {
+    "name": "Grant Dental Boise",
+    "location": "Boise, ID",
+    "address": "Boise, ID",
+    "phone": "(208) 893-5000",
+    "description": "Grant Dental Boise location — family and cosmetic care. Website: https://scottwgrantdmd.com"
+  },
+  {
+    "name": "Horizon Dental Bench",
+    "location": "Boise, ID",
+    "address": "Boise, ID",
+    "phone": "(208) 345-2325",
+    "description": "General dentistry with Dr. Christian — confident smiles in Boise. Website: https://horizondentalbench.com"
+  },
+  {
     "name": "Idaho Family Dental",
     "location": "Boise, ID",
     "address": "9203 W Overland Rd, Boise, ID 83709",
     "phone": "(208) 375-1012",
-    "description": "Family dentistry with Dr. Anna Budolfson on Overland Road."
+    "description": "Family dentistry with Dr. Anna Budolfson on Overland Road. Website: https://idahofamilydental.com"
   },
   {
     "name": "Idaho Street Dental",
@@ -151,14 +186,14 @@
     "location": "Boise, ID",
     "address": "4255 N Eagle Rd Ste 102, Boise, ID 83713",
     "phone": "(208) 344-6300",
-    "description": "Gentle family dentistry on Eagle Road."
+    "description": "Gentle family dentistry on Eagle Road serving Boise, Meridian, and Eagle. Website: https://dentalboise.com"
   },
   {
     "name": "Lowry Dental",
     "location": "Boise, ID",
     "address": "9460 W Franklin Rd, Boise, ID 83709",
     "phone": "(208) 377-0410",
-    "description": "Family dental practice on Franklin Road."
+    "description": "Family dental practice on Franklin Road. Website: https://www.lowrydental.com"
   },
   {
     "name": "North End Dental",
@@ -180,6 +215,13 @@
     "address": "150 E Boise Ave, Boise, ID 83706",
     "phone": "(208) 385-7500",
     "description": "General dentistry practice in downtown Boise."
+  },
+  {
+    "name": "Rita Ann Harding DDS",
+    "location": "Boise, ID",
+    "address": "900 N Liberty St #304, Boise, ID 83704",
+    "phone": "(208) 375-0665",
+    "description": "Gentle family dentistry with Drs. Rita Ann Harding and Tanner Moir. Website: https://www.drritaharding.com"
   },
   {
     "name": "River City Dental",
@@ -214,7 +256,7 @@
     "location": "Boise, ID",
     "address": "9733 W Ustick Rd, Boise, ID 83704",
     "phone": "(208) 375-8720",
-    "description": "Family-oriented dental office on Ustick Road."
+    "description": "Family-oriented dental office on Ustick Road. Website: https://www.ustickdental.com"
   },
   {
     "name": "VA Boise Dental Clinic",
@@ -228,14 +270,14 @@
     "location": "Boise, ID",
     "address": "1880 W Judith Ln Suite 210, Boise, ID 83705",
     "phone": "(208) 345-2771",
-    "description": "Family dentistry on Judith Lane."
+    "description": "Family dentistry with Dr. Christopher R. Wells, DMD. Website: https://wellsdentistry.com"
   },
   {
     "name": "Willamette Dental Boise",
     "location": "Boise, ID",
     "address": "607 N Mitchell St, Boise, ID 83704",
     "phone": "(855) 433-6825",
-    "description": "Multi-specialty dental group location in Boise."
+    "description": "Multi-specialty dental group location in Boise. Website: https://locations.willamettedental.com/office/boise/"
   },
   {
     "name": "Willow Tree Dental",
@@ -312,7 +354,7 @@
     "location": "Eagle, ID",
     "address": "467 S Rivershore Ln, Eagle, ID 83616",
     "phone": "(208) 792-6473",
-    "description": "Dentures and implants in Eagle."
+    "description": "Affordable dental implants and dentures in Eagle. Website: https://smilenowdenturesandimplants.com"
   },
   {
     "name": "Treasure Valley Orthodontics",
@@ -326,7 +368,7 @@
     "location": "Meridian, ID",
     "address": "Meridian, ID 83642",
     "phone": "(208) 501-8860",
-    "description": "Family-owned dental practice in Meridian."
+    "description": "Family-owned dental practice in Meridian. Website: https://www.208dental.com"
   },
   {
     "name": "Alliance Dental Care",
@@ -354,7 +396,7 @@
     "location": "Meridian, ID",
     "address": "1144 S Silverstone Way Suite 140, Meridian, ID 83642",
     "phone": "(208) 607-3234",
-    "description": "General dentistry in south Meridian."
+    "description": "General dentistry Mon–Thu 8–5, Friday 9–3. Website: https://www.caresmiles.com"
   },
   {
     "name": "Cherry Lane Kids Dentistry",
@@ -368,35 +410,42 @@
     "location": "Meridian, ID",
     "address": "3250 N Leslie Way, Meridian, ID 83646",
     "phone": "(208) 218-0329",
-    "description": "Family and cosmetic dentistry in Meridian."
+    "description": "Family and cosmetic dentistry in Meridian. Website: https://www.copperstonedental.com"
+  },
+  {
+    "name": "Dental Care for Kids — Meridian",
+    "location": "Meridian, ID",
+    "address": "3235 N Towerbridge Way Suite #200, Meridian, ID 83646",
+    "phone": "(208) 888-7711",
+    "description": "Pediatric dentistry with Dr. Joel Whitt. Website: https://www.drbaby2th.com"
   },
   {
     "name": "Eagle Smiles Dentistry and Orthodontics",
     "location": "Meridian, ID",
     "address": "6700 N Linder Rd Ste 132, Meridian, ID 83646",
     "phone": "(208) 895-8555",
-    "description": "Dentistry and orthodontics on Linder Road in Meridian."
+    "description": "Dentistry and orthodontics on Linder Road in Meridian. Website: https://www.eaglesmilesdentistry.com"
   },
   {
     "name": "Grant Dental Meridian",
     "location": "Meridian, ID",
     "address": "2275 S Eagle Rd Suite 140, Meridian, ID 83642",
     "phone": "(208) 888-2000",
-    "description": "Family and cosmetic dentistry in Meridian."
+    "description": "Family and cosmetic dentistry in Meridian. Website: https://scottwgrantdmd.com"
   },
   {
     "name": "ISU Family Dentistry Meridian",
     "location": "Meridian, ID",
     "address": "1311 E Central Dr, Meridian, ID 83642",
     "phone": "(208) 373-1855",
-    "description": "Idaho State University family dentistry clinic."
+    "description": "Idaho State University family dentistry clinic. Website: https://www.isu.edu/clinics/family-dentistry-meridian/"
   },
   {
     "name": "Legacy Smiles Family Dental",
     "location": "Meridian, ID",
-    "address": "Meridian, ID 83642",
+    "address": "1180 N Olive Ave, Meridian, ID 83642",
     "phone": "(208) 888-3311",
-    "description": "Family dental practice in Meridian."
+    "description": "Family dental practice on Olive Avenue in Meridian. Website: https://www.legacysmiles.com"
   },
   {
     "name": "Meridian Dental",
@@ -410,28 +459,35 @@
     "location": "Meridian, ID",
     "address": "1848 S Millennium Way, Meridian, ID 83642",
     "phone": "(208) 314-1834",
-    "description": "Family dental practice on Millennium Way."
+    "description": "Family dental practice on Millennium Way. Website: https://www.millenniumfamilydentistry.com"
+  },
+  {
+    "name": "Mint Dental",
+    "location": "Meridian, ID",
+    "address": "3877 E Amity Rd, Meridian, ID 83642",
+    "phone": "(208) 900-4669",
+    "description": "Comprehensive dental care for all ages — Meridian, Kuna, and Boise patients welcome. Website: https://www.mintydentists.com"
   },
   {
     "name": "New Leaf Dental",
     "location": "Meridian, ID",
     "address": "870 N Linder Rd Suite G, Meridian, ID 83642",
     "phone": "(208) 896-2284",
-    "description": "Comprehensive dental care in Meridian."
+    "description": "Comprehensive, gentle dentistry at Linder and Pine. Serving Boise, Nampa, Eagle, Caldwell, and Star. Website: https://www.newleafdentalidaho.com"
   },
   {
     "name": "Owyhee Oral & Facial Surgery",
     "location": "Meridian, ID",
     "address": "1554 S Labrador Way, Meridian, ID 83642",
     "phone": "(208) 505-1946",
-    "description": "Oral and facial surgery in Meridian."
+    "description": "Oral and facial surgery including wisdom teeth removal. Website: https://www.owyheeoralsurgery.com"
   },
   {
     "name": "Riverbend Family Dental",
     "location": "Meridian, ID",
     "address": "2947 E Magic View Dr #4, Meridian, ID 83642",
     "phone": "(986) 256-3244",
-    "description": "Family dentistry in Meridian."
+    "description": "Family dentistry proudly serving Meridian and Boise. Website: https://riverbendfamilydentist.com"
   },
   {
     "name": "Roots Dental",
@@ -448,6 +504,13 @@
     "description": "General dentistry in north Meridian."
   },
   {
+    "name": "Silverstone Family Dental",
+    "location": "Meridian, ID",
+    "address": "Meridian, ID 83642",
+    "phone": "(208) 888-3623",
+    "description": "Local family dental office in Meridian — same-day care and emergency help with Dr. Graham Hill. Website: https://www.silverstonefamilydental.com"
+  },
+  {
     "name": "Steiner Family Dentistry",
     "location": "Meridian, ID",
     "address": "1550 N Crestmont Dr Suite C, Meridian, ID 83642",
@@ -459,21 +522,21 @@
     "location": "Meridian, ID",
     "address": "3115 E Florence Dr, Meridian, ID 83642",
     "phone": "(208) 991-2963",
-    "description": "Community health dental clinic in Meridian."
+    "description": "Community health dental clinic in Meridian. Website: https://www.trhs.org"
   },
   {
     "name": "Treasure Valley Family Dentistry",
     "location": "Meridian, ID",
     "address": "1570 E Heritage Park St Ste 100, Meridian, ID 83646",
     "phone": "(208) 884-8066",
-    "description": "Family dentistry serving Meridian, Eagle, and Boise."
+    "description": "Family dentistry serving Meridian, Eagle, and Boise. Website: https://treasurevalleyfamilydentistry.com"
   },
   {
     "name": "Willamette Dental Meridian",
     "location": "Meridian, ID",
     "address": "1075 S Wells St, Meridian, ID 83642",
     "phone": "(855) 433-6825",
-    "description": "Multi-specialty dental group location in Meridian."
+    "description": "Multi-specialty dental group location in Meridian. Website: https://locations.willamettedental.com/office/meridian/"
   },
   {
     "name": "Willow Tree Dental Meridian",
@@ -487,7 +550,7 @@
     "location": "Nampa, ID",
     "address": "16377 N Marketplace Blvd, Nampa, ID 83687",
     "phone": "(208) 936-7338",
-    "description": "Dentures and implants at Treasure Valley Marketplace."
+    "description": "Dentures and implants at Treasure Valley Marketplace. Website: https://www.affordabledentures.com"
   },
   {
     "name": "Aspen Creek Dental",
@@ -515,21 +578,21 @@
     "location": "Nampa, ID",
     "address": "Nampa, ID 83686",
     "phone": "(844) 437-8184",
-    "description": "Dental practice in south Nampa."
+    "description": "General dentistry in Nampa — help@southridgesmiles.com."
   },
   {
     "name": "Terry Reilly Dental Nampa 1st Street",
     "location": "Nampa, ID",
     "address": "207 1st Street South, Nampa, ID 83651",
     "phone": "(208) 466-7869",
-    "description": "Community health dental clinic in Nampa."
+    "description": "Community health dental clinic in Nampa. Website: https://www.trhs.org"
   },
   {
     "name": "Terry Reilly Dental Nampa Moss Lane",
     "location": "Nampa, ID",
     "address": "11136 Moss Lane, Nampa, ID 83651",
     "phone": "(208) 466-0515",
-    "description": "Community health dental clinic on Moss Lane."
+    "description": "Community health dental clinic on Moss Lane. Website: https://www.trhs.org"
   },
   {
     "name": "Today's Dentistry Nampa",
@@ -543,6 +606,6 @@
     "location": "Nampa, ID",
     "address": "16145 N High Desert St, Nampa, ID 83687",
     "phone": "(855) 433-6825",
-    "description": "Willamette Dental Group location in north Nampa."
+    "description": "Willamette Dental Group location in north Nampa. Website: https://locations.willamettedental.com/office/nampa/"
   }
 ]
