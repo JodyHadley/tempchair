@@ -499,6 +499,96 @@ export async function withdrawApplication(applicationId: string, workerId: strin
   return { success: true };
 }
 
+/**
+ * Clinic accepts or declines a pending application.
+ * Does not auto-fill the job or auto-reject other applicants (v1).
+ */
+export async function respondToApplication(data: {
+  applicationId: string;
+  clinicId: string;
+  decision: "accepted" | "rejected";
+}) {
+  const app = await prisma.application.findUnique({
+    where: { id: data.applicationId },
+    include: {
+      job: true,
+      worker: { select: { email: true, firstName: true, lastName: true } },
+    },
+  });
+
+  if (!app) {
+    return { success: false, error: "Application not found." };
+  }
+  if (app.job.clinicId !== data.clinicId) {
+    return { success: false, error: "You can only respond to applications for your positions." };
+  }
+  if (app.status !== "pending") {
+    return { success: false, error: "Only pending applications can be accepted or declined." };
+  }
+
+  await prisma.application.update({
+    where: { id: data.applicationId },
+    data: { status: data.decision },
+  });
+
+  // Notify worker via email
+  try {
+    const clinic = await prisma.clinicProfile.findUnique({
+      where: { id: data.clinicId },
+      select: { name: true },
+    });
+
+    if (app.worker.email && process.env.RESEND_API_KEY) {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const accepted = data.decision === "accepted";
+      const workerName = app.worker.firstName;
+      const clinicName = clinic?.name ?? "the clinic";
+
+      await resend.emails.send({
+        from: "TempChair <noreply@notifications.tempchair.com>",
+        to: app.worker.email,
+        subject: accepted
+          ? `You're confirmed for ${app.job.title} — TempChair`
+          : `Update on your application for ${app.job.title} — TempChair`,
+        html: accepted
+          ? `
+          <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2 style="color: #1a7a6d; margin-bottom: 4px;">You're accepted!</h2>
+            <p style="color: #666; margin-top: 0;">Hi ${workerName}, great news — <strong>${clinicName}</strong> accepted your application.</p>
+            <div style="background: #f5f5f5; border-radius: 8px; padding: 16px; margin: 16px 0;">
+              <p style="margin: 0 0 8px 0; font-weight: 600;">${app.job.title}</p>
+              <p style="margin: 0; font-size: 13px; color: #666;">${app.job.dates} · ${app.job.hours}</p>
+              <p style="margin: 8px 0 0 0; font-size: 13px; color: #1a7a6d; font-weight: 600;">${app.job.rate}</p>
+            </div>
+            <p style="color: #666; font-size: 14px;">Message the clinic from your dashboard to confirm details.</p>
+            <a href="https://tempchair.com/dashboard" style="display: inline-block; background: #1a7a6d; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; margin-top: 8px;">View Dashboard</a>
+            <p style="color: #999; font-size: 12px; margin-top: 24px;">You received this because you applied on TempChair.</p>
+          </div>
+        `
+          : `
+          <div style="font-family: system-ui, sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2 style="color: #333; margin-bottom: 4px;">Application update</h2>
+            <p style="color: #666; margin-top: 0;">Hi ${workerName}, <strong>${clinicName}</strong> went with another professional for this shift.</p>
+            <div style="background: #f5f5f5; border-radius: 8px; padding: 16px; margin: 16px 0;">
+              <p style="margin: 0 0 8px 0; font-weight: 600;">${app.job.title}</p>
+              <p style="margin: 0; font-size: 13px; color: #666;">${app.job.dates}</p>
+            </div>
+            <p style="color: #666; font-size: 14px;">There are other open positions nearby — keep applying.</p>
+            <a href="https://tempchair.com/jobs" style="display: inline-block; background: #1a7a6d; color: white; padding: 10px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; margin-top: 8px;">Browse Jobs</a>
+            <p style="color: #999; font-size: 12px; margin-top: 24px;">You received this because you applied on TempChair.</p>
+          </div>
+        `,
+      });
+    }
+  } catch (emailError) {
+    console.error("Application response email failed:", emailError);
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath("/jobs");
+  return { success: true };
+}
+
 export async function expireOldJobs() {
   const now = new Date();
   await prisma.jobPosting.updateMany({

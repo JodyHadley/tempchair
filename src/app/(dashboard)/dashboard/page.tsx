@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { WorkerDashboard } from "@/components/dashboard/worker-dashboard";
@@ -93,7 +93,11 @@ export default function DashboardPage() {
   }
 
   if (user.role === "clinic" && clinicData?.clinic) {
-    return <ClinicDashboard data={clinicData} onRefresh={refreshData} />;
+    return (
+      <Suspense fallback={<LoadingSkeleton />}>
+        <ClinicDashboard data={clinicData} onRefresh={refreshData} />
+      </Suspense>
+    );
   }
 
   return <LoadingSkeleton />;

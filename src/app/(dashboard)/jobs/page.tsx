@@ -11,13 +11,17 @@ import { JobsPageClient } from "@/components/jobs/jobs-page-client";
 export default async function JobsPage() {
   const openJobs = await getOpenJobs();
 
-  // Get current user's info if they're a worker
   let workerApplications: { jobId: string; status: string }[] = [];
   let workerSpecialty: string | null = null;
+  let userRole: "worker" | "clinic" | null = null;
+
   try {
     const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     if (user?.user_metadata?.role === "worker" && user.user_metadata?.profileId) {
+      userRole = "worker";
       const [apps, worker] = await Promise.all([
         prisma.application.findMany({
           where: { workerId: user.user_metadata.profileId },
@@ -30,12 +34,19 @@ export default async function JobsPage() {
       ]);
       workerApplications = apps;
       workerSpecialty = worker?.specialty ?? null;
+    } else if (user?.user_metadata?.role === "clinic") {
+      userRole = "clinic";
     }
   } catch {
     // Not logged in or error
   }
 
-  const jobsData = openJobs.map((job) => ({
+  // Soonest start first for decision-friendly browsing
+  const sortedJobs = [...openJobs].sort(
+    (a, b) => a.startDate.getTime() - b.startDate.getTime(),
+  );
+
+  const jobsData = sortedJobs.map((job) => ({
     id: job.id,
     title: job.title,
     type: job.type,
@@ -46,13 +57,15 @@ export default async function JobsPage() {
     rate: job.rate,
     description: job.description,
     posted: job.posted,
+    createdAt: job.createdAt.toISOString(),
     clinic: {
       name: job.clinic.name,
       location: job.clinic.location,
+      rating: job.clinic.rating,
+      reviewCount: job.clinic.reviewCount,
     },
   }));
 
-  // Get booked jobs for calendar
   let bookedJobs: typeof jobsData = [];
   if (workerSpecialty) {
     const acceptedApps = workerApplications.filter((a) => a.status === "accepted");
@@ -72,13 +85,23 @@ export default async function JobsPage() {
         rate: job.rate,
         description: job.description,
         posted: job.posted,
+        createdAt: job.createdAt.toISOString(),
         clinic: {
           name: job.clinic.name,
           location: job.clinic.location,
+          rating: job.clinic.rating,
+          reviewCount: job.clinic.reviewCount,
         },
       }));
     }
   }
+
+  const postCta =
+    userRole === "clinic"
+      ? { href: "/dashboard?post=1", label: "Post a Position" }
+      : userRole === "worker"
+        ? null
+        : { href: "/sign-up?role=clinic", label: "Post a Position" };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -89,9 +112,11 @@ export default async function JobsPage() {
             Browse available shifts and positions at dental clinics near you.
           </p>
         </div>
-        <Link href="/sign-up?role=clinic" className={cn(buttonVariants())}>
-          Post a Position
-        </Link>
+        {postCta && (
+          <Link href={postCta.href} className={cn(buttonVariants())}>
+            {postCta.label}
+          </Link>
+        )}
       </div>
 
       <JobsPageClient
@@ -104,6 +129,11 @@ export default async function JobsPage() {
       {openJobs.length === 0 && (
         <div className="mt-8 text-center">
           <p className="text-muted-foreground">No open positions right now. Check back soon!</p>
+          {userRole === "clinic" && (
+            <Link href="/dashboard?post=1" className={cn(buttonVariants({ size: "sm" }), "mt-4 inline-flex")}>
+              Post a position
+            </Link>
+          )}
         </div>
       )}
     </div>

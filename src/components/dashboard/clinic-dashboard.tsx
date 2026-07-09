@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { HelpTooltip } from "@/components/ui/help-tooltip";
@@ -16,6 +17,9 @@ import { EditPositionForm } from "./edit-position-form";
 import { MessageThread } from "./message-thread";
 import { BillingTab } from "./billing-tab";
 import { ChangePassword } from "./change-password";
+import { ApplicationRespondButtons } from "./application-respond-buttons";
+import { EmptyState } from "./empty-state";
+import { OnboardingChecklist } from "./onboarding-checklist";
 import {
   Star,
   MapPin,
@@ -29,9 +33,7 @@ import {
   Plus,
   DollarSign,
   Crown,
-  CheckCircle2,
-  XCircle,
-  ClockIcon,
+  AlertCircle,
 } from "lucide-react";
 import type { getClinicDashboardData } from "@/lib/db/actions";
 
@@ -56,12 +58,24 @@ const appStatusConfig: Record<StatusKey, { label: string; variant: "default" | "
 
 export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRefresh?: () => void }) {
   const { clinic, jobs, reviews, reviewsGiven, marketRates, marketName, isPremium, trialDaysLeft } = data;
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [editing, setEditing] = useState(false);
   const [reviewingApp, setReviewingApp] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
   const [showPostForm, setShowPostForm] = useState(false);
   const [editingJob, setEditingJob] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [reviewView, setReviewView] = useState<"received" | "given">("received");
+
+  useEffect(() => {
+    if (searchParams.get("post") === "1") {
+      setActiveTab("positions");
+      setShowPostForm(true);
+      router.replace("/dashboard", { scroll: false });
+    }
+  }, [searchParams, router]);
+
   if (!clinic) return null;
 
   const allApplications = jobs.flatMap((job) =>
@@ -71,21 +85,78 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
   const openJobs = jobs.filter((j) => j.status === "open").length;
   const pendingApps = allApplications.filter((a) => a.status === "pending").length;
   const acceptedWorkers = allApplications.filter((a) => a.status === "accepted").length;
+  const profileComplete =
+    Boolean(clinic.phone?.trim()) &&
+    Boolean(clinic.address?.trim()) &&
+    Boolean(clinic.description?.trim()) &&
+    clinic.description.length > 20;
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">{clinic.name}</h1>
-        <p className="mt-1 text-muted-foreground">Manage your positions, applications, and team from your dashboard.</p>
+        <p className="mt-1 text-muted-foreground">Your positions, applicants, and schedule in one place.</p>
       </div>
+
+      <OnboardingChecklist
+        profileId={clinic.id}
+        role="clinic"
+        onTabChange={setActiveTab}
+        steps={[
+          {
+            id: "profile",
+            label: "Complete your clinic profile",
+            done: profileComplete,
+            action: { type: "tab", value: "overview" },
+            actionLabel: "Edit profile",
+          },
+          {
+            id: "post",
+            label: "Post your first position",
+            done: jobs.length > 0,
+            action: { type: "tab", value: "positions" },
+            actionLabel: "Post position",
+          },
+          {
+            id: "respond",
+            label: "Respond to an applicant",
+            done: allApplications.some((a) => a.status === "accepted" || a.status === "rejected"),
+            action: { type: "tab", value: "applications" },
+            actionLabel: "View applicants",
+          },
+        ]}
+      />
+
+      {pendingApps > 0 && activeTab === "overview" && (
+        <button
+          type="button"
+          onClick={() => setActiveTab("applications")}
+          className="mb-6 flex w-full items-center gap-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-left transition-colors hover:bg-amber-500/15"
+        >
+          <AlertCircle className="h-5 w-5 shrink-0 text-amber-600" />
+          <div className="flex-1">
+            <p className="text-sm font-medium">
+              {pendingApps} applicant{pendingApps !== 1 ? "s" : ""} waiting for a response
+            </p>
+            <p className="text-xs text-muted-foreground">Accept or decline so professionals know where they stand.</p>
+          </div>
+          <span className="text-sm font-medium text-primary">Review →</span>
+        </button>
+      )}
 
       <Tabs value={activeTab} onValueChange={(v) => v && setActiveTab(v)}>
         <TabsList variant="line" className="mb-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="positions">My Positions ({jobs.length})</TabsTrigger>
-          <TabsTrigger value="applications">Applications ({allApplications.length})</TabsTrigger>
-          <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
-          <TabsTrigger value="my-reviews">My Reviews ({reviewsGiven.length})</TabsTrigger>
+          <TabsTrigger value="positions">Positions ({jobs.length})</TabsTrigger>
+          <TabsTrigger value="applications">
+            Applicants ({allApplications.length})
+            {pendingApps > 0 && (
+              <span className="ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-primary-foreground">
+                {pendingApps}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="reviews">Reviews ({reviews.length + reviewsGiven.length})</TabsTrigger>
           <TabsTrigger value="billing">Billing</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
@@ -168,19 +239,19 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                     </CardContent>
                   </Card>
                 </HelpTooltip>
-                <HelpTooltip text="Applications from dental professionals waiting for your response. Click to review and accept or decline them.">
+                <HelpTooltip text="Applicants waiting for your response. Click to accept or decline them.">
                   <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
                     <CardContent className="p-4 text-center">
                       <p className="text-2xl font-bold text-primary">{pendingApps}</p>
-                      <p className="text-xs text-muted-foreground">Pending Apps</p>
+                      <p className="text-xs text-muted-foreground">Waiting on you</p>
                     </CardContent>
                   </Card>
                 </HelpTooltip>
-                <HelpTooltip text="The number of dental professionals you've accepted and confirmed for upcoming or completed shifts.">
+                <HelpTooltip text="Dental professionals you've accepted and confirmed for shifts.">
                   <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
                     <CardContent className="p-4 text-center">
                       <p className="text-2xl font-bold text-primary">{acceptedWorkers}</p>
-                      <p className="text-xs text-muted-foreground">Workers Booked</p>
+                      <p className="text-xs text-muted-foreground">Professionals booked</p>
                     </CardContent>
                   </Card>
                 </HelpTooltip>
@@ -195,14 +266,20 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
               </div>
 
               <Card>
-                <CardHeader><CardTitle className="text-base">Pending Applications</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="text-base">Pending applicants</CardTitle></CardHeader>
                 <CardContent>
                   {pendingApps === 0 ? (
-                    <p className="text-sm text-muted-foreground">No pending applications right now.</p>
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground">No applicants waiting right now.</p>
+                      <Button size="sm" className="mt-3" onClick={() => setActiveTab("positions")}>
+                        <Plus className="h-3.5 w-3.5 mr-1" />
+                        Post a position
+                      </Button>
+                    </div>
                   ) : (
                     <div className="space-y-3">
                       {allApplications.filter((a) => a.status === "pending").map((app) => (
-                        <div key={app.id} className="flex items-center justify-between rounded-lg border p-3">
+                        <div key={app.id} className="flex flex-col gap-3 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between">
                           <div className="flex items-center gap-3">
                             <Avatar className="h-9 w-9">
                               <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">{app.worker.initials}</AvatarFallback>
@@ -210,12 +287,21 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                             <div>
                               <p className="text-sm font-medium">{app.worker.firstName} {app.worker.lastName}</p>
                               <p className="text-xs text-muted-foreground">{app.worker.specialty} &middot; {app.job.title} &middot; {app.job.dates}</p>
+                              <div className="mt-0.5 flex items-center gap-1">
+                                <Star className="h-3 w-3 fill-primary text-primary" />
+                                <span className="text-xs font-medium">{app.worker.rating}</span>
+                              </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 fill-primary text-primary" />
-                            <span className="text-xs font-medium">{app.worker.rating}</span>
-                          </div>
+                          <ApplicationRespondButtons
+                            applicationId={app.id}
+                            clinicId={clinic.id}
+                            workerName={`${app.worker.firstName} ${app.worker.lastName}`}
+                            jobTitle={app.job.title}
+                            jobDates={app.job.dates}
+                            onDone={() => onRefresh?.()}
+                            compact
+                          />
                         </div>
                       ))}
                     </div>
@@ -423,14 +509,23 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
           </div>
         </TabsContent>
 
-        {/* Applications Tab */}
+        {/* Applicants Tab */}
         <TabsContent value="applications">
           <div className="space-y-4">
             {allApplications.length === 0 ? (
-              <Card><CardContent className="p-8 text-center text-muted-foreground">No applications received yet.</CardContent></Card>
+              <EmptyState
+                icon={Users}
+                title="No applicants yet"
+                description="Post a position to start receiving applications from dental professionals."
+                actionLabel="Post a position"
+                onAction={() => setActiveTab("positions")}
+                tip="Shifts posted early in the week often fill faster."
+              />
             ) : (
               allApplications.map((app) => {
                 const aConfig = appStatusConfig[app.status as StatusKey];
+                const unread =
+                  app.messages?.filter((m: { senderRole: string; readAt: Date | null }) => m.senderRole === "worker" && !m.readAt).length || 0;
                 if (reviewingApp === app.id) {
                   return (
                     <div key={app.id}>
@@ -465,6 +560,9 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                             <div className="flex flex-wrap items-center gap-2">
                               <h3 className="font-semibold">{app.worker.firstName} {app.worker.lastName}</h3>
                               <Badge variant={aConfig.variant} className="text-xs">{aConfig.label}</Badge>
+                              {unread > 0 && (
+                                <Badge variant="default" className="text-[10px]">{unread} new message{unread !== 1 ? "s" : ""}</Badge>
+                              )}
                             </div>
                             <p className="text-xs text-primary font-medium">{app.worker.specialty}</p>
                             <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
@@ -478,13 +576,17 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                             </div>
                           </div>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
+                        <div className="flex flex-col items-stretch gap-2 sm:items-end">
                           <span className="text-xs text-muted-foreground">Applied {app.appliedDate}</span>
                           {app.status === "pending" && (
-                            <div className="flex gap-2 mt-1">
-                              <Button size="sm" variant="outline"><XCircle className="h-3.5 w-3.5 mr-1" />Decline</Button>
-                              <Button size="sm"><CheckCircle2 className="h-3.5 w-3.5 mr-1" />Accept</Button>
-                            </div>
+                            <ApplicationRespondButtons
+                              applicationId={app.id}
+                              clinicId={clinic.id}
+                              workerName={`${app.worker.firstName} ${app.worker.lastName}`}
+                              jobTitle={app.job.title}
+                              jobDates={app.job.dates}
+                              onDone={() => onRefresh?.()}
+                            />
                           )}
                           {app.status === "accepted" && app.job.status === "completed" && (
                             <Button
@@ -494,7 +596,7 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                               onClick={() => setReviewingApp(app.id)}
                             >
                               <MessageSquarePlus className="h-3.5 w-3.5 mr-1" />
-                              Review Worker
+                              Review professional
                             </Button>
                           )}
                         </div>
@@ -506,7 +608,8 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
                           currentName={clinic.name}
                           currentId={clinic.id}
                           otherName={`${app.worker.firstName} ${app.worker.lastName}`}
-                          unreadCount={app.messages?.filter((m: any) => m.senderRole === "worker" && !m.readAt).length || 0}
+                          unreadCount={unread}
+                          defaultOpen={unread > 0}
                         />
                       )}
                     </CardContent>
@@ -517,47 +620,67 @@ export function ClinicDashboard({ data, onRefresh }: { data: DashboardData; onRe
           </div>
         </TabsContent>
 
-        {/* Reviews Tab */}
+        {/* Reviews Tab (received + given) */}
         <TabsContent value="reviews">
-          <div className="space-y-4">
-            {reviews.length === 0 ? (
-              <Card><CardContent className="p-8 text-center text-muted-foreground">No reviews yet.</CardContent></Card>
-            ) : (
-              reviews.map((review) => (
-                <Card key={review.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">{review.fromName}</span>
-                          {review.isPrivate && <PrivateBadge />}
-                          <div className="flex items-center gap-0.5">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-primary text-primary" : "text-muted"}`} />
-                            ))}
-                          </div>
-                        </div>
-                        <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
-                        {review.job && (
-                          <p className="mt-2 text-xs text-muted-foreground">
-                            <Briefcase className="inline h-3 w-3 mr-1" />{review.job.title} &middot; {review.job.dates}
-                          </p>
-                        )}
-                      </div>
-                      <span className="text-xs text-muted-foreground">{review.date}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
+          <div className="mb-4 flex gap-2">
+            <Button
+              size="sm"
+              variant={reviewView === "received" ? "default" : "outline"}
+              onClick={() => setReviewView("received")}
+            >
+              Received ({reviews.length})
+            </Button>
+            <Button
+              size="sm"
+              variant={reviewView === "given" ? "default" : "outline"}
+              onClick={() => setReviewView("given")}
+            >
+              Given ({reviewsGiven.length})
+            </Button>
           </div>
-        </TabsContent>
-
-        {/* My Reviews Tab (reviews I've written) */}
-        <TabsContent value="my-reviews">
           <div className="space-y-4">
-            {reviewsGiven.length === 0 ? (
-              <Card><CardContent className="p-8 text-center text-muted-foreground">You haven&apos;t written any reviews yet.</CardContent></Card>
+            {reviewView === "received" ? (
+              reviews.length === 0 ? (
+                <EmptyState
+                  icon={Star}
+                  title="No reviews yet"
+                  description="Reviews from professionals who work with you will show up here."
+                  tip="Clear communication and fair shifts help build your clinic rating."
+                />
+              ) : (
+                reviews.map((review) => (
+                  <Card key={review.id}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">{review.fromName}</span>
+                            {review.isPrivate && <PrivateBadge />}
+                            <div className="flex items-center gap-0.5">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-primary text-primary" : "text-muted"}`} />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
+                          {review.job && (
+                            <p className="mt-2 text-xs text-muted-foreground">
+                              <Briefcase className="inline h-3 w-3 mr-1" />{review.job.title} &middot; {review.job.dates}
+                            </p>
+                          )}
+                        </div>
+                        <span className="text-xs text-muted-foreground">{review.date}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )
+            ) : reviewsGiven.length === 0 ? (
+              <EmptyState
+                icon={Star}
+                title="You haven't written any reviews yet"
+                description="After a shift is completed, you can review the professional you booked."
+              />
             ) : (
               reviewsGiven.map((review) => (
                 <div key={review.id}>

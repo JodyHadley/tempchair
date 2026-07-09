@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { HelpTooltip } from "@/components/ui/help-tooltip";
@@ -14,6 +15,9 @@ import { ReviewEditForm } from "./review-edit-form";
 import { CredentialVault } from "./credential-vault";
 import { MessageThread } from "./message-thread";
 import { ChangePassword } from "./change-password";
+import { EmptyState } from "./empty-state";
+import { OnboardingChecklist } from "./onboarding-checklist";
+import { cn } from "@/lib/utils";
 import {
   Star,
   MapPin,
@@ -46,6 +50,7 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
   const [reviewingShift, setReviewingShift] = useState<string | null>(null);
   const [editingReview, setEditingReview] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [reviewView, setReviewView] = useState<"received" | "given">("received");
   if (!worker) return null;
 
   const upcomingShifts = applications.filter(
@@ -57,6 +62,12 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
   );
 
   const pendingApps = applications.filter((a) => a.status === "pending").length;
+  const profileComplete =
+    Boolean(worker.bio?.trim()) &&
+    worker.bio.length > 20 &&
+    Boolean(worker.location?.trim()) &&
+    Boolean(worker.hourlyRate?.trim()) &&
+    Boolean(worker.experience?.trim());
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -65,19 +76,47 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
           Welcome back, {worker.firstName}
         </h1>
         <p className="mt-1 text-muted-foreground">
-          Here&apos;s what&apos;s happening with your TempChair profile.
+          Your applications, shifts, and schedule.
         </p>
       </div>
+
+      <OnboardingChecklist
+        profileId={worker.id}
+        role="worker"
+        onTabChange={setActiveTab}
+        steps={[
+          {
+            id: "profile",
+            label: "Complete your profile",
+            done: profileComplete,
+            action: { type: "tab", value: "overview" },
+            actionLabel: "Edit profile",
+          },
+          {
+            id: "credential",
+            label: "Add a credential",
+            done: credentials.length > 0,
+            action: { type: "tab", value: "credentials" },
+            actionLabel: "Add credential",
+          },
+          {
+            id: "apply",
+            label: "Apply to a position",
+            done: applications.length > 0,
+            action: { type: "href", href: "/jobs" },
+            actionLabel: "Browse jobs",
+          },
+        ]}
+      />
 
       <Tabs value={activeTab} onValueChange={(v) => v && setActiveTab(v)}>
         <TabsList variant="line" className="mb-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="applications">
-            My Applications ({applications.length})
+            Applications ({applications.length})
           </TabsTrigger>
-          <TabsTrigger value="shifts">My Shifts</TabsTrigger>
-          <TabsTrigger value="reviews">Reviews ({reviews.length})</TabsTrigger>
-          <TabsTrigger value="my-reviews">My Reviews ({reviewsGiven.length})</TabsTrigger>
+          <TabsTrigger value="shifts">Shifts</TabsTrigger>
+          <TabsTrigger value="reviews">Reviews ({reviews.length + reviewsGiven.length})</TabsTrigger>
           <TabsTrigger value="credentials">Credentials ({credentials.length})</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
@@ -162,11 +201,11 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                     </CardContent>
                   </Card>
                 </HelpTooltip>
-                <HelpTooltip text="Applications you've submitted that are waiting for a clinic's response. Click to view their status.">
+                <HelpTooltip text="Applications waiting for a clinic's response. Click to view their status.">
                   <Card className="cursor-pointer hover:border-primary/40 hover:shadow-sm transition-all" onClick={() => setActiveTab("applications")}>
                     <CardContent className="p-4 text-center">
                       <p className="text-2xl font-bold text-primary">{pendingApps}</p>
-                      <p className="text-xs text-muted-foreground">Pending Apps</p>
+                      <p className="text-xs text-muted-foreground">Awaiting reply</p>
                     </CardContent>
                   </Card>
                 </HelpTooltip>
@@ -181,10 +220,16 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
               </div>
 
               <Card>
-                <CardHeader><CardTitle className="text-base">Upcoming Shifts</CardTitle></CardHeader>
+                <CardHeader><CardTitle className="text-base">Upcoming shifts</CardTitle></CardHeader>
                 <CardContent>
                   {upcomingShifts.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No upcoming shifts. Browse open positions to apply!</p>
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground">No upcoming shifts yet.</p>
+                      <Link href="/jobs" className={cn(buttonVariants({ size: "sm" }), "mt-3")}>
+                        Browse open positions
+                      </Link>
+                      <p className="mt-2 text-xs text-muted-foreground">Profiles with credentials stand out to clinics.</p>
+                    </div>
                   ) : (
                     <div className="space-y-3">
                       {upcomingShifts.map((a) => (
@@ -236,11 +281,20 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
         <TabsContent value="applications">
           <div className="space-y-4">
             {applications.length === 0 ? (
-              <Card><CardContent className="p-8 text-center text-muted-foreground">You haven&apos;t applied to any positions yet.</CardContent></Card>
+              <EmptyState
+                icon={Briefcase}
+                title="You haven't applied to any positions yet"
+                description="Browse open shifts at clinics near you and apply in minutes."
+                actionLabel="Browse open positions"
+                href="/jobs"
+                tip="Profiles with credentials get more attention from clinics."
+              />
             ) : (
               applications.map((app) => {
                 const config = statusConfig[app.status as StatusKey];
                 const StatusIcon = config.icon;
+                const unread =
+                  app.messages?.filter((m: { senderRole: string; readAt: Date | null }) => m.senderRole === "clinic" && !m.readAt).length || 0;
                 return (
                   <Card key={app.id}>
                     <CardContent className="p-4">
@@ -251,6 +305,9 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                             <Badge variant={config.variant} className="text-xs">
                               <StatusIcon className="mr-1 h-3 w-3" />{config.label}
                             </Badge>
+                            {unread > 0 && (
+                              <Badge variant="default" className="text-[10px]">{unread} new message{unread !== 1 ? "s" : ""}</Badge>
+                            )}
                           </div>
                           <div className="mt-1.5 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                             <span className="flex items-center gap-1"><Building2 className="h-3 w-3" />{app.job.clinic.name}</span>
@@ -284,7 +341,8 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
                           currentName={`${worker.firstName} ${worker.lastName}`}
                           currentId={worker.id}
                           otherName={app.job.clinic.name}
-                          unreadCount={app.messages?.filter((m: any) => m.senderRole === "clinic" && !m.readAt).length || 0}
+                          unreadCount={unread}
+                          defaultOpen={unread > 0}
                         />
                       )}
                     </CardContent>
@@ -378,52 +436,79 @@ export function WorkerDashboard({ data, onRefresh }: { data: DashboardData; onRe
               </div>
             )}
             {upcomingShifts.length === 0 && completedShifts.length === 0 && (
-              <Card><CardContent className="p-8 text-center text-muted-foreground">No shifts yet. Apply to open positions to get started!</CardContent></Card>
+              <EmptyState
+                icon={CalendarDays}
+                title="No shifts yet"
+                description="Apply to open positions to get your first confirmed shift."
+                actionLabel="Browse open positions"
+                href="/jobs"
+              />
             )}
           </div>
         </TabsContent>
 
-        {/* Reviews Tab */}
+        {/* Reviews Tab (received + given) */}
         <TabsContent value="reviews">
-          <div className="space-y-4">
-            {reviews.length === 0 ? (
-              <Card><CardContent className="p-8 text-center text-muted-foreground">No reviews yet. Complete shifts to start building your reputation!</CardContent></Card>
-            ) : (
-              reviews.map((review) => (
-                <Card key={review.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold">{review.fromName}</span>
-                          {review.isPrivate && <PrivateBadge />}
-                          <div className="flex items-center gap-0.5">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-primary text-primary" : "text-muted"}`} />
-                            ))}
-                          </div>
-                        </div>
-                        <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
-                        {review.job && (
-                          <p className="mt-2 text-xs text-muted-foreground">
-                            <Briefcase className="inline h-3 w-3 mr-1" />{review.job.title} &middot; {review.job.dates}
-                          </p>
-                        )}
-                      </div>
-                      <span className="text-xs text-muted-foreground">{review.date}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            )}
+          <div className="mb-4 flex gap-2">
+            <Button
+              size="sm"
+              variant={reviewView === "received" ? "default" : "outline"}
+              onClick={() => setReviewView("received")}
+            >
+              Received ({reviews.length})
+            </Button>
+            <Button
+              size="sm"
+              variant={reviewView === "given" ? "default" : "outline"}
+              onClick={() => setReviewView("given")}
+            >
+              Given ({reviewsGiven.length})
+            </Button>
           </div>
-        </TabsContent>
-
-        {/* My Reviews Tab (reviews I've written) */}
-        <TabsContent value="my-reviews">
           <div className="space-y-4">
-            {reviewsGiven.length === 0 ? (
-              <Card><CardContent className="p-8 text-center text-muted-foreground">You haven&apos;t written any reviews yet.</CardContent></Card>
+            {reviewView === "received" ? (
+              reviews.length === 0 ? (
+                <EmptyState
+                  icon={Star}
+                  title="No reviews yet"
+                  description="Complete shifts to start building your reputation with clinics."
+                  actionLabel="Browse open positions"
+                  href="/jobs"
+                />
+              ) : (
+                reviews.map((review) => (
+                  <Card key={review.id}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold">{review.fromName}</span>
+                            {review.isPrivate && <PrivateBadge />}
+                            <div className="flex items-center gap-0.5">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? "fill-primary text-primary" : "text-muted"}`} />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="mt-2 text-sm text-muted-foreground">{review.comment}</p>
+                          {review.job && (
+                            <p className="mt-2 text-xs text-muted-foreground">
+                              <Briefcase className="inline h-3 w-3 mr-1" />{review.job.title} &middot; {review.job.dates}
+                            </p>
+                          )}
+                        </div>
+                        <span className="text-xs text-muted-foreground">{review.date}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )
+            ) : reviewsGiven.length === 0 ? (
+              <EmptyState
+                icon={Star}
+                title="You haven't written any reviews yet"
+                description="After a completed shift, you can review the clinic."
+              />
             ) : (
               reviewsGiven.map((review) => (
                 <div key={review.id}>
